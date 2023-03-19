@@ -98,6 +98,11 @@ public:
 		return Vector2D(x - vec.x, y - vec.y);
 	}
 
+	Vector2D operator -()
+	{
+		return Vector2D(-x, -y);
+	}
+
 	void operator +=(Vector2D vec)
 	{
 		x += vec.x;
@@ -148,6 +153,28 @@ public:
 	Vector3D(const Vector3D& vector) :x(vector.x), y(vector.y), z(vector.z)
 	{
 
+	}
+
+	float Magnitude()
+	{
+		if (x == 0 && y == 0 && z == 0)
+		{
+			return 0.0f;
+		}
+		return std::sqrtf((x * x) + (y * y) + (z * z));
+	}
+
+	Vector3D Normalize()
+	{
+		float magnitude = Magnitude();
+		if (magnitude > 0.0f)
+		{
+			return Vector3D(x / magnitude, y / magnitude, z / magnitude);
+		}
+		else
+		{
+			return Vector3D();
+		}
 	}
 
 	float Dot(const Vector3D& v)
@@ -203,6 +230,11 @@ public:
 		return v;
 	}
 
+	Vector3D Perpendicular() 
+	{
+		return Vector3D(y, -x, z);
+	}
+
 	Vector3D operator *(float num)
 	{
 		return Vector3D(x * num, y * num, z * num);
@@ -221,6 +253,10 @@ public:
 	Vector3D operator -(Vector3D vec)
 	{
 		return Vector3D(x - vec.x, y - vec.y, z - vec.z);
+	}
+	Vector3D operator -()
+	{
+		return Vector3D(-x, -y, -z);
 	}
 
 	~Vector3D()

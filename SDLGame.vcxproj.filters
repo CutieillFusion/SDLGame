@@ -30,7 +30,7 @@
     <ClInclude Include="ECS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components.h">
+    <ClInclude Include="ColliderComponents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CollisionDetection.h">
@@ -46,6 +46,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextRendererComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,8 +3,12 @@
 #include "Map.h"
 #include "Vector.h"
 #include "ECS.h"
-#include "Components.h"
 #include "SDL_ttf.h"
+#include "ColliderComponents.h"
+#include "CollisionDetection.h"
+#include "SpriteRendererComponent.h"
+#include "TransformComponent.h"
+#include "PlayerControllerComponent.h"
 
 Map* map;
 
@@ -17,7 +21,6 @@ auto& debug(manager.AddEntity());
 
 auto& Box1(manager.AddEntity());
 auto& Box2(manager.AddEntity());
-
 
 Game::Game()
 {
@@ -65,28 +68,29 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	}
 
 	map = new Map();
+
+	std::vector<Vector3D> boxCollider = {
+	Vector3D(0.0f, 0.0f, 0),
+	Vector3D(0.0f, 1.0f, 0),
+	Vector3D(1.0f, 1.0f, 0),
+	Vector3D(1.0f, 0.0f, 0)
+	};
+
 	newPlayer.addComponent<TransformComponent>(Vector2D(1, 1), Vector2D(1, 1));
 	newPlayer.addComponent<SpriteRendererComponent>("Assets/player.png");
 	newPlayer.getComponent<SpriteRendererComponent>().Initialize();
 	newPlayer.addComponent<PlayerControllerComponent>();
+	newPlayer.addComponent<ColliderComponent>(boxCollider, false);
 
 	Box1.addComponent<TransformComponent>(Vector2D(2, 2), Vector2D(1, 1));
-	//std::vector<Vector3D> vertexes = {
-	//	Vector3D(1.0f, 1.0f, 0),
-	//	Vector3D(1.0f, 2.0f, 0),
-	//	Vector3D(2.0f, 2.0f, 0),
-	//	Vector3D(2.0f, 1.0f, 0)
-	//};
-	//Box1.addComponent<Collider>(vertexes);
+	Box1.addComponent<SpriteRendererComponent>("Assets/debug.png");
+	Box1.getComponent<SpriteRendererComponent>().Initialize();
+	Box1.addComponent<ColliderComponent>(boxCollider, false);
 
-	Box2.addComponent<TransformComponent>(Vector2D(2, 2), Vector2D(1, 1));
-	//std::vector<Vector3D> vertexes2 = {
-	//Vector3D(2.5f, 1.5f, 0),
-	//Vector3D(2.5f, 2.5f, 0),
-	//Vector3D(3.5f, 2.5f, 0),
-	//Vector3D(3.5f, 1.5f, 0)
-	//};
-	//Box2.addComponent<Collider>(vertexes2);
+	Box2.addComponent<TransformComponent>(Vector2D(4, 2), Vector2D(1, 1));
+	Box2.addComponent<SpriteRendererComponent>("Assets/debug.png");
+	Box2.getComponent<SpriteRendererComponent>().Initialize();
+	Box2.addComponent<ColliderComponent>(boxCollider, true);
 }
 
 void Game::handleEvents()
@@ -109,10 +113,46 @@ void Game::handleEvents()
 	}
 }
 
+auto collision = CollisionDetection();
+
+
 void Game::update()
 {
-	manager.Update();
+	manager.Update();	
+	
+	UpdateCollisions();
+}
 
+void Game::UpdateCollisions() 
+{
+	for (int i = 0; i < manager.entities.size(); i++)
+	{
+		Entity* entityA = manager.entities[i].get();
+		if (entityA->hasComponent<ColliderComponent>())
+		{
+			for (int j = 0; j < manager.entities.size(); j++)
+			{
+				Entity* entityB = manager.entities[j].get();
+				if (entityB->hasComponent<ColliderComponent>())
+				{
+					if (i == j)//Same Index Guard Clause
+					{
+						continue;
+					}
+
+					//If this gets laggy can do a sphere check before GJK algorithm
+
+					auto collisionPoint = collision.GJK(&entityA->getComponent<ColliderComponent>(), &entityB->getComponent<ColliderComponent>());
+
+					if (collisionPoint.colliding && !entityA->getComponent<ColliderComponent>().IsStatic())
+					{
+						entityA->getComponent<TransformComponent>().position.x -= collisionPoint.normal.x;
+						entityA->getComponent<TransformComponent>().position.y -= collisionPoint.normal.y;
+					}
+				}
+			}
+		}
+	}
 }
 
 void Game::render()
