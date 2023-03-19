@@ -89,10 +89,9 @@ public:
 
 class Manager
 {
-private:
+public:
 	std::vector<std::unique_ptr<Entity>> entities;
 
-public:
 	void Update()
 	{
 		for (auto& e : entities) e->Update();

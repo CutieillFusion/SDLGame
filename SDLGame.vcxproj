@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionDetection.h" />
-    <ClInclude Include="Components.h" />
+    <ClInclude Include="ColliderComponents.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Map.h" />
@@ -28,6 +28,7 @@
     <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="TextRendererComponent.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="TileComponent.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
