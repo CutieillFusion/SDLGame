@@ -3,6 +3,8 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include <iostream>
+#include <string>
+#include "Vector.h"
 
 #define WORLD_SCALE 32
 #define MAX_KEYBOARD_KEYS 350
@@ -17,6 +19,7 @@ public:
 
 	void init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen);
 
+	//Deals with Updates that envolve other systems
 	void UpdateCollisions();
 
 	void handleEvents();
@@ -27,6 +30,7 @@ public:
 	bool running() { return isRunning; }
 
 	static SDL_Renderer* renderer;
+	static Vector2D camera;
 private:
 	bool isRunning;
 	SDL_Window *window;

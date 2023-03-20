@@ -4,6 +4,7 @@
 #include "TextureManager.h"
 #include "SDL_ttf.h"
 #include "Vector.h"
+#include "AssetManager.h"
 
 class TextRendererComponent : public Component
 {
@@ -13,10 +14,10 @@ public:
 	TTF_Font* font;
 
 	TextRendererComponent() = default;
-	TextRendererComponent(std::string text, const char* path, Vector2D position, SDL_Color textColor)
+	TextRendererComponent(std::string text, std::string id, Vector3D position, SDL_Color textColor)
 	{
 		TextRendererComponent::text = text;
-		font = TTF_OpenFont(path, 32);
+		font = AssetManager::instance->GetFont(id);
 
 		if (font == NULL)
 		{
@@ -28,21 +29,20 @@ public:
 		TextRendererComponent::position.y = position.y;
 
 		TextRendererComponent::textColor = textColor;
-		UpdateText();
+
+		SetText();
+	}
+
+	void SetText() 
+	{
+		surf = TTF_RenderText_Blended(font, text.c_str(), textColor);
+		labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
+		SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
 	}
 
 	void Initialize() override
 	{
 
-	}
-
-	void UpdateText()
-	{
-		SDL_Surface* surf = TTF_RenderText_Blended(font, text.c_str(), textColor);
-		labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
-		SDL_FreeSurface(surf);
-
-		SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
 	}
 
 	void Update() override
@@ -56,6 +56,7 @@ public:
 	}
 
 private:
+	SDL_Surface* surf;
 	SDL_Color textColor;
 	SDL_Texture* labelTexture;
 

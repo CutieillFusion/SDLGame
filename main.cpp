@@ -34,5 +34,10 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+//TODO:
+//Add Circle Check before running CollisionDetection to save resources?
+//Add .cpp Files for all Components
+
+
 //https://www.youtube.com/watch?v=1eaxE_waDNc&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&index=8
 //https://www.parallelrealities.co.uk/tutorials/

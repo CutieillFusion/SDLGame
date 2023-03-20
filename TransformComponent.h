@@ -1,12 +1,13 @@
 #pragma once
 #include "ECS.h"
 #include "Vector.h"
+#include "Game.h"
 
 class TransformComponent : public Component
 {
 public:
 	TransformComponent() = default;
-	TransformComponent(Vector2D position, Vector2D scale)
+	TransformComponent(Vector3D position, Vector3D scale)
 	{
 		TransformComponent::position = position;
 		TransformComponent::scale = scale;
@@ -14,11 +15,11 @@ public:
 		TransformComponent::flipFlags = SDL_FLIP_NONE;
 		destRect.x = 0;
 		destRect.y = 0;
-		destRect.w = 32;
-		destRect.h = 32;
+		destRect.w = WORLD_SCALE;
+		destRect.h = WORLD_SCALE;
 	}
 
-	TransformComponent(Vector2D position, Vector2D scale, float rotationAngle, SDL_RendererFlip flipFlags)
+	TransformComponent(Vector3D position, Vector3D scale, float rotationAngle, SDL_RendererFlip flipFlags)
 	{
 		TransformComponent::position = position;
 		TransformComponent::scale = scale;
@@ -26,12 +27,19 @@ public:
 		TransformComponent::flipFlags = flipFlags;
 		destRect.x = 0;
 		destRect.y = 0;
-		destRect.w = 32;
-		destRect.h = 32;
+		destRect.w = WORLD_SCALE;
+		destRect.h = WORLD_SCALE;
 	}
 
-	Vector2D position;
-	Vector2D scale;
+	void Update() override 
+	{
+		position += dPosition;
+		dPosition = Vector3D();
+	}
+
+	Vector3D dPosition;
+	Vector3D position;
+	Vector3D scale;
 	float rotationAngle;
 	SDL_RendererFlip flipFlags;
 	SDL_FRect destRect;

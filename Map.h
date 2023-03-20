@@ -1,19 +1,20 @@
 #pragma once
 #include "Game.h"
+#include "ECS.h"
 
 class Map
 {
 public:
 
-	Map();
+	Map(Manager* manager);
 	~Map();
 
 	void LoadMap(int arr[20][25]);
-	void DrawMap();
-private:
 
+private:
+	Manager* manager;
 	SDL_Rect src, dest;
-	SDL_Texture* textures[3];
+	std::string textures[3];
 
 	int map[20][25];
 };

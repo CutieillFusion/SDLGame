@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -41,22 +42,32 @@ public:
 	virtual ~Component() { }
 };
 
+typedef std::uint32_t UID;
+typedef std::string Tag;
+
 class Entity
 {
 private:
+	UID uid;
+	std::vector<Tag> tags;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
 	ComponentBitSet componentBitSet;
 public:
-	void Update() 
-	{
-		for (auto& c : components) c->Update();
-	}
-
-	void Render() { for (auto& c : components) c->Render(); }
+	Entity(UID uid);
+	void Update();
+	void Render();
 	bool isActive() const { return active; }
+	int GetUID() const { return uid; }
+	
+	//Tags Logic
+	void ClearTags();
+	void AddTag(Tag tag);
+	bool HasTag(Tag tag);
+	void RemoveTag(Tag tag);//This has not been tested nor will be 
+
 	void Destroy() { active = false; }
 
 	template <typename T> bool hasComponent() const
@@ -87,36 +98,28 @@ public:
 	}
 };
 
+enum RenderLayer
+{
+	LAYER_BACKGROUND,
+	LAYER_FOREGROUND,
+	LAYER_CHARACTER,
+	LAYER_UI
+};
+
 class Manager
 {
+private:
+	UID nextUID = 0;
+
 public:
 	std::vector<std::unique_ptr<Entity>> entities;
+	std::map<RenderLayer, std::vector<UID>> renderLayers;
 
-	void Update()
-	{
-		for (auto& e : entities) e->Update();
-	}
+	void Update();
+	void Render();
+	void Refresh();
 
-	void Render() 
-	{
-		for (auto& e : entities) e->Render();
-	}
+	std::vector<int> FindEntitiesWithTag(Tag tag);
 
-	void Refresh() 
-	{
-		entities.erase(std::remove_if(std::begin(entities), std::end(entities),
-			[](const std::unique_ptr<Entity>& mEntity)
-			{
-				return !mEntity->isActive();
-			}),
-			std::end(entities));
-	}
-
-	Entity& AddEntity() 
-	{
-		Entity* e = new Entity();
-		std::unique_ptr<Entity> uPtr{ e };
-		entities.emplace_back(std::move(uPtr));
-		return *e;
-	}
+	Entity& AddEntity(RenderLayer renderLayer);
 };

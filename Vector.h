@@ -259,6 +259,39 @@ public:
 		return Vector3D(-x, -y, -z);
 	}
 
+	void operator +=(Vector3D vec)
+	{
+		x += vec.x;
+		y += vec.y;
+		z += vec.z;
+	}
+
+	void operator +=(Vector2D vec)
+	{
+		x += vec.x;
+		y += vec.y;
+	}
+
+	void operator -=(Vector3D vec)
+	{
+		x -= vec.x;
+		y -= vec.y;
+		z -= vec.z;
+	}
+
+	void operator -=(Vector2D vec)
+	{
+		x -= vec.x;
+		y -= vec.y;
+	}
+
+	void operator *=(float num)
+	{
+		x *= num;
+		y *= num;
+		z *= num;
+	}
+
 	~Vector3D()
 	{
 

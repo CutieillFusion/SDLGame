@@ -9,18 +9,27 @@
 #include "SpriteRendererComponent.h"
 #include "TransformComponent.h"
 #include "PlayerControllerComponent.h"
+#include "TextRendererComponent.h"
+#include "AssetManager.h"
 
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
 
+Vector2D Game::camera = Vector2D(0, 0);
+Vector2D cameraOffset = Vector2D(800.0f/(WORLD_SCALE * 2), 640.0f/(WORLD_SCALE * 2));//Center Screen
+
 Manager manager;
 
-auto& newPlayer(manager.AddEntity());
-auto& debug(manager.AddEntity());
+//Entities
+auto& newPlayer(manager.AddEntity(LAYER_CHARACTER));
+auto& debug(manager.AddEntity(LAYER_FOREGROUND));
+auto& Box(manager.AddEntity(LAYER_FOREGROUND));
+auto& BoxStatic(manager.AddEntity(LAYER_FOREGROUND));
+auto& BoxTrigger(manager.AddEntity(LAYER_FOREGROUND));
+auto& Text(manager.AddEntity(LAYER_UI));
 
-auto& Box1(manager.AddEntity());
-auto& Box2(manager.AddEntity());
+
 
 Game::Game()
 {
@@ -60,6 +69,9 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 			std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
 		}
 
+		//Initializes AssetManager
+		AssetManager();
+
 		isRunning = true;
 	}
 	else 
@@ -67,7 +79,17 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = false;
 	}
 
-	map = new Map();
+	//PUT ALL TEXTURES AND FONTS HERE
+	AssetManager::instance->AddTexture("Player", "Assets/player.png");
+	AssetManager::instance->AddTexture("Debug", "Assets/debug.png");
+	AssetManager::instance->AddTexture("Water", "Assets/water.png");
+	AssetManager::instance->AddTexture("Grass", "Assets/grass.png");
+	AssetManager::instance->AddTexture("Dirt", "Assets/dirt.png");
+	AssetManager::instance->AddFont("8Bit", "Assets/8Bit.ttf", 32);
+	AssetManager::instance->AddFont("Test", "Assets/Test.ttf", 32);
+
+
+	map = new Map(&manager);
 
 	std::vector<Vector3D> boxCollider = {
 	Vector3D(0.0f, 0.0f, 0),
@@ -75,22 +97,32 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	Vector3D(1.0f, 1.0f, 0),
 	Vector3D(1.0f, 0.0f, 0)
 	};
-
-	newPlayer.addComponent<TransformComponent>(Vector2D(1, 1), Vector2D(1, 1));
-	newPlayer.addComponent<SpriteRendererComponent>("Assets/player.png");
-	newPlayer.getComponent<SpriteRendererComponent>().Initialize();
+	
+	newPlayer.addComponent<TransformComponent>(Vector3D(10, 10, 0), Vector3D(1, 1, 1));
+	newPlayer.addComponent<SpriteRendererComponent>("Player");
 	newPlayer.addComponent<PlayerControllerComponent>();
-	newPlayer.addComponent<ColliderComponent>(boxCollider, false);
+	newPlayer.addComponent<ColliderComponent>(boxCollider, false, false);
+	newPlayer.addComponent<CameraComponent>();
+	newPlayer.AddTag("Player");
 
-	Box1.addComponent<TransformComponent>(Vector2D(2, 2), Vector2D(1, 1));
-	Box1.addComponent<SpriteRendererComponent>("Assets/debug.png");
-	Box1.getComponent<SpriteRendererComponent>().Initialize();
-	Box1.addComponent<ColliderComponent>(boxCollider, false);
+	Box.addComponent<TransformComponent>(Vector3D(2, 2, 0), Vector3D(2, 1, 1));
+	Box.addComponent<SpriteRendererComponent>("Debug");
+	Box.addComponent<ColliderComponent>(boxCollider, false, false);
+	Box.AddTag("Box");
 
-	Box2.addComponent<TransformComponent>(Vector2D(4, 2), Vector2D(1, 1));
-	Box2.addComponent<SpriteRendererComponent>("Assets/debug.png");
-	Box2.getComponent<SpriteRendererComponent>().Initialize();
-	Box2.addComponent<ColliderComponent>(boxCollider, true);
+	BoxStatic.addComponent<TransformComponent>(Vector3D(8, 4, 0), Vector3D(2, 3, 1));
+	BoxStatic.addComponent<SpriteRendererComponent>("Debug");
+	BoxStatic.addComponent<ColliderComponent>(boxCollider, true, false);
+	BoxStatic.AddTag("Box");
+
+	BoxTrigger.addComponent<TransformComponent>(Vector3D(6, 10, 0), Vector3D(2, 2, 1));
+	BoxTrigger.addComponent<SpriteRendererComponent>("Debug");
+	BoxTrigger.addComponent<ColliderComponent>(boxCollider, false, true);
+	BoxTrigger.AddTag("Box");
+
+	SDL_Color textColor = { 0, 0, 0, 255 };
+	Text.addComponent<TextRendererComponent>("Test", "8Bit", Vector3D(10, 600, 0), textColor);
+
 }
 
 void Game::handleEvents()
@@ -103,10 +135,15 @@ void Game::handleEvents()
 			isRunning = false;
 			break;
 		case SDL_KEYDOWN:
-			newPlayer.getComponent<PlayerControllerComponent>().KeyDown(&events.key);
+			newPlayer.getComponent<PlayerControllerComponent>().OnKeyDown(&events.key);
 			break;
 		case SDL_KEYUP:
-			newPlayer.getComponent<PlayerControllerComponent>().KeyUp(&events.key);
+			newPlayer.getComponent<PlayerControllerComponent>().OnKeyUp(&events.key);
+			break;
+		case SDL_MOUSEMOTION:
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			//Text.getComponent<TextRendererComponent>().text = std::to_string(x) + " | " + std::to_string(y);
 			break;
 		default:
 			break;
@@ -118,8 +155,11 @@ auto collision = CollisionDetection();
 
 void Game::update()
 {
-	manager.Update();	
+	manager.Update();
 	
+	camera.x = newPlayer.getComponent<TransformComponent>().position.x - cameraOffset.x;
+	camera.y = newPlayer.getComponent<TransformComponent>().position.y - cameraOffset.y;
+
 	UpdateCollisions();
 }
 
@@ -128,26 +168,44 @@ void Game::UpdateCollisions()
 	for (int i = 0; i < manager.entities.size(); i++)
 	{
 		Entity* entityA = manager.entities[i].get();
-		if (entityA->hasComponent<ColliderComponent>())
+		
+		if (entityA->hasComponent<ColliderComponent>() && !entityA->getComponent<ColliderComponent>().IsTrigger())
 		{
+			ColliderComponent* colliderA = &entityA->getComponent<ColliderComponent>();
 			for (int j = 0; j < manager.entities.size(); j++)
 			{
 				Entity* entityB = manager.entities[j].get();
 				if (entityB->hasComponent<ColliderComponent>())
 				{
-					if (i == j)//Same Index Guard Clause
+					ColliderComponent* colliderB = &entityB->getComponent<ColliderComponent>();
+
+					//Same Index Guard Clause
+					if (i == j)
+					{
+						continue;
+					}
+
+					//Double Static Guard Clause
+					if (colliderA->IsStatic() && colliderB->IsStatic()) 
 					{
 						continue;
 					}
 
 					//If this gets laggy can do a sphere check before GJK algorithm
 
-					auto collisionPoint = collision.GJK(&entityA->getComponent<ColliderComponent>(), &entityB->getComponent<ColliderComponent>());
+					auto collisionPoint = collision.GJK(colliderA, colliderB);
 
-					if (collisionPoint.colliding && !entityA->getComponent<ColliderComponent>().IsStatic())
+					if (collisionPoint.colliding && !colliderA->IsStatic())
 					{
-						entityA->getComponent<TransformComponent>().position.x -= collisionPoint.normal.x;
-						entityA->getComponent<TransformComponent>().position.y -= collisionPoint.normal.y;
+						if (!colliderB->IsTrigger())
+						{
+							entityA->getComponent<TransformComponent>().dPosition.x -= collisionPoint.normal.x;
+							entityA->getComponent<TransformComponent>().dPosition.y -= collisionPoint.normal.y;
+						}
+						else 
+						{
+							entityB->getComponent<ColliderComponent>().OnTrigger();
+						}
 					}
 				}
 			}
@@ -159,7 +217,6 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 
-	map->DrawMap();
 	manager.Render();
 	
 	SDL_RenderPresent(renderer);

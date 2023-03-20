@@ -1,8 +1,13 @@
 #include "Map.h"
 #include "TextureManager.h"
 #include <iostream>
+#include "TransformComponent.h"
+#include "TileComponent.h"
+#include "SpriteRendererComponent.h"
 
-int lvl1[20][25] = { 
+//Add File Input 
+
+int lvl1[25][25] = { 
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -22,17 +27,21 @@ int lvl1[20][25] = {
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 
-Map::Map() 
+Map::Map(Manager* manager) 
 {
-	textures[0] = TextureManager::LoadTexture("Assets/water.png");
-	textures[1] = TextureManager::LoadTexture("Assets/dirt.png");
-	textures[2] = TextureManager::LoadTexture("Assets/grass.png");
+	textures[0] = "Water";
+	textures[1] = "Dirt";
+	textures[2] = "Grass";
 
-	LoadMap(lvl1);
 	//Normal Data
 	src.x = 0;
 	src.y = 0;
@@ -43,33 +52,26 @@ Map::Map()
 	dest.h = 32;
 	dest.x = 0;
 	dest.y = 0;
+
+	Map::manager = manager;
+
+	LoadMap(lvl1);
 }
 
 Map::~Map()
 {
 }
 
-void Map::LoadMap(int arr[20][25])
+void Map::LoadMap(int map[20][25])
 {
-	for (int row = 0; row < 20; row++)
+	for (int row = 0; row < 25; row++)
 	{
 		for (int column = 0; column < 25; column++)
 		{
-			map[row][column] = arr[row][column];
-		}
-	}
-}
-
-void Map::DrawMap()
-{
-	int type = 0;
-	for (int row = 0; row < 20; row++)
-	{
-		for (int column = 0; column < 25; column++)
-		{
-			dest.x = column * 32;
-			dest.y = row * 32;
-			TextureManager::Draw(textures[map[row][column]], src, dest);
+			auto& tile(manager->AddEntity(LAYER_BACKGROUND));
+			tile.addComponent<TransformComponent>(Vector3D(row, column, -10), Vector3D(1, 1, 1));
+			tile.addComponent<TileComponent>("Water");
+			tile.AddTag("Tile");
 		}
 	}
 }

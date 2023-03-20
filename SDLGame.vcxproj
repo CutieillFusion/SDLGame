@@ -19,10 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="ColliderComponents.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InputListenerComponent.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
     <ClInclude Include="SpriteRendererComponent.h" />
@@ -33,7 +36,10 @@
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CollisionDetection.cpp" />
+    <ClCompile Include="ECS.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />

@@ -2,11 +2,12 @@
 #include "ECS.h"
 #include "SDL.h"
 #include "Vector.h"
+#include "InputListenerComponent.h"
 #include "TransformComponent.h"
 
 #define DELTA_TIME 1.0f / 144.0f
 
-class PlayerControllerComponent : public Component
+class PlayerControllerComponent : public InputListenerComponent
 {
 public:
 	PlayerControllerComponent() = default;
@@ -19,7 +20,7 @@ public:
 	void Update() override
 	{
 		float speed = 5.0f;
-		Vector2D direction = Vector2D();
+		Vector3D direction = Vector3D();
 
 		if (keyboard[SDL_SCANCODE_W])
 		{
@@ -41,15 +42,10 @@ public:
 			direction.x += 1;
 		}
 
-		transform->position += direction.Normalize() * speed * (DELTA_TIME);
+		transform->dPosition += direction.Normalize() * speed * (DELTA_TIME);
 	}
 
-	void Render() override
-	{
-
-	}
-
-	void KeyDown(SDL_KeyboardEvent* key)
+	void OnKeyDown(SDL_KeyboardEvent* key)
 	{
 		if (key->repeat == 0 && key->keysym.scancode < MAX_KEYBOARD_KEYS)
 		{
@@ -60,7 +56,7 @@ public:
 		}
 	}
 
-	void KeyUp(SDL_KeyboardEvent* key)
+	void OnKeyUp(SDL_KeyboardEvent* key)
 	{
 		if (key->repeat == 0 && key->keysym.scancode < MAX_KEYBOARD_KEYS)
 		{
@@ -73,5 +69,4 @@ public:
 
 private:
 	TransformComponent* transform;
-	bool keyboard[MAX_KEYBOARD_KEYS];
 };
