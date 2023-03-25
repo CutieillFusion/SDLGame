@@ -1,41 +1,17 @@
 #pragma once
 #include "ECS.h"
 #include "Vector.h"
-#include "Game.h"
+
+#define WORLD_SCALE 32
 
 class TransformComponent : public Component
 {
 public:
 	TransformComponent() = default;
-	TransformComponent(Vector3D position, Vector3D scale)
-	{
-		TransformComponent::position = position;
-		TransformComponent::scale = scale;
-		TransformComponent::rotationAngle = 0;
-		TransformComponent::flipFlags = SDL_FLIP_NONE;
-		destRect.x = 0;
-		destRect.y = 0;
-		destRect.w = WORLD_SCALE;
-		destRect.h = WORLD_SCALE;
-	}
+	TransformComponent(Vector3D position, Vector3D scale);
+	TransformComponent(Vector3D position, Vector3D scale, float rotationAngle, SDL_RendererFlip flipFlags);
 
-	TransformComponent(Vector3D position, Vector3D scale, float rotationAngle, SDL_RendererFlip flipFlags)
-	{
-		TransformComponent::position = position;
-		TransformComponent::scale = scale;
-		TransformComponent::rotationAngle = 0;
-		TransformComponent::flipFlags = flipFlags;
-		destRect.x = 0;
-		destRect.y = 0;
-		destRect.w = WORLD_SCALE;
-		destRect.h = WORLD_SCALE;
-	}
-
-	void Update() override 
-	{
-		position += dPosition;
-		dPosition = Vector3D();
-	}
+	void Update() override;
 
 	Vector3D dPosition;
 	Vector3D position;

@@ -1,18 +1,17 @@
 #include "Game.h"
-#include "TextureManager.h"
 #include "Map.h"
-#include "Vector.h"
 #include "ECS.h"
-#include "SDL_ttf.h"
 #include "ColliderComponents.h"
 #include "CollisionDetection.h"
 #include "SpriteRendererComponent.h"
 #include "TransformComponent.h"
 #include "PlayerControllerComponent.h"
 #include "TextRendererComponent.h"
+#include "ImageRendererComponent.h"
 #include "AssetManager.h"
 
 Map* map;
+
 
 SDL_Renderer* Game::renderer = nullptr;
 
@@ -21,6 +20,8 @@ Vector2D cameraOffset = Vector2D(800.0f/(WORLD_SCALE * 2), 640.0f/(WORLD_SCALE *
 
 Manager manager;
 
+AssetManager* Game::assets = new AssetManager();
+
 //Entities
 auto& newPlayer(manager.AddEntity(LAYER_CHARACTER));
 auto& debug(manager.AddEntity(LAYER_FOREGROUND));
@@ -28,6 +29,7 @@ auto& Box(manager.AddEntity(LAYER_FOREGROUND));
 auto& BoxStatic(manager.AddEntity(LAYER_FOREGROUND));
 auto& BoxTrigger(manager.AddEntity(LAYER_FOREGROUND));
 auto& Text(manager.AddEntity(LAYER_UI));
+auto& Image(manager.AddEntity(LAYER_UI));
 
 
 
@@ -69,9 +71,6 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 			std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
 		}
 
-		//Initializes AssetManager
-		AssetManager();
-
 		isRunning = true;
 	}
 	else 
@@ -80,13 +79,30 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	}
 
 	//PUT ALL TEXTURES AND FONTS HERE
-	AssetManager::instance->AddTexture("Player", "Assets/player.png");
-	AssetManager::instance->AddTexture("Debug", "Assets/debug.png");
-	AssetManager::instance->AddTexture("Water", "Assets/water.png");
-	AssetManager::instance->AddTexture("Grass", "Assets/grass.png");
-	AssetManager::instance->AddTexture("Dirt", "Assets/dirt.png");
-	AssetManager::instance->AddFont("8Bit", "Assets/8Bit.ttf", 32);
-	AssetManager::instance->AddFont("Test", "Assets/Test.ttf", 32);
+	Game::assets->AddTexture("Player", "Assets/player.png");
+	Game::assets->AddTexture("Debug", "Assets/debug.png");
+	Game::assets->AddTexture("Water", "Assets/water.png");
+	Game::assets->AddTexture("Grass", "Assets/grass.png");
+	Game::assets->AddTexture("Dirt", "Assets/dirt.png");
+
+	//Player Animations
+	Game::assets->AddTexture("Player_0", "Assets/Player/Player_0.png");
+	Game::assets->AddTexture("Player_1", "Assets/Player/Player_1.png");
+	Game::assets->AddTexture("Player_2", "Assets/Player/Player_2.png");
+	Game::assets->AddTexture("Player_3", "Assets/Player/Player_3.png");
+	Game::assets->AddTexture("Player_4", "Assets/Player/Player_4.png");
+	Game::assets->AddTexture("Player_5", "Assets/Player/Player_5.png");
+	Game::assets->AddTexture("Player_6", "Assets/Player/Player_6.png");
+	Game::assets->AddTexture("Player_7", "Assets/Player/Player_7.png");
+	Game::assets->AddTexture("Player_8", "Assets/Player/Player_8.png");
+	Game::assets->AddTexture("Player_9", "Assets/Player/Player_9.png");
+	Game::assets->AddTexture("Player_10", "Assets/Player/Player_10.png");
+	Game::assets->AddTexture("Player_11", "Assets/Player/Player_11.png");
+	Game::assets->AddTexture("Player_12", "Assets/Player/Player_12.png");
+
+
+	Game::assets->AddFont("8Bit", "Assets/Fonts/8Bit.ttf", 32);
+	Game::assets->AddFont("Test", "Assets/Fonts/Test.ttf", 32);
 
 
 	map = new Map(&manager);
@@ -102,7 +118,6 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	newPlayer.addComponent<SpriteRendererComponent>("Player");
 	newPlayer.addComponent<PlayerControllerComponent>();
 	newPlayer.addComponent<ColliderComponent>(boxCollider, false, false);
-	newPlayer.addComponent<CameraComponent>();
 	newPlayer.AddTag("Player");
 
 	Box.addComponent<TransformComponent>(Vector3D(2, 2, 0), Vector3D(2, 1, 1));
@@ -120,9 +135,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	BoxTrigger.addComponent<ColliderComponent>(boxCollider, false, true);
 	BoxTrigger.AddTag("Box");
 
-	SDL_Color textColor = { 0, 0, 0, 255 };
-	Text.addComponent<TextRendererComponent>("Test", "8Bit", Vector3D(10, 600, 0), textColor);
+	//SDL_Color textColor = { 0, 0, 0, 255 };
+	//Text.addComponent<TextRendererComponent>("Test", "8Bit", Vector3D(10, 600, 0), textColor);
 
+	//Image.addComponent<ImageRendererComponent>("Dirt", Vector3D(200, 400, 0), Vector3D(200, 200, 0));
 }
 
 void Game::handleEvents()
@@ -139,6 +155,7 @@ void Game::handleEvents()
 			break;
 		case SDL_KEYUP:
 			newPlayer.getComponent<PlayerControllerComponent>().OnKeyUp(&events.key);
+
 			break;
 		case SDL_MOUSEMOTION:
 			int x, y;
@@ -152,11 +169,10 @@ void Game::handleEvents()
 
 auto collision = CollisionDetection();
 
-
 void Game::update()
 {
 	manager.Update();
-	
+
 	camera.x = newPlayer.getComponent<TransformComponent>().position.x - cameraOffset.x;
 	camera.y = newPlayer.getComponent<TransformComponent>().position.y - cameraOffset.y;
 
@@ -197,7 +213,7 @@ void Game::UpdateCollisions()
 
 					if (collisionPoint.colliding && !colliderA->IsStatic())
 					{
-						if (!colliderB->IsTrigger())
+						if (!colliderB->IsTrigger()) 
 						{
 							entityA->getComponent<TransformComponent>().dPosition.x -= collisionPoint.normal.x;
 							entityA->getComponent<TransformComponent>().dPosition.y -= collisionPoint.normal.y;

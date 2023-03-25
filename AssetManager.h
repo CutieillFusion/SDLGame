@@ -1,29 +1,25 @@
 #pragma once
 
-#include "SDL_ttf.h"
 #include <map>
-#include <vector>
 #include <string>
+#include "TextureManager.h"
+#include "SDL_ttf.h"
 
 class AssetManager
 {
 public:
-	static AssetManager* instance;
-	
 	AssetManager();
 	~AssetManager();
 
-	//Texture Managing
+
+	//texture management
 	void AddTexture(std::string id, const char* path);
 	SDL_Texture* GetTexture(std::string id);
 
-	void AddFont(std::string id, const char* path, int fontSize);
+	void AddFont(std::string id, std::string path, int fontSize);
 	TTF_Font* GetFont(std::string id);
 
 private:
-	std::vector<std::string> textureIds;
-	std::vector<SDL_Texture*> textures;
-	std::vector<std::string> fontIds;
-	std::vector<TTF_Font*> fonts;
+	std::map<std::string, SDL_Texture*> textures;
+	std::map<std::string, TTF_Font*> fonts;
 };
-

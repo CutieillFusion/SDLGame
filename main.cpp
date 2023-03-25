@@ -35,9 +35,17 @@ int main(int argc, char* argv[])
 }
 
 //TODO:
+//Create A SpriteComponent
+//Create A SpriteAnimationComponent
+//Add Simple Animation to spriteRenderer 
+//	*Maybe refactor all renderers eventually
+//Add RectTransform for UI Elements
+//	*part of Refactor
 //Add Circle Check before running CollisionDetection to save resources?
 //Add .cpp Files for all Components
-
+//	*Part of Refactor
+//Add Slerp to pivot point
+//Add Transparent Image Loading
 
 //https://www.youtube.com/watch?v=1eaxE_waDNc&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&index=8
 //https://www.parallelrealities.co.uk/tutorials/

@@ -1,5 +1,4 @@
 #include "Map.h"
-#include "TextureManager.h"
 #include <iostream>
 #include "TransformComponent.h"
 #include "TileComponent.h"
@@ -64,9 +63,9 @@ Map::~Map()
 
 void Map::LoadMap(int map[20][25])
 {
-	for (int row = 0; row < 25; row++)
+	for (float row = 0; row < 25; row++)
 	{
-		for (int column = 0; column < 25; column++)
+		for (float column = 0; column < 25; column++)
 		{
 			auto& tile(manager->AddEntity(LAYER_BACKGROUND));
 			tile.addComponent<TransformComponent>(Vector3D(row, column, -10), Vector3D(1, 1, 1));

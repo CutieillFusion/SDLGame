@@ -20,14 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="ColliderComponents.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="ImageRendererComponent.h" />
     <ClInclude Include="InputListenerComponent.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
+    <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="TextRendererComponent.h" />
     <ClInclude Include="TextureManager.h" />
@@ -37,13 +38,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="ImageRendererComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="PlayerControllerComponent.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="SpriteRendererComponent.cpp" />
+    <ClCompile Include="TextRendererComponent.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TileComponent.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -56,14 +63,40 @@
     <None Include="zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Assets\8Bit.ttf" />
-    <Font Include="Assets\Test.ttf" />
+    <Font Include="Assets\Fonts\8Bit.ttf" />
+    <Font Include="Assets\Fonts\Test.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\debug.png" />
     <Image Include="Assets\dirt.png" />
     <Image Include="Assets\grass.png" />
     <Image Include="Assets\player.png" />
+    <Image Include="Assets\Player\Player_0.png" />
+    <Image Include="Assets\Player\Player_1.png" />
+    <Image Include="Assets\Player\Player_10.png" />
+    <Image Include="Assets\Player\Player_11.png" />
+    <Image Include="Assets\Player\Player_12.png" />
+    <Image Include="Assets\Player\Player_2.png" />
+    <Image Include="Assets\Player\Player_3.png" />
+    <Image Include="Assets\Player\Player_4.png" />
+    <Image Include="Assets\Player\Player_5.png" />
+    <Image Include="Assets\Player\Player_6.png" />
+    <Image Include="Assets\Player\Player_7.png" />
+    <Image Include="Assets\Player\Player_8.png" />
+    <Image Include="Assets\Player\Player_9.png" />
+    <Image Include="Assets\Player\Player_0.png" />
+    <Image Include="Assets\player_1.png" />
+    <Image Include="Assets\Player\Player_10.png" />
+    <Image Include="Assets\Player\Player_11.png" />
+    <Image Include="Assets\Player\Player_12.png" />
+    <Image Include="Assets\Player_2.png" />
+    <Image Include="Assets\Player\Player_3.png" />
+    <Image Include="Assets\Player\Player_4.png" />
+    <Image Include="Assets\Player\Player_5.png" />
+    <Image Include="Assets\Player\Player_6.png" />
+    <Image Include="Assets\Player\Player_7.png" />
+    <Image Include="Assets\Player\Player_8.png" />
+    <Image Include="Assets\Player\Player_9.png" />
     <Image Include="Assets\water.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

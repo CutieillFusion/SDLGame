@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include <iostream>
 #include <string>
 #include "Vector.h"
@@ -9,6 +10,8 @@
 #define WORLD_SCALE 32
 #define MAX_KEYBOARD_KEYS 350
 #define DELTA_TIME 1.0f / 144.0f
+
+class AssetManager;
 
 class Game
 {
@@ -31,7 +34,9 @@ public:
 
 	static SDL_Renderer* renderer;
 	static Vector2D camera;
+	static AssetManager* assets;
 private:
 	bool isRunning;
 	SDL_Window *window;
+
 };

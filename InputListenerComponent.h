@@ -2,6 +2,8 @@
 #include "ECS.h"
 #include "SDL.h"
 
+#define MAX_KEYBOARD_KEYS 350
+
 class InputListenerComponent : public Component
 {
 public:

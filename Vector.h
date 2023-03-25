@@ -124,8 +124,8 @@ public:
 	SDL_Point* ToSDLPoint() 
 	{
 		SDL_Point point = SDL_Point();
-		point.x = x;
-		point.y = y;
+		point.x = (int)x;
+		point.y = (int)y;
 		return &point;
 	}
 

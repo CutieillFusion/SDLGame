@@ -54,10 +54,13 @@
     <ClInclude Include="InputListenerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ImageRendererComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CameraComponent.h">
+    <ClInclude Include="SpriteComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,13 +80,31 @@
     <ClCompile Include="CollisionDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ECS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
+    <ClCompile Include="ImageRendererComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRendererComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TileComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerControllerComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRendererComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,8 +119,8 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Assets\8Bit.ttf" />
-    <Font Include="Assets\Test.ttf" />
+    <Font Include="Assets\Fonts\8Bit.ttf" />
+    <Font Include="Assets\Fonts\Test.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\dirt.png">
@@ -115,6 +136,84 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Assets\debug.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_9.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\player_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_9.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Player\Player_12.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
