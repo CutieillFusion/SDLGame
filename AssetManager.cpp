@@ -26,3 +26,28 @@ TTF_Font* AssetManager::GetFont(std::string id)
 {
 	return fonts[id];
 }
+
+void AssetManager::AddJSONFile(std::string id, const char* path)
+{
+	auto file = JSONParser(path);
+	file.parse();
+	files.emplace(id, file.root);
+}
+
+std::shared_ptr<JSON::JSONNode> AssetManager::GetJSONFile(std::string id)
+{
+	return files[id];
+}
+
+void AssetManager::LoadSpritesFromJSONFile(std::string id, std::string jsonId)
+{
+	auto root = GetJSONFile(id);
+
+	auto spritePaths = root.get()->returnObject()[jsonId].get()->returnObject()["path"].get()->returnList();
+	auto spriteIds = root.get()->returnObject()[jsonId].get()->returnObject()["id"].get()->returnList();
+
+	for (int i = 0; i < spritePaths.size(); i++)
+	{
+		AddTexture(spriteIds[i].get()->returnString(), spritePaths[i].get()->returnString().c_str());
+	}
+}

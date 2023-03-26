@@ -37,3 +37,18 @@ void SpriteComponent::AddTexture(std::vector<std::string> ids)
 		textures.emplace_back(Game::assets->GetTexture(id));
 	}
 }
+
+SDL_Texture* SpriteComponent::GetCurrentTexture()
+{
+	return textures[index];
+}
+
+void SpriteComponent::SetIndex(unsigned int index)
+{
+	SpriteComponent::index = index;
+}
+
+unsigned int SpriteComponent::GetIndex()
+{
+	return index;
+}

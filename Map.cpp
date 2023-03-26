@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TransformComponent.h"
 #include "TileComponent.h"
+#include "SpriteComponent.h"
 #include "SpriteRendererComponent.h"
 
 //Add File Input 
@@ -69,7 +70,8 @@ void Map::LoadMap(int map[20][25])
 		{
 			auto& tile(manager->AddEntity(LAYER_BACKGROUND));
 			tile.addComponent<TransformComponent>(Vector3D(row, column, -10), Vector3D(1, 1, 1));
-			tile.addComponent<TileComponent>("Water");
+			tile.addComponent<SpriteComponent>("Water");
+			tile.addComponent<TileComponent>();
 			tile.AddTag("Tile");
 		}
 	}

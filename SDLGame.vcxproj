@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="ColliderComponents.h" />
@@ -26,6 +27,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="ImageRendererComponent.h" />
     <ClInclude Include="InputListenerComponent.h" />
+    <ClInclude Include="JSONNode.h" />
+    <ClInclude Include="JSONParser.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
@@ -33,15 +36,19 @@
     <ClInclude Include="TextRendererComponent.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TileComponent.h" />
+    <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ImageRendererComponent.cpp" />
+    <ClCompile Include="JSONNode.cpp" />
+    <ClCompile Include="JSONParser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerControllerComponent.cpp" />
@@ -50,11 +57,13 @@
     <ClCompile Include="TextRendererComponent.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TileComponent.cpp" />
+    <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Assets\JSON\Sprites.json" />
     <None Include="libpng16-16.dll" />
     <None Include="README.md" />
     <None Include="SDL2.dll" />
@@ -77,19 +86,6 @@
     <Image Include="Assets\Player\Player_11.png" />
     <Image Include="Assets\Player\Player_12.png" />
     <Image Include="Assets\Player\Player_2.png" />
-    <Image Include="Assets\Player\Player_3.png" />
-    <Image Include="Assets\Player\Player_4.png" />
-    <Image Include="Assets\Player\Player_5.png" />
-    <Image Include="Assets\Player\Player_6.png" />
-    <Image Include="Assets\Player\Player_7.png" />
-    <Image Include="Assets\Player\Player_8.png" />
-    <Image Include="Assets\Player\Player_9.png" />
-    <Image Include="Assets\Player\Player_0.png" />
-    <Image Include="Assets\player_1.png" />
-    <Image Include="Assets\Player\Player_10.png" />
-    <Image Include="Assets\Player\Player_11.png" />
-    <Image Include="Assets\Player\Player_12.png" />
-    <Image Include="Assets\Player_2.png" />
     <Image Include="Assets\Player\Player_3.png" />
     <Image Include="Assets\Player\Player_4.png" />
     <Image Include="Assets\Player\Player_5.png" />

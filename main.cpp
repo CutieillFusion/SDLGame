@@ -35,15 +35,9 @@ int main(int argc, char* argv[])
 }
 
 //TODO:
-//Create A SpriteComponent
-//Create A SpriteAnimationComponent
-//Add Simple Animation to spriteRenderer 
-//	*Maybe refactor all renderers eventually
 //Add RectTransform for UI Elements
 //	*part of Refactor
 //Add Circle Check before running CollisionDetection to save resources?
-//Add .cpp Files for all Components
-//	*Part of Refactor
 //Add Slerp to pivot point
 //Add Transparent Image Loading
 

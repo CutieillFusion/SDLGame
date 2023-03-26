@@ -8,7 +8,9 @@
 #include "PlayerControllerComponent.h"
 #include "TextRendererComponent.h"
 #include "ImageRendererComponent.h"
+#include "AnimationComponent.h"
 #include "AssetManager.h"
+#include "JSONParser.h"
 
 Map* map;
 
@@ -23,19 +25,17 @@ Manager manager;
 AssetManager* Game::assets = new AssetManager();
 
 //Entities
-auto& newPlayer(manager.AddEntity(LAYER_CHARACTER));
+auto& Player(manager.AddEntity(LAYER_CHARACTER));
 auto& debug(manager.AddEntity(LAYER_FOREGROUND));
 auto& Box(manager.AddEntity(LAYER_FOREGROUND));
 auto& BoxStatic(manager.AddEntity(LAYER_FOREGROUND));
 auto& BoxTrigger(manager.AddEntity(LAYER_FOREGROUND));
 auto& Text(manager.AddEntity(LAYER_UI));
 auto& Image(manager.AddEntity(LAYER_UI));
-
-
-
+ 
 Game::Game()
 {
-}
+} 
 
 Game::~Game()
 {
@@ -78,28 +78,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = false;
 	}
 
-	//PUT ALL TEXTURES AND FONTS HERE
-	Game::assets->AddTexture("Player", "Assets/player.png");
-	Game::assets->AddTexture("Debug", "Assets/debug.png");
-	Game::assets->AddTexture("Water", "Assets/water.png");
-	Game::assets->AddTexture("Grass", "Assets/grass.png");
-	Game::assets->AddTexture("Dirt", "Assets/dirt.png");
 
-	//Player Animations
-	Game::assets->AddTexture("Player_0", "Assets/Player/Player_0.png");
-	Game::assets->AddTexture("Player_1", "Assets/Player/Player_1.png");
-	Game::assets->AddTexture("Player_2", "Assets/Player/Player_2.png");
-	Game::assets->AddTexture("Player_3", "Assets/Player/Player_3.png");
-	Game::assets->AddTexture("Player_4", "Assets/Player/Player_4.png");
-	Game::assets->AddTexture("Player_5", "Assets/Player/Player_5.png");
-	Game::assets->AddTexture("Player_6", "Assets/Player/Player_6.png");
-	Game::assets->AddTexture("Player_7", "Assets/Player/Player_7.png");
-	Game::assets->AddTexture("Player_8", "Assets/Player/Player_8.png");
-	Game::assets->AddTexture("Player_9", "Assets/Player/Player_9.png");
-	Game::assets->AddTexture("Player_10", "Assets/Player/Player_10.png");
-	Game::assets->AddTexture("Player_11", "Assets/Player/Player_11.png");
-	Game::assets->AddTexture("Player_12", "Assets/Player/Player_12.png");
-
+	Game::assets->AddJSONFile("Sprites", "Assets/JSON/Sprites.json");
+	Game::assets->LoadSpritesFromJSONFile("Sprites", "WorldSprites");
+	Game::assets->LoadSpritesFromJSONFile("Sprites", "PlayerSprites");
 
 	Game::assets->AddFont("8Bit", "Assets/Fonts/8Bit.ttf", 32);
 	Game::assets->AddFont("Test", "Assets/Fonts/Test.ttf", 32);
@@ -108,30 +90,69 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	map = new Map(&manager);
 
 	std::vector<Vector3D> boxCollider = {
-	Vector3D(0.0f, 0.0f, 0),
-	Vector3D(0.0f, 1.0f, 0),
-	Vector3D(1.0f, 1.0f, 0),
-	Vector3D(1.0f, 0.0f, 0)
+		Vector3D(0.0f, 0.0f, 0),
+		Vector3D(0.0f, 1.0f, 0),
+		Vector3D(1.0f, 1.0f, 0),
+		Vector3D(1.0f, 0.0f, 0)
 	};
 	
-	newPlayer.addComponent<TransformComponent>(Vector3D(10, 10, 0), Vector3D(1, 1, 1));
-	newPlayer.addComponent<SpriteRendererComponent>("Player");
-	newPlayer.addComponent<PlayerControllerComponent>();
-	newPlayer.addComponent<ColliderComponent>(boxCollider, false, false);
-	newPlayer.AddTag("Player");
+	std::vector<std::string> player_sprites = 
+	{
+		"Player_0",
+		"Player_1",
+		"Player_2",
+		"Player_3",
+		"Player_4",
+		"Player_5",
+		"Player_6",
+		"Player_7",
+		"Player_8",
+		"Player_9",
+		"Player_10",
+		"Player_11",
+		"Player_12",
+	};
+
+	std::vector<AnimationState> player_animations =
+	{
+		{0, 144},
+		{1, 144},
+		{2, 144},
+		{3, 144},
+		{4, 144},
+		{5, 144},
+		{6, 144},
+		{7, 144},
+		{8, 144},
+		{9, 144},
+		{10, 144},
+		{11, 144},
+		{12, 144},
+	};
+
+	Player.addComponent<TransformComponent>(Vector3D(10, 10, 0), Vector3D(1, 1, 1));
+	Player.addComponent<SpriteComponent>(player_sprites);
+	Player.addComponent<AnimationComponent>(player_animations);
+	Player.addComponent<SpriteRendererComponent>();
+	Player.addComponent<PlayerControllerComponent>();
+	Player.addComponent<ColliderComponent>(boxCollider, false, false);
+	Player.AddTag("Player");
 
 	Box.addComponent<TransformComponent>(Vector3D(2, 2, 0), Vector3D(2, 1, 1));
-	Box.addComponent<SpriteRendererComponent>("Debug");
+	Box.addComponent<SpriteComponent>("Debug");
+	Box.addComponent<SpriteRendererComponent>();
 	Box.addComponent<ColliderComponent>(boxCollider, false, false);
 	Box.AddTag("Box");
 
 	BoxStatic.addComponent<TransformComponent>(Vector3D(8, 4, 0), Vector3D(2, 3, 1));
-	BoxStatic.addComponent<SpriteRendererComponent>("Debug");
+	BoxStatic.addComponent<SpriteComponent>("Debug");
+	BoxStatic.addComponent<SpriteRendererComponent>();
 	BoxStatic.addComponent<ColliderComponent>(boxCollider, true, false);
 	BoxStatic.AddTag("Box");
 
 	BoxTrigger.addComponent<TransformComponent>(Vector3D(6, 10, 0), Vector3D(2, 2, 1));
-	BoxTrigger.addComponent<SpriteRendererComponent>("Debug");
+	BoxTrigger.addComponent<SpriteComponent>("Debug");
+	BoxTrigger.addComponent<SpriteRendererComponent>();
 	BoxTrigger.addComponent<ColliderComponent>(boxCollider, false, true);
 	BoxTrigger.AddTag("Box");
 
@@ -151,10 +172,10 @@ void Game::handleEvents()
 			isRunning = false;
 			break;
 		case SDL_KEYDOWN:
-			newPlayer.getComponent<PlayerControllerComponent>().OnKeyDown(&events.key);
+			Player.getComponent<PlayerControllerComponent>().OnKeyDown(&events.key);
 			break;
 		case SDL_KEYUP:
-			newPlayer.getComponent<PlayerControllerComponent>().OnKeyUp(&events.key);
+			Player.getComponent<PlayerControllerComponent>().OnKeyUp(&events.key);
 
 			break;
 		case SDL_MOUSEMOTION:
@@ -169,12 +190,14 @@ void Game::handleEvents()
 
 auto collision = CollisionDetection();
 
+
+int frames = 0;
 void Game::update()
 {
 	manager.Update();
 
-	camera.x = newPlayer.getComponent<TransformComponent>().position.x - cameraOffset.x;
-	camera.y = newPlayer.getComponent<TransformComponent>().position.y - cameraOffset.y;
+	camera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
+	camera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
 
 	UpdateCollisions();
 }

@@ -1,17 +1,11 @@
 #include "TileComponent.h"
 
-TileComponent::TileComponent(std::string id)
-{
-	TileComponent::texture = Game::assets->GetTexture(id);
-	srcRect.x = 0;
-	srcRect.y = 0;
-	srcRect.w = WORLD_SCALE;
-	srcRect.h = WORLD_SCALE;
-}
-
 void TileComponent::Initialize()
 {
+	srcRect = { 0, 0, WORLD_SCALE, WORLD_SCALE };
+
 	transform = &entity->getComponent<TransformComponent>();
+	sprites = &entity->getComponent<SpriteComponent>();
 }
 
 void TileComponent::Update()
@@ -24,5 +18,5 @@ void TileComponent::Update()
 
 void TileComponent::Render()
 {
-	SDL_RenderCopyExF(Game::renderer, texture, &srcRect, &transform->destRect, transform->rotationAngle, NULL, transform->flipFlags);
+	SDL_RenderCopyF(Game::renderer, sprites->GetCurrentTexture(), &srcRect, &transform->destRect);
 }

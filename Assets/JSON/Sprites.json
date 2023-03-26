@@ -1,0 +1,50 @@
+{
+	"WorldSprites": {
+		"path": [
+			"Assets/player.png",
+			"Assets/debug.png",
+			"Assets/water.png",
+			"Assets/grass.png",
+			"Assets/dirt.png"
+		],
+		"id": [
+			"Player",
+			"Debug",
+			"Water",
+			"Grass",
+			"Dirt"
+		]
+	},
+	"PlayerSprites": {
+		"path": [
+			"Assets/Player/Player_0.png",
+			"Assets/Player/Player_1.png",
+			"Assets/Player/Player_2.png",
+			"Assets/Player/Player_3.png",
+			"Assets/Player/Player_4.png",
+			"Assets/Player/Player_5.png",
+			"Assets/Player/Player_6.png",
+			"Assets/Player/Player_7.png",
+			"Assets/Player/Player_8.png",
+			"Assets/Player/Player_9.png",
+			"Assets/Player/Player_10.png",
+			"Assets/Player/Player_11.png",
+			"Assets/Player/Player_12.png"
+		],
+		"id": [
+			"Player_0",
+			"Player_1",
+			"Player_2",
+			"Player_3",
+			"Player_4",
+			"Player_5",
+			"Player_6",
+			"Player_7",
+			"Player_8",
+			"Player_9",
+			"Player_10",
+			"Player_11",
+			"Player_12"
+		]
+	}
+}

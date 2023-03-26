@@ -1,17 +1,11 @@
 #include "SpriteRendererComponent.h"
 
-SpriteRendererComponent::SpriteRendererComponent(std::string id)
-{
-	SpriteRendererComponent::texture = Game::assets->GetTexture(id);
-	srcRect.x = 0;
-	srcRect.y = 0;
-	srcRect.w = WORLD_SCALE;
-	srcRect.h = WORLD_SCALE;
-}
-
 void SpriteRendererComponent::Initialize()
 {
+	srcRect = { 0, 0, WORLD_SCALE, WORLD_SCALE };
+
 	transform = &entity->getComponent<TransformComponent>();
+	sprites = &entity->getComponent<SpriteComponent>();
 }
 
 void SpriteRendererComponent::Update()
@@ -24,5 +18,5 @@ void SpriteRendererComponent::Update()
 
 void SpriteRendererComponent::Render()
 {
-	SDL_RenderCopyExF(Game::renderer, texture, &srcRect, &transform->destRect, transform->rotationAngle, NULL, transform->flipFlags);
+	SDL_RenderCopyExF(Game::renderer, sprites->GetCurrentTexture(), &srcRect, &transform->destRect, transform->rotationAngle, NULL, transform->flipFlags);
 }

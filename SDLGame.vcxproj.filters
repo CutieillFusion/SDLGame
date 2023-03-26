@@ -63,6 +63,18 @@
     <ClInclude Include="SpriteComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tokenizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +119,18 @@
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tokenizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="libpng16-16.dll" />
@@ -117,6 +141,7 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="README.md" />
+    <None Include="Assets\JSON\Sprites.json" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\8Bit.ttf" />
@@ -130,9 +155,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Assets\player.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\water.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Assets\debug.png">
@@ -177,43 +199,7 @@
     <Image Include="Assets\Player\Player_12.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Assets\player_1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player_2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_3.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_0.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_4.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_5.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_6.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_7.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_8.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_9.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_10.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_11.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Assets\Player\Player_12.png">
+    <Image Include="Assets\water.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
