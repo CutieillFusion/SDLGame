@@ -1,6 +1,6 @@
 #include "TextRendererComponent.h"
 
-TextRendererComponent::TextRendererComponent(std::string text, std::string id, Vector3D position, SDL_Color textColor)
+TextRendererComponent::TextRendererComponent(std::string text, std::string id, SDL_Color textColor)
 {
 	TextRendererComponent::text = text;
 	font = Game::assets->GetFont(id);
@@ -10,9 +10,6 @@ TextRendererComponent::TextRendererComponent(std::string text, std::string id, V
 		std::cout << "FONT FAILED TO LOAD!..." << std::endl;
 		return;
 	}
-
-	TextRendererComponent::position.x = (int)position.x;
-	TextRendererComponent::position.y = (int)position.y;
 
 	TextRendererComponent::textColor = textColor;
 
@@ -28,6 +25,9 @@ void TextRendererComponent::SetText()
 
 void TextRendererComponent::Initialize()
 {
+	rect = &entity->getComponent<RectComponent>();
+	TextRendererComponent::position.x = (int)rect->position.x;
+	TextRendererComponent::position.y = (int)rect->position.y;
 }
 
 void TextRendererComponent::Update()

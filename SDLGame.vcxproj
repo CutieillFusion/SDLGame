@@ -21,8 +21,10 @@
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="ButtonComponent.h" />
+    <ClInclude Include="ButtonEvents.h" />
     <ClInclude Include="CollisionDetection.h" />
-    <ClInclude Include="ColliderComponents.h" />
+    <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ImageRendererComponent.h" />
@@ -31,6 +33,7 @@
     <ClInclude Include="JSONParser.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
+    <ClInclude Include="RectComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="TextRendererComponent.h" />
@@ -38,11 +41,15 @@
     <ClInclude Include="TileComponent.h" />
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="UIColliderComponent.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="ButtonComponent.cpp" />
+    <ClCompile Include="ButtonEvents.cpp" />
+    <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -52,6 +59,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerControllerComponent.cpp" />
+    <ClCompile Include="RectComponent.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="SpriteRendererComponent.cpp" />
     <ClCompile Include="TextRendererComponent.cpp" />
@@ -59,6 +67,7 @@
     <ClCompile Include="TileComponent.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="UIColliderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

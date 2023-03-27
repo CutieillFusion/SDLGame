@@ -16,7 +16,7 @@ public:
 	void Render() override;
 
 private:
-	SpriteComponent* sprites;
-	TransformComponent* transform;
+	SpriteComponent* sprites{};
+	TransformComponent* transform{};
 	SDL_Rect srcRect;
 };

@@ -18,7 +18,9 @@ public:
 
 	void OnKeyDown(SDL_KeyboardEvent* key);
 	void OnKeyUp(SDL_KeyboardEvent* key);
+	void OnMouseDown(SDL_MouseButtonEvent* key);
+	void OnMouseUp(SDL_MouseButtonEvent* key);
 
 private:
-	TransformComponent* transform;
+	TransformComponent* transform{};
 };

@@ -3,6 +3,7 @@
 void PlayerControllerComponent::Initialize()
 {
 	transform = &entity->getComponent<TransformComponent>();
+	entity->AddTag("InputListenerComponent");
 }
 
 void PlayerControllerComponent::Update()
@@ -53,4 +54,12 @@ void PlayerControllerComponent::OnKeyUp(SDL_KeyboardEvent* key)
 			keyboard[key->keysym.scancode] = false;
 		}
 	}
+}
+
+void PlayerControllerComponent::OnMouseDown(SDL_MouseButtonEvent* key)
+{
+}
+
+void PlayerControllerComponent::OnMouseUp(SDL_MouseButtonEvent* key)
+{
 }

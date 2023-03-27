@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
 }
 
 //TODO:
-//Add RectTransform for UI Elements
-//	*part of Refactor
+//Refactor ECS System so you can remove Entities
+//	*Map for Entities is best choice change how render layers work 
 //Add Circle Check before running CollisionDetection to save resources?
 //Add Slerp to pivot point
 //Add Transparent Image Loading
-
+//Add Button Class with Function Pointers
 //https://www.youtube.com/watch?v=1eaxE_waDNc&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&index=8
 //https://www.parallelrealities.co.uk/tutorials/

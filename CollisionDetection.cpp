@@ -18,10 +18,36 @@ Vector3D CollisionDetection::FindFarthestPoint(ColliderComponent* collider, Vect
 	return maxPoint;
 }
 
+Vector3D CollisionDetection::FindFarthestPoint(UIColliderComponent* collider, Vector3D direction)
+{
+	Vector3D maxPoint;
+	float maxDistance = -FLT_MAX;
+
+	for (Vector3D vertex : collider->movingMesh)
+	{
+		float distance = vertex.Dot(direction);
+		if (distance > maxDistance)
+		{
+			maxDistance = distance;
+			maxPoint = vertex;
+		}
+	}
+
+	return maxPoint;
+}
+
 Vector3D CollisionDetection::Support(ColliderComponent* colliderA, ColliderComponent* colliderB, Vector3D direction)
 {
 	Vector3D a = FindFarthestPoint(colliderA, direction);
 	Vector3D b = FindFarthestPoint(colliderB, -direction);
+
+	return a - b;
+}
+
+Vector3D CollisionDetection::Support(UIColliderComponent* colliderA, SDL_Rect* mousePos, Vector3D direction)
+{
+	Vector3D a = FindFarthestPoint(colliderA, direction);
+	Vector3D b = Vector3D((float)mousePos->x, (float)mousePos->y, 0);
 
 	return a - b;
 }
@@ -105,6 +131,85 @@ CollisionPoint CollisionDetection::GJK(ColliderComponent* colliderA, ColliderCom
 	}
 
 	return collisionPoint;
+}
+
+bool CollisionDetection::GJK(UIColliderComponent* colliderA, SDL_Rect* mousePos)
+{
+	CollisionPoint collisionPoint = { Vector3D(), false };
+
+	int index = 0;
+	Vector3D a, b, c, ao, ab, ac, abperp, acperp;
+	std::vector<Vector3D> simplex = { Vector3D(), Vector3D(), Vector3D() };
+	Vector3D direction = Support(colliderA, mousePos, Vector3D(1, 0, 0));
+
+	a = simplex[0] = Support(colliderA, mousePos, direction);
+
+	if (a.Dot(direction) <= 0)
+	{
+		//No Collision
+		return false;
+	}
+
+	direction = -a;
+
+	while (true)
+	{
+		a = simplex[++index] = Support(colliderA, mousePos, direction);
+
+		if (a.Dot(direction) <= 0)
+		{
+			//No Collision
+			return false;
+		}
+
+		ao = -a;
+
+		if (index < 2)
+		{
+			b = simplex[0];
+			ab = b - a;
+			direction = ab.Cross(ao).Cross(ab);
+			if (direction.Magnitude() == 0)
+			{
+				direction = ab.Perpendicular();
+			}
+			continue;
+		}
+
+		b = simplex[1];
+		c = simplex[0];
+		ab = b - a;
+		ac = c - a;
+
+		acperp = ab.Cross(ac).Cross(ac);
+
+		if (acperp.Dot(ao) >= 0)
+		{
+			//New direction is the Normal to Ac towards the Origin
+			direction = acperp;
+		}
+		else
+		{
+			abperp = ac.Cross(ab).Cross(ab);
+
+			if (abperp.Dot(ao) < 0)
+			{
+				//Collision
+				return true;
+			}
+
+			//Swap First Element (Point C)
+			simplex[0] = simplex[1];
+
+			direction = abperp;
+		}
+
+		//Swap Element in the Middle (Point B)
+		simplex[1] = simplex[2];
+		--index;
+	}
+
+	return false;
 }
 
 Vector3D CollisionDetection::EPA(std::vector<Vector3D> polytope, ColliderComponent* colliderA, ColliderComponent* colliderB)

@@ -1,7 +1,6 @@
 #include "Game.h"
 #include "Map.h"
-#include "ECS.h"
-#include "ColliderComponents.h"
+#include "ColliderComponent.h"
 #include "CollisionDetection.h"
 #include "SpriteRendererComponent.h"
 #include "TransformComponent.h"
@@ -11,6 +10,9 @@
 #include "AnimationComponent.h"
 #include "AssetManager.h"
 #include "JSONParser.h"
+#include "UIColliderComponent.h"
+#include "ButtonComponent.h"
+#include "ButtonEvents.h"
 
 Map* map;
 
@@ -20,19 +22,19 @@ SDL_Renderer* Game::renderer = nullptr;
 Vector2D Game::camera = Vector2D(0, 0);
 Vector2D cameraOffset = Vector2D(800.0f/(WORLD_SCALE * 2), 640.0f/(WORLD_SCALE * 2));//Center Screen
 
-Manager manager;
-
 AssetManager* Game::assets = new AssetManager();
 
+Manager* Game::manager = new Manager();
+
 //Entities
-auto& Player(manager.AddEntity(LAYER_CHARACTER));
-auto& debug(manager.AddEntity(LAYER_FOREGROUND));
-auto& Box(manager.AddEntity(LAYER_FOREGROUND));
-auto& BoxStatic(manager.AddEntity(LAYER_FOREGROUND));
-auto& BoxTrigger(manager.AddEntity(LAYER_FOREGROUND));
-auto& Text(manager.AddEntity(LAYER_UI));
-auto& Image(manager.AddEntity(LAYER_UI));
- 
+auto& Player(Game::manager->AddEntity(LAYER_CHARACTER));
+auto& debug(Game::manager->AddEntity(LAYER_FOREGROUND));
+auto& Box(Game::manager->AddEntity(LAYER_FOREGROUND));
+auto& BoxStatic(Game::manager->AddEntity(LAYER_FOREGROUND));
+auto& BoxTrigger(Game::manager->AddEntity(LAYER_FOREGROUND));
+auto& Text(Game::manager->AddEntity(LAYER_UI));
+auto& Image(Game::manager->AddEntity(LAYER_UI));
+
 Game::Game()
 {
 } 
@@ -87,7 +89,9 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	Game::assets->AddFont("Test", "Assets/Fonts/Test.ttf", 32);
 
 
-	map = new Map(&manager);
+	
+	
+	map = new Map(manager);
 
 	std::vector<Vector3D> boxCollider = {
 		Vector3D(0.0f, 0.0f, 0),
@@ -156,10 +160,25 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	BoxTrigger.addComponent<ColliderComponent>(boxCollider, false, true);
 	BoxTrigger.AddTag("Box");
 
-	//SDL_Color textColor = { 0, 0, 0, 255 };
-	//Text.addComponent<TextRendererComponent>("Test", "8Bit", Vector3D(10, 600, 0), textColor);
+	SDL_Color textColor = { 0, 0, 0, 255 };
+	Text.addComponent<RectComponent>(Vector3D(10, 600, 0), Vector3D(1, 1, 1));
+	Text.addComponent<TextRendererComponent>("Test", "8Bit", textColor);
 
-	//Image.addComponent<ImageRendererComponent>("Dirt", Vector3D(200, 400, 0), Vector3D(200, 200, 0));
+	std::vector<std::string> ids =
+	{
+		"Player_0", "Player_6", "Player_12"
+	};
+	std::vector<ButtonEvent> buttonEvents =
+	{
+		TestEvents::Test,
+		TestEvents::Disable
+	};
+	Image.addComponent<RectComponent>(Vector3D(200, 400, 0), Vector3D(200, 200, 0));
+	Image.addComponent<SpriteComponent>(ids);
+	Image.addComponent<ImageRendererComponent>();
+	Image.addComponent<UIColliderComponent>(boxCollider);
+	Image.addComponent<ButtonComponent>(buttonEvents);
+	Image.AddTag("Button");
 }
 
 void Game::handleEvents()
@@ -171,18 +190,80 @@ void Game::handleEvents()
 		case SDL_QUIT:
 			isRunning = false;
 			break;
-		case SDL_KEYDOWN:
-			Player.getComponent<PlayerControllerComponent>().OnKeyDown(&events.key);
-			break;
-		case SDL_KEYUP:
-			Player.getComponent<PlayerControllerComponent>().OnKeyUp(&events.key);
+		case SDL_KEYDOWN: 
+		{
+			auto inputListeners = manager->FindEntitiesWithTag("InputListenerComponent");
+			for (auto inputListener : inputListeners)
+			{
+				Entity* entityA = manager->entities[inputListener].get();
 
+				if (entityA->hasComponent<PlayerControllerComponent>())
+				{
+					entityA->getComponent<PlayerControllerComponent>().OnKeyDown(&events.key);
+				}
+				else if (entityA->hasComponent<ButtonComponent>())
+				{
+					entityA->getComponent<ButtonComponent>().OnKeyDown(&events.key);
+				}
+			}
 			break;
+		}
+		case SDL_KEYUP:
+		{
+			auto inputListeners = manager->FindEntitiesWithTag("InputListenerComponent");
+			for (auto inputListener : inputListeners)
+			{
+				Entity* entityA = manager->entities[inputListener].get();
+				if (entityA->hasComponent<PlayerControllerComponent>())
+				{
+					entityA->getComponent<PlayerControllerComponent>().OnKeyUp(&events.key);
+				}
+				else if (entityA->hasComponent<ButtonComponent>())
+				{
+					entityA->getComponent<ButtonComponent>().OnKeyUp(&events.key);
+				}
+			}
+			break;
+		}
 		case SDL_MOUSEMOTION:
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			//Text.getComponent<TextRendererComponent>().text = std::to_string(x) + " | " + std::to_string(y);
+			SDL_GetMouseState(&mousePos.x, &mousePos.y);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+		{
+			auto inputListeners = manager->FindEntitiesWithTag("InputListenerComponent");
+			for (auto inputListener : inputListeners)
+			{
+				Entity* entityA = manager->entities[inputListener].get();
+
+				if (entityA->hasComponent<PlayerControllerComponent>())
+				{
+					entityA->getComponent<PlayerControllerComponent>().OnMouseDown(&events.button);
+				}
+				else if (entityA->hasComponent<ButtonComponent>())
+				{
+					entityA->getComponent<ButtonComponent>().OnMouseDown(&events.button);
+				}
+			}
+			break;
+		}
+		case SDL_MOUSEBUTTONUP:
+		{
+			auto inputListeners = manager->FindEntitiesWithTag("InputListenerComponent");
+			for (auto inputListener : inputListeners)
+			{
+				Entity* entityA = manager->entities[inputListener].get();
+
+				if (entityA->hasComponent<PlayerControllerComponent>())
+				{
+					entityA->getComponent<PlayerControllerComponent>().OnMouseUp(&events.button);
+				}
+				else if (entityA->hasComponent<ButtonComponent>())
+				{
+					entityA->getComponent<ButtonComponent>().OnMouseUp(&events.button);
+				}
+			}
+			break;
+		}
 		default:
 			break;
 	}
@@ -190,36 +271,51 @@ void Game::handleEvents()
 
 auto collision = CollisionDetection();
 
-
-int frames = 0;
 void Game::update()
 {
-	manager.Update();
+	manager->Refresh();
 
-	camera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
-	camera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
+	manager->Update();
+
+	newCamera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
+	newCamera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
+	camera = Vector2D::Lerp(camera, newCamera, 3.5f * DELTA_TIME);
 
 	UpdateCollisions();
+	UpdateUICollisions();
 }
 
 void Game::UpdateCollisions() 
 {
-	for (int i = 0; i < manager.entities.size(); i++)
+	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = manager->entities.begin(); it != manager->entities.end(); ++it)
 	{
-		Entity* entityA = manager.entities[i].get();
-		
+		Entity* entityA = it->second.get();
+
+		//Disabled Guard Clause
+		if (!entityA->isActive()) 
+		{
+			continue;
+		}
+
 		if (entityA->hasComponent<ColliderComponent>() && !entityA->getComponent<ColliderComponent>().IsTrigger())
 		{
 			ColliderComponent* colliderA = &entityA->getComponent<ColliderComponent>();
-			for (int j = 0; j < manager.entities.size(); j++)
+			for (std::map<UID, std::unique_ptr<Entity>>::iterator _it = manager->entities.begin(); _it != manager->entities.end(); ++_it)
 			{
-				Entity* entityB = manager.entities[j].get();
+				Entity* entityB = _it->second.get();
+				
+				//Disabled Guard Clause
+				if (!entityB->isActive())
+				{
+					continue;
+				}
+
 				if (entityB->hasComponent<ColliderComponent>())
 				{
 					ColliderComponent* colliderB = &entityB->getComponent<ColliderComponent>();
 
-					//Same Index Guard Clause
-					if (i == j)
+					//Same Entity Guard Clause
+					if (entityA->GetUID() == entityB->GetUID())
 					{
 						continue;
 					}
@@ -231,7 +327,6 @@ void Game::UpdateCollisions()
 					}
 
 					//If this gets laggy can do a sphere check before GJK algorithm
-
 					auto collisionPoint = collision.GJK(colliderA, colliderB);
 
 					if (collisionPoint.colliding && !colliderA->IsStatic())
@@ -252,12 +347,39 @@ void Game::UpdateCollisions()
 	}
 }
 
+void Game::UpdateUICollisions()
+{
+	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = manager->entities.begin(); it != manager->entities.end(); ++it)
+	{
+		Entity* entityA = it->second.get();
+
+		//Disabled Guard Clause
+		if (!entityA->isActive())
+		{
+			continue;
+		}
+
+		if (entityA->hasComponent<UIColliderComponent>())
+		{
+			UIColliderComponent* colliderA = &entityA->getComponent<UIColliderComponent>();
+
+			colliderA->colliding = false;
+
+			//If this gets laggy can do a sphere check before GJK algorithm
+			if (collision.GJK(colliderA, &mousePos))
+			{
+				colliderA->colliding = true;
+			}
+		}
+	}
+}
+
 void Game::render()
 {
 	SDL_RenderClear(renderer);
 
-	manager.Render();
-	
+	manager->Render();
+
 	SDL_RenderPresent(renderer);
 }
 

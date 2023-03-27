@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include "Vector.h"
+#include "ECS.h"
 
 #define WORLD_SCALE 32
 #define MAX_KEYBOARD_KEYS 350
@@ -24,6 +25,7 @@ public:
 
 	//Deals with Updates that envolve other systems
 	void UpdateCollisions();
+	void UpdateUICollisions();
 
 	void handleEvents();
 	void update();
@@ -35,8 +37,11 @@ public:
 	static SDL_Renderer* renderer;
 	static Vector2D camera;
 	static AssetManager* assets;
+	static Manager* manager;
 private:
-	bool isRunning;
-	SDL_Window *window;
+	Vector2D newCamera;
+	SDL_Rect mousePos{};
+	bool isRunning{};
+	SDL_Window* window{};
 
 };

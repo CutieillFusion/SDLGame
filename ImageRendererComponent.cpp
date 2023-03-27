@@ -1,15 +1,11 @@
 #include "ImageRendererComponent.h"
 
-ImageRendererComponent::ImageRendererComponent(Vector3D position, Vector3D scale) : position(position), scale(scale)
-{
-	destRect.x = position.x;
-	destRect.y = position.y;
-	destRect.w = scale.x;
-	destRect.h = scale.y;
-}
-
 void ImageRendererComponent::Initialize()
 {
+	rect = &entity->getComponent<RectComponent>();
+	sprites = &entity->getComponent<SpriteComponent>();
+
+	destRect = { rect->position.x, rect->position.y, rect->scale.x, rect->scale.y };
 }
 
 void ImageRendererComponent::Update()

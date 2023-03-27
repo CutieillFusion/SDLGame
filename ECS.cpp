@@ -21,6 +21,11 @@ void Entity::Render()
 	}
 }
 
+void Entity::SetActiveStatus(bool activeStatus)
+{
+	active = activeStatus;
+}
+
 void Entity::ClearTags()
 {
 	tags.clear();
@@ -48,11 +53,24 @@ void Entity::RemoveTag(Tag tag)
 	tags.erase(std::remove_if(tags.begin(), tags.end(), [&](const Tag _tag)-> bool { return _tag == tag; }), tags.end());
 }
 
+bool Entity::Destroyable()
+{
+	return destroy;
+}
+
+void Entity::Destroy()
+{
+	destroy = true;
+}
+
 void Manager::Update()
 {
-	for (auto& e : entities)
+	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
 	{
-		e->Update();
+		if (it->second->isActive()) 
+		{
+			it->second->Update();
+		}
 	}
 }
 
@@ -62,30 +80,47 @@ void Manager::Render()
 	{
 		for (auto& uid : renderLayers[(RenderLayer)i])
 		{
-			entities[uid]->Render();
+			if(entities[uid]->isActive()) 
+			{
+				entities[uid]->Render();
+			}
 		}
 	}
 }
 
 void Manager::Refresh()
 {
-	entities.erase(std::remove_if(std::begin(entities), std::end(entities),
-		[](const std::unique_ptr<Entity>& mEntity)
+	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
+	{
+		if(it->second->Destroyable()) 
 		{
-			return !mEntity->isActive();
-		}),
-		std::end(entities));
+			auto uid = it->second->GetUID();
+			entities.erase(it);
+			for (int i = 0; i < 4; i++)
+			{
+				for (std::vector<UID>::iterator _it = renderLayers[(RenderLayer)i].begin();  _it < renderLayers[(RenderLayer)i].end(); _it++)
+				{
+					if (uid == *_it) 
+					{
+						renderLayers[(RenderLayer)i].erase(_it);
+						return;
+					}
+				}
+			}
+
+		}
+	}
 }
 
-std::vector<int> Manager::FindEntitiesWithTag(Tag tag)
+std::vector<UID> Manager::FindEntitiesWithTag(Tag tag)
 {
-	std::vector<int> entitiesWithTag;
+	std::vector<UID> entitiesWithTag;
 
-	for (int i = 0; i < entities.size(); i++)
+	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
 	{
-		if (entities[i]->HasTag(tag))
+		if (it->second->HasTag(tag))
 		{
-			entitiesWithTag.emplace_back(i);
+			entitiesWithTag.emplace_back(it->second->GetUID());
 		}
 	}
 
@@ -96,7 +131,7 @@ Entity& Manager::AddEntity(RenderLayer renderLayer)
 {
 	Entity* e = new Entity(nextUID);
 	std::unique_ptr<Entity> uPtr{ e };
-	entities.emplace_back(std::move(uPtr));
+	entities[nextUID] = std::move(uPtr);
 	renderLayers[renderLayer].emplace_back(nextUID);
 	nextUID++;
 	return *e;

@@ -3,16 +3,17 @@
 #include "AssetManager.h"
 #include "SDL_ttf.h"
 #include "Vector.h"
+#include "RectComponent.h"
 
 class TextRendererComponent : public Component
 {
 public:
-	SDL_Rect position;
+	RectComponent* rect;
 	std::string text;
 	TTF_Font* font;
 
 	TextRendererComponent() = default;
-	TextRendererComponent(std::string text, std::string id, Vector3D position, SDL_Color textColor);
+	TextRendererComponent(std::string text, std::string id, SDL_Color textColor);
 
 	void SetText();
 
@@ -23,6 +24,7 @@ public:
 private:
 	SDL_Surface* surf;
 	SDL_Color textColor;
+	SDL_Rect position;
 	SDL_Texture* labelTexture;
 
 };

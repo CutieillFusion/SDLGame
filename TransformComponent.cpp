@@ -16,7 +16,7 @@ TransformComponent::TransformComponent(Vector3D position, Vector3D scale, float 
 {
 	TransformComponent::position = position;
 	TransformComponent::scale = scale;
-	TransformComponent::rotationAngle = 0;
+	TransformComponent::rotationAngle = rotationAngle;
 	TransformComponent::flipFlags = flipFlags;
 	destRect.x = 0;
 	destRect.y = 0;

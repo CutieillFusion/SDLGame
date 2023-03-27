@@ -51,15 +51,17 @@ private:
 	UID uid;
 	std::vector<Tag> tags;
 	bool active = true;
+	bool destroy = false;
 	std::vector<std::unique_ptr<Component>> components;
 
-	ComponentArray componentArray;
+	ComponentArray componentArray{};
 	ComponentBitSet componentBitSet;
 public:
 	Entity(UID uid);
 	void Update();
 	void Render();
 	bool isActive() const { return active; }
+	void SetActiveStatus(bool activeStatus);
 	int GetUID() const { return uid; }
 	
 	//Tags Logic
@@ -68,7 +70,9 @@ public:
 	bool HasTag(Tag tag);
 	void RemoveTag(Tag tag);//This has not been tested nor will be 
 
-	void Destroy() { active = false; }
+	//Destroy Logic
+	bool Destroyable();
+	void Destroy();
 
 	template <typename T> bool hasComponent() const
 	{
@@ -91,7 +95,7 @@ public:
 		return *c;
 	}
 
-	template <typename T> T& getComponent() const 
+	template <typename T> T& getComponent() const
 	{
 		auto ptr(componentArray[getComponentTypeID<T>()]);
 		return *static_cast<T*>(ptr);
@@ -112,14 +116,14 @@ private:
 	UID nextUID = 0;
 
 public:
-	std::vector<std::unique_ptr<Entity>> entities;
+	std::map<UID, std::unique_ptr<Entity>> entities;
 	std::map<RenderLayer, std::vector<UID>> renderLayers;
 
 	void Update();
 	void Render();
 	void Refresh();
 
-	std::vector<int> FindEntitiesWithTag(Tag tag);
+	std::vector<UID> FindEntitiesWithTag(Tag tag);
 
 	Entity& AddEntity(RenderLayer renderLayer);
 };
