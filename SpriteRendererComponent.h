@@ -18,5 +18,5 @@ public:
 private:
 	SpriteComponent* sprites{};
 	TransformComponent* transform{};
-	SDL_Rect srcRect;
+	SDL_Rect srcRect{};
 };

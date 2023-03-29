@@ -10,6 +10,7 @@ void ImageRendererComponent::Initialize()
 
 void ImageRendererComponent::Update()
 {	
+	destRect = { rect->position.x, rect->position.y, rect->scale.x, rect->scale.y };
 }
 
 void ImageRendererComponent::Render()

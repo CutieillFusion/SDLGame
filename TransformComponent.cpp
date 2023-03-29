@@ -1,31 +1,32 @@
 #include "TransformComponent.h"
 
-TransformComponent::TransformComponent(Vector3D position, Vector3D scale)
+TransformComponent::TransformComponent(Vector3D position, Vector3D scale) : localPosition(position), scale(scale), rotationAngle(0), flipFlags(SDL_FLIP_NONE)
 {
-	TransformComponent::position = position;
-	TransformComponent::scale = scale;
-	TransformComponent::rotationAngle = 0;
-	TransformComponent::flipFlags = SDL_FLIP_NONE;
-	destRect.x = 0;
-	destRect.y = 0;
-	destRect.w = WORLD_SCALE;
-	destRect.h = WORLD_SCALE;
+
 }
 
-TransformComponent::TransformComponent(Vector3D position, Vector3D scale, float rotationAngle, SDL_RendererFlip flipFlags)
+TransformComponent::TransformComponent(Vector3D position, Vector3D scale, float rotationAngle, SDL_RendererFlip flipFlags) : localPosition(position), scale(scale), rotationAngle(rotationAngle), flipFlags(flipFlags)
 {
-	TransformComponent::position = position;
-	TransformComponent::scale = scale;
-	TransformComponent::rotationAngle = rotationAngle;
-	TransformComponent::flipFlags = flipFlags;
-	destRect.x = 0;
-	destRect.y = 0;
-	destRect.w = WORLD_SCALE;
-	destRect.h = WORLD_SCALE;
+
+}
+
+void TransformComponent::Initialize()
+{
+	entity->AddTag("WorldElement");
+	destRect = { 0,0, WORLD_SCALE, WORLD_SCALE };
 }
 
 void TransformComponent::Update()
 {
-	position += dPosition;
+	localPosition += dPosition;
 	dPosition = Vector3D();
+
+	if (entity->HasParent())
+	{
+		position = entity->GetParent()->getComponent<TransformComponent>().position + localPosition;
+	}
+	else
+	{
+		position = localPosition;
+	}
 }

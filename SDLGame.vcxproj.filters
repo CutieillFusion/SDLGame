@@ -87,6 +87,12 @@
     <ClInclude Include="ButtonEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Pokemon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PokemonObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -158,6 +164,12 @@
     <ClCompile Include="ButtonEvents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pokemon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PokemonObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="libpng16-16.dll" />
@@ -227,6 +239,144 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Assets\water.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_9.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_14.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_15.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_17.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_18.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_19.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_20.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_21.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_22.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_23.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_24.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_25.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_26.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_27.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_28.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_29.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_30.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_31.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\Pokemon\Pokemon_32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\PokemonPlatform.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\ItemSlot.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\ItemSlot_Activated.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\ItemSlot_Highlighted.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Pokeball_Team.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Pokeball_Team_Activated.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Pokeball_Team_Highlighted.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Stats_Border.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Health_Bar.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Move_Normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Move_Normal_Activated.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\Move_Normal_Highlighted.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\BattleUI\BattleTextBox.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

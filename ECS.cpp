@@ -63,13 +63,28 @@ void Entity::Destroy()
 	destroy = true;
 }
 
+void Entity::SetParent(Entity* parent)
+{
+	Entity::parent = parent;
+}
+
+bool Entity::HasParent()
+{
+	return (parent != nullptr);
+}
+
+Entity* Entity::GetParent()
+{
+	return parent;
+}
+
 void Manager::Update()
 {
-	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
+	for (auto& [key, entity] : entities)
 	{
-		if (it->second->isActive()) 
+		if (entity->isActive()) 
 		{
-			it->second->Update();
+			entity->Update();
 		}
 	}
 }
@@ -116,11 +131,11 @@ std::vector<UID> Manager::FindEntitiesWithTag(Tag tag)
 {
 	std::vector<UID> entitiesWithTag;
 
-	for (std::map<UID, std::unique_ptr<Entity>>::iterator it = entities.begin(); it != entities.end(); ++it)
+	for (auto& [key, entity] : entities)
 	{
-		if (it->second->HasTag(tag))
+		if (entity->HasTag(tag))
 		{
-			entitiesWithTag.emplace_back(it->second->GetUID());
+			entitiesWithTag.emplace_back(entity->GetUID());
 		}
 	}
 

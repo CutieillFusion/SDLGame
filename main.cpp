@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	int frameTime;
 
 	game = new Game();
-	game->init("Test", 100, 100, 800, 640, false);
+	game->init("Test", 100, 100, 1600, 900, false);
 
 	while (game->running()) 
 	{
@@ -35,11 +35,16 @@ int main(int argc, char* argv[])
 }
 
 //TODO:
-//Refactor ECS System so you can remove Entities
-//	*Map for Entities is best choice change how render layers work 
+//Add BarComponent
+//Make a SIMPLE POKEMON UI THAT WORKS
+//	*Similar to this->https://i.stack.imgur.com/0kZcV.jpg
+//	*FULLY functional (UI ONLY)
+//	*Cant be 50% Static for rn
+//Add Wrapping and Aligning to TextRendererComponent
+//	*https://www.parallelrealities.co.uk/tutorials/ttf/ttf3.php
 //Add Circle Check before running CollisionDetection to save resources?
 //Add Slerp to pivot point
-//Add Transparent Image Loading
-//Add Button Class with Function Pointers
+//	*You hopefully remember the idea 
+//	* while (dPosition > minMov) { position += minMov }
 //https://www.youtube.com/watch?v=1eaxE_waDNc&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&index=8
 //https://www.parallelrealities.co.uk/tutorials/

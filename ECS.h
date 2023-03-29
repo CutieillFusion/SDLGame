@@ -53,6 +53,7 @@ private:
 	bool active = true;
 	bool destroy = false;
 	std::vector<std::unique_ptr<Component>> components;
+	Entity* parent = nullptr;
 
 	ComponentArray componentArray{};
 	ComponentBitSet componentBitSet;
@@ -73,6 +74,10 @@ public:
 	//Destroy Logic
 	bool Destroyable();
 	void Destroy();
+
+	void SetParent(Entity* parent);
+	bool HasParent();
+	Entity* GetParent();
 
 	template <typename T> bool hasComponent() const
 	{

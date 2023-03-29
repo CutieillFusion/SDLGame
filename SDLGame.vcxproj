@@ -33,6 +33,8 @@
     <ClInclude Include="JSONParser.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
+    <ClInclude Include="Pokemon.h" />
+    <ClInclude Include="PokemonObject.h" />
     <ClInclude Include="RectComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="SpriteRendererComponent.h" />
@@ -59,6 +61,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerControllerComponent.cpp" />
+    <ClCompile Include="Pokemon.cpp" />
+    <ClCompile Include="PokemonObject.cpp" />
     <ClCompile Include="RectComponent.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="SpriteRendererComponent.cpp" />
@@ -85,6 +89,19 @@
     <Font Include="Assets\Fonts\Test.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\BattleUI\BattleTextBox.png" />
+    <Image Include="Assets\BattleUI\Health_Bar.png" />
+    <Image Include="Assets\BattleUI\ItemSlot.png" />
+    <Image Include="Assets\BattleUI\ItemSlot_Activated.png" />
+    <Image Include="Assets\BattleUI\ItemSlot_Highlighted.png" />
+    <Image Include="Assets\BattleUI\Move_Normal.png" />
+    <Image Include="Assets\BattleUI\Move_Normal_Activated.png" />
+    <Image Include="Assets\BattleUI\Move_Normal_Highlighted.png" />
+    <Image Include="Assets\BattleUI\Pokeball_Team.png" />
+    <Image Include="Assets\BattleUI\Pokeball_Team_Activated.png" />
+    <Image Include="Assets\BattleUI\Pokeball_Team_Highlighted.png" />
+    <Image Include="Assets\BattleUI\PokemonPlatform.png" />
+    <Image Include="Assets\BattleUI\Stats_Border.png" />
     <Image Include="Assets\debug.png" />
     <Image Include="Assets\dirt.png" />
     <Image Include="Assets\grass.png" />
@@ -102,6 +119,39 @@
     <Image Include="Assets\Player\Player_7.png" />
     <Image Include="Assets\Player\Player_8.png" />
     <Image Include="Assets\Player\Player_9.png" />
+    <Image Include="Assets\Pokemon\Pokemon_0.png" />
+    <Image Include="Assets\Pokemon\Pokemon_1.png" />
+    <Image Include="Assets\Pokemon\Pokemon_10.png" />
+    <Image Include="Assets\Pokemon\Pokemon_11.png" />
+    <Image Include="Assets\Pokemon\Pokemon_12.png" />
+    <Image Include="Assets\Pokemon\Pokemon_13.png" />
+    <Image Include="Assets\Pokemon\Pokemon_14.png" />
+    <Image Include="Assets\Pokemon\Pokemon_15.png" />
+    <Image Include="Assets\Pokemon\Pokemon_16.png" />
+    <Image Include="Assets\Pokemon\Pokemon_17.png" />
+    <Image Include="Assets\Pokemon\Pokemon_18.png" />
+    <Image Include="Assets\Pokemon\Pokemon_19.png" />
+    <Image Include="Assets\Pokemon\Pokemon_2.png" />
+    <Image Include="Assets\Pokemon\Pokemon_20.png" />
+    <Image Include="Assets\Pokemon\Pokemon_21.png" />
+    <Image Include="Assets\Pokemon\Pokemon_22.png" />
+    <Image Include="Assets\Pokemon\Pokemon_23.png" />
+    <Image Include="Assets\Pokemon\Pokemon_24.png" />
+    <Image Include="Assets\Pokemon\Pokemon_25.png" />
+    <Image Include="Assets\Pokemon\Pokemon_26.png" />
+    <Image Include="Assets\Pokemon\Pokemon_27.png" />
+    <Image Include="Assets\Pokemon\Pokemon_28.png" />
+    <Image Include="Assets\Pokemon\Pokemon_29.png" />
+    <Image Include="Assets\Pokemon\Pokemon_3.png" />
+    <Image Include="Assets\Pokemon\Pokemon_30.png" />
+    <Image Include="Assets\Pokemon\Pokemon_31.png" />
+    <Image Include="Assets\Pokemon\Pokemon_32.png" />
+    <Image Include="Assets\Pokemon\Pokemon_4.png" />
+    <Image Include="Assets\Pokemon\Pokemon_5.png" />
+    <Image Include="Assets\Pokemon\Pokemon_6.png" />
+    <Image Include="Assets\Pokemon\Pokemon_7.png" />
+    <Image Include="Assets\Pokemon\Pokemon_8.png" />
+    <Image Include="Assets\Pokemon\Pokemon_9.png" />
     <Image Include="Assets\water.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -205,6 +255,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_ttf-2.20.2\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_image-2.0.1\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -222,6 +273,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_ttf-2.20.2\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_image-2.0.1\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

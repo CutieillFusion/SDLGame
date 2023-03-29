@@ -39,6 +39,7 @@ public:
 	static AssetManager* assets;
 	static Manager* manager;
 private:
+	Vector2D screenSize{};
 	Vector2D newCamera;
 	SDL_Rect mousePos{};
 	bool isRunning{};
