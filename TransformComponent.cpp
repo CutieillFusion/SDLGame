@@ -1,4 +1,5 @@
 #include "TransformComponent.h"
+#include "Globals.h"
 
 TransformComponent::TransformComponent(Vector3D position, Vector3D scale) : localPosition(position), scale(scale), rotationAngle(0), flipFlags(SDL_FLIP_NONE)
 {

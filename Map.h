@@ -1,6 +1,7 @@
 #pragma once
 #include "AssetManager.h"
-#include "ECS.h"
+#include "Globals.h"
+#include "Vector.h"
 
 class Map
 {

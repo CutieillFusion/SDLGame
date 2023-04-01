@@ -1,9 +1,8 @@
 #pragma once
 #include "ECS.h"
-#include "SDL.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
-#include "Vector.h"
+#include "Globals.h"
 #include "AssetManager.h"
 
 class SpriteRendererComponent : public Component

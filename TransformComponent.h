@@ -1,8 +1,7 @@
 #pragma once
 #include "ECS.h"
+#include "Globals.h"
 #include "Vector.h"
-
-#define WORLD_SCALE 32
 
 class TransformComponent : public Component
 {

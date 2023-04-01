@@ -1,8 +1,7 @@
 #pragma once
 #include "SpriteComponent.h"
 #include "ECS.h"
-#include <vector>
-#include <map>
+#include "Globals.h"
 
 struct AnimationState
 {

@@ -1,9 +1,8 @@
-#ifndef JSONPARSER_HEADER
-#define JSONPARSER_HEADER
+#pragma once 
 
 #include "JSONNode.h"
 #include "Tokenizer.h"
-#include <memory>
+#include "Globals.h"
 
 class JSONParser {
 public:
@@ -25,5 +24,3 @@ public:
     std::shared_ptr<JSON::JSONNode> parseBoolean();
     std::shared_ptr<JSON::JSONNode> parseNull();
 };
-
-#endif

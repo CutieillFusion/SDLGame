@@ -1,4 +1,5 @@
 #include "UIColliderComponent.h"
+#include "Globals.h"
 
 UIColliderComponent::UIColliderComponent(std::vector<Vector3D> vertexs)
 {

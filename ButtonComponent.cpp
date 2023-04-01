@@ -1,4 +1,5 @@
 #include "ButtonComponent.h"
+#include "Globals.h"
 
 ButtonComponent::ButtonComponent(ButtonEvent buttonEvent)
 {
@@ -55,7 +56,7 @@ void ButtonComponent::OnMouseDown(SDL_MouseButtonEvent* button)
 
 		for (auto buttonEvent : buttonEvents)
 		{
-			(buttonEvent)(button);
+			(buttonEvent)(data);
 		}
 
 		if (!entity->isActive()) 

@@ -1,4 +1,5 @@
 #include "ImageRendererComponent.h"
+#include "Globals.h"
 
 void ImageRendererComponent::Initialize()
 {

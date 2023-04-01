@@ -1,7 +1,6 @@
 #pragma once
 #include "ECS.h"
-#include <vector>
-#include "SDL.h"
+#include "Globals.h"
 #include "AssetManager.h"
 
 class SpriteComponent : public Component
@@ -17,7 +16,8 @@ public:
 
 	void AddTexture(std::string id);
 	void AddTexture(std::vector<std::string> ids);
-
+	void ClearTextures();
+	void ClearSetTexture(std::string id);
 	SDL_Texture* GetCurrentTexture();
 
 	void SetIndex(unsigned int index);

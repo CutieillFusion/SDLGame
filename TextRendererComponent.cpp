@@ -1,4 +1,5 @@
 #include "TextRendererComponent.h"
+#include "Globals.h"
 
 TextRendererComponent::TextRendererComponent(std::string text, std::string id, SDL_Color textColor, TEXT_HORIZONTAL_ALIGNMENT textHorizontalAlignment, TEXT_VERTICAL_ALIGNMENT textVerticalAlignment)
 {
@@ -26,6 +27,12 @@ void TextRendererComponent::SetText()
 	SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
 }
 
+void TextRendererComponent::SetText(std::string text)
+{
+	this->text = text;
+	SetText();
+}
+
 void TextRendererComponent::Initialize()
 {
 	rect = &entity->getComponent<RectComponent>();
@@ -35,20 +42,20 @@ void TextRendererComponent::Initialize()
 
 	if (textHorizontalAlignment == TEXT_ALIGN_RIGHT) 
 	{
-		position.x -= -rect->scale.x + position.w;
+		position.x -= (int)(position.w - rect->scale.x);
 	}
 	else if (textHorizontalAlignment == TEXT_ALIGN_CENTER) 
 	{
-		position.x -= -rect->scale.x + position.w / 2.0f;
+		position.x -= (int)(position.w / 2.0f - rect->scale.x / 2.0f);
 	}
 
 	if (textVerticalAlignment == TEXT_ALIGN_BOTTOM)
 	{
-		position.y -= -rect->scale.y + position.h;
+		position.y -= (int)(-rect->scale.y + position.h);
 	}
 	else if (textVerticalAlignment == TEXT_ALIGN_CENTER)
 	{
-		position.y -= -rect->scale.y / 2.0f + position.h / 2.0f;
+		position.y -= (int)(-rect->scale.y / 2.0f + position.h / 2.0f);
 	}
 }
 
@@ -59,20 +66,20 @@ void TextRendererComponent::Update()
 
 	if (textHorizontalAlignment == TEXT_ALIGN_RIGHT)
 	{
-		position.x -= -rect->scale.x + position.w;
+		position.x -= (int)(-rect->scale.x + position.w);
 	}
 	else if (textHorizontalAlignment == TEXT_ALIGN_CENTER)
 	{
-		position.x -= -rect->scale.x / 2.0f + position.w / 2.0f;
+		position.x -= (int)(-rect->scale.x / 2.0f + position.w / 2.0f);
 	}
 
 	if (textVerticalAlignment == TEXT_ALIGN_BOTTOM)
 	{
-		position.y -= -rect->scale.y + position.h;
+		position.y -= (int)(-rect->scale.y + position.h);
 	}
 	else if (textVerticalAlignment == TEXT_ALIGN_CENTER)
 	{
-		position.y -= -rect->scale.y / 2.0f + position.h / 2.0f;
+		position.y -= (int)(-rect->scale.y / 2.0f + position.h / 2.0f);
 	}
 }
 

@@ -93,6 +93,15 @@
     <ClInclude Include="PokemonObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PokemonManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PokemonBattleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -170,6 +179,18 @@
     <ClCompile Include="PokemonObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PokemonManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PokemonBattleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="libpng16-16.dll" />
@@ -181,6 +202,8 @@
     <None Include=".gitignore" />
     <None Include="README.md" />
     <None Include="Assets\JSON\Sprites.json" />
+    <None Include="Assets\JSON\PokemonMoves.json" />
+    <None Include="Assets\JSON\Pokemons.json" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\8Bit.ttf" />

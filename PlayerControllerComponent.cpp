@@ -1,4 +1,5 @@
 #include "PlayerControllerComponent.h"
+#include "Globals.h"
 
 void PlayerControllerComponent::Initialize()
 {

@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "Globals.h"
 
 SDL_Texture* TextureManager::LoadTexture(const char* fileName)
 {

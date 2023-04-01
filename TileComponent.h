@@ -2,7 +2,7 @@
 #include "ECS.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
-#include "Vector.h"
+#include "Globals.h"
 #include "AssetManager.h"
 
 class TileComponent : public Component

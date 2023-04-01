@@ -1,8 +1,6 @@
 #pragma once
 #include "ECS.h"
-#include "SDL.h"
-
-#define MAX_KEYBOARD_KEYS 350
+#include "Globals.h"
 
 class InputListenerComponent : public Component
 {

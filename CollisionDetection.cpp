@@ -1,4 +1,5 @@
 #include "CollisionDetection.h"
+#include "Globals.h"
 
 Vector3D CollisionDetection::FindFarthestPoint(ColliderComponent* collider, Vector3D direction)
 {

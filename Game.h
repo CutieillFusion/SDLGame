@@ -1,12 +1,8 @@
 #pragma once
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
-#include <iostream>
-#include <string>
-#include "Vector.h"
+#include "Globals.h"
 #include "ECS.h"
+#include "Vector.h"
 
 #define WORLD_SCALE 32
 #define MAX_KEYBOARD_KEYS 350

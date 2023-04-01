@@ -1,4 +1,5 @@
 #include "ColliderComponent.h"
+#include "Globals.h"
 
 ColliderComponent::ColliderComponent(std::vector<Vector3D> vertexs, bool isStatic, bool isTrigger)
 {

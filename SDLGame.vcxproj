@@ -27,6 +27,7 @@
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="ImageRendererComponent.h" />
     <ClInclude Include="InputListenerComponent.h" />
     <ClInclude Include="JSONNode.h" />
@@ -34,6 +35,8 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
     <ClInclude Include="Pokemon.h" />
+    <ClInclude Include="PokemonBattleManager.h" />
+    <ClInclude Include="PokemonManager.h" />
     <ClInclude Include="PokemonObject.h" />
     <ClInclude Include="RectComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
@@ -55,6 +58,12 @@
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Globals.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Globals.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Globals.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="ImageRendererComponent.cpp" />
     <ClCompile Include="JSONNode.cpp" />
     <ClCompile Include="JSONParser.cpp" />
@@ -62,6 +71,8 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerControllerComponent.cpp" />
     <ClCompile Include="Pokemon.cpp" />
+    <ClCompile Include="PokemonBattleManager.cpp" />
+    <ClCompile Include="PokemonManager.cpp" />
     <ClCompile Include="PokemonObject.cpp" />
     <ClCompile Include="RectComponent.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -72,10 +83,13 @@
     <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="UIColliderComponent.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="Assets\JSON\PokemonMoves.json" />
+    <None Include="Assets\JSON\Pokemons.json" />
     <None Include="Assets\JSON\Sprites.json" />
     <None Include="libpng16-16.dll" />
     <None Include="README.md" />
@@ -256,6 +270,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_ttf-2.20.2\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_image-2.0.1\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>Globals.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -274,6 +290,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_ttf-2.20.2\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2_image-2.0.1\include;C:\Users\norqu\Desktop\Programs\GameEngines\Cpp Libraries\SDL2-2.26.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>Globals.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

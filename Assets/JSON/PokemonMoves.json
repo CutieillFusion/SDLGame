@@ -1,0 +1,29 @@
+{
+	"Moves": {
+		"Name": [
+			"Tackle",
+			"Leer",
+			"False Swipe"
+		],
+		"Type": [
+			"Normal",
+			"Normal",
+			"Normal"
+		],
+		"Power": [
+			40,
+			0,
+			40
+		],
+		"MaxPowerPoints": [
+			35,
+			30,
+			40
+		],
+		"Accuracy": [
+			100,
+			100,
+			100
+		]
+	}
+}

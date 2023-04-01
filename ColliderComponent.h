@@ -2,7 +2,7 @@
 #include "ECS.h"
 #include "Game.h"
 #include "TransformComponent.h"
-#include "Vector.h"
+#include "Globals.h"
 
 class ColliderComponent : public Component
 {

@@ -8,11 +8,11 @@
 #include "TextRendererComponent.h"
 #include "ImageRendererComponent.h"
 #include "AnimationComponent.h"
-#include "AssetManager.h"
 #include "JSONParser.h"
 #include "UIColliderComponent.h"
 #include "ButtonComponent.h"
 #include "ButtonEvents.h"
+#include "AssetManager.h"
 
 Map* map;
 
@@ -23,10 +23,14 @@ Vector2D cameraOffset = Vector2D(800.0f/(WORLD_SCALE * 2), 640.0f/(WORLD_SCALE *
 
 AssetManager* Game::assets = new AssetManager();
 
+CollisionDetection collision = CollisionDetection();
+
 Manager* Game::manager = new Manager();
 
 //Entities
+#pragma region ENTITIES
 auto& Background(Game::manager->AddEntity(LAYER_UI));
+
 auto& MoveButton0(Game::manager->AddEntity(LAYER_UI));
 auto& MoveButton1(Game::manager->AddEntity(LAYER_UI));
 auto& MoveButton2(Game::manager->AddEntity(LAYER_UI));
@@ -39,13 +43,22 @@ auto& MoveButtonTextPP0(Game::manager->AddEntity(LAYER_UI));
 auto& MoveButtonTextPP1(Game::manager->AddEntity(LAYER_UI));
 auto& MoveButtonTextPP2(Game::manager->AddEntity(LAYER_UI));
 auto& MoveButtonTextPP3(Game::manager->AddEntity(LAYER_UI));
+
 auto& ItemSlot0(Game::manager->AddEntity(LAYER_UI));
 auto& ItemSlot1(Game::manager->AddEntity(LAYER_UI));
 auto& ItemSlot2(Game::manager->AddEntity(LAYER_UI));
 auto& ItemSlot3(Game::manager->AddEntity(LAYER_UI));
+
 auto& PlayerPokemonPlatform(Game::manager->AddEntity(LAYER_UI));
-auto& EnemyPokemonPlatform(Game::manager->AddEntity(LAYER_UI));
 auto& PlayerPokemon(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerTeam0(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerTeam1(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerTeam2(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerTeam3(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerTeam4(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerTeam5(Game::manager->AddEntity(LAYER_UI));
+
+auto& EnemyPokemonPlatform(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyPokemon(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyTeam0(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyTeam1(Game::manager->AddEntity(LAYER_UI));
@@ -53,26 +66,23 @@ auto& EnemyTeam2(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyTeam3(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyTeam4(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyTeam5(Game::manager->AddEntity(LAYER_UI));
-auto& PlayerTeam0(Game::manager->AddEntity(LAYER_UI));
-auto& PlayerTeam1(Game::manager->AddEntity(LAYER_UI));
-auto& PlayerTeam2(Game::manager->AddEntity(LAYER_UI));
-auto& PlayerTeam3(Game::manager->AddEntity(LAYER_UI));
-auto& PlayerTeam4(Game::manager->AddEntity(LAYER_UI));
-auto& PlayerTeam5(Game::manager->AddEntity(LAYER_UI));
+
 auto& PlayerStatsBackground(Game::manager->AddEntity(LAYER_UI));
 auto& PlayerStatsName(Game::manager->AddEntity(LAYER_UI));
 auto& PlayerStatsLevel(Game::manager->AddEntity(LAYER_UI));
 auto& PlayerStatsHeldItem(Game::manager->AddEntity(LAYER_UI));
 auto& PlayerStatsHealth(Game::manager->AddEntity(LAYER_UI));
+auto& PlayerStatsHealthText(Game::manager->AddEntity(LAYER_UI));
+
 auto& EnemyStatsBackground(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyStatsName(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyStatsLevel(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyStatsHeldItem(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyStatsHealth(Game::manager->AddEntity(LAYER_UI));
+auto& EnemyStatsHealthText(Game::manager->AddEntity(LAYER_UI));
+
 auto& BattleTextBox(Game::manager->AddEntity(LAYER_UI));
-
-
-
+#pragma endregion
 
 Game::Game()
 {
@@ -120,16 +130,22 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 		isRunning = false;
 	}
 
+	assets->AddJSONFile("Sprites", "Assets/JSON/Sprites.json");
+	assets->AddJSONFile("PokemonMoves", "Assets/JSON/PokemonMoves.json");
+	assets->AddJSONFile("Pokemons", "Assets/JSON/Pokemons.json");
 
-	Game::assets->AddJSONFile("Sprites", "Assets/JSON/Sprites.json");
-	Game::assets->LoadSpritesFromJSONFile("Sprites", "WorldSprites");
-	Game::assets->LoadSpritesFromJSONFile("Sprites", "PlayerSprites");
-	Game::assets->LoadSpritesFromJSONFile("Sprites", "PokemonSprites");
-	Game::assets->LoadSpritesFromJSONFile("Sprites", "UISprites");
+	assets->LoadSpritesFromJSONFile("Sprites", "WorldSprites");
+	assets->LoadSpritesFromJSONFile("Sprites", "PlayerSprites");
+	assets->LoadSpritesFromJSONFile("Sprites", "PokemonSprites");
+	assets->LoadSpritesFromJSONFile("Sprites", "UISprites");
+	assets->LoadMovesFromJSONFile("PokemonMoves", "Moves");
+	assets->LoadPokemonsFromJSONFile("Pokemons", "Pokemons");
 
-	Game::assets->AddFont("8Bit36", "Assets/Fonts/8Bit.ttf", 36);
-	Game::assets->AddFont("8Bit56", "Assets/Fonts/8Bit.ttf", 56);
-	Game::assets->AddFont("Test", "Assets/Fonts/Test.ttf", 32);
+	assets->AddFont("8Bit36", "Assets/Fonts/8Bit.ttf", 36);
+	assets->AddFont("8Bit56", "Assets/Fonts/8Bit.ttf", 56);
+	assets->AddFont("Test", "Assets/Fonts/Test.ttf", 32);
+
+	assets->pokemonManager->Initialize();
 
 	//map = new Map(manager);
 
@@ -212,14 +228,18 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	PlayerStatsName.addComponent<TextRendererComponent>("Name", "8Bit36", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
 	PlayerStatsName.SetParent(&PlayerStatsBackground);
 
-	PlayerStatsLevel.addComponent<RectComponent>(Vector3D(-12, screenSize.y * 22.0f / 225.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, screenSize.y * 8.0f / 225.0f, 0));
+	PlayerStatsLevel.addComponent<RectComponent>(Vector3D(-12, screenSize.y * 1.0f / 225.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, 32, 0));
 	PlayerStatsLevel.addComponent<TextRendererComponent>("Lvl: 01", "8Bit36", textColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP);
 	PlayerStatsLevel.SetParent(&PlayerStatsBackground);
 
-	PlayerStatsHealth.addComponent<RectComponent>(Vector3D(screenSize.x * 1.0f / 100.0f, screenSize.y * 4.0f / 75.0f, 0), Vector3D(screenSize.x * 63.0f / 200.0f, screenSize.y * 7.0f / 225.0f, 0));
+	PlayerStatsHealth.addComponent<RectComponent>(Vector3D(screenSize.x * 1.0f / 100.0f, screenSize.y * 4.0f / 75.0f, 0), Vector3D(504, 28, 0));
 	PlayerStatsHealth.addComponent<SpriteComponent>("Health_Bar");
 	PlayerStatsHealth.addComponent<ImageRendererComponent>();
 	PlayerStatsHealth.SetParent(&PlayerStatsBackground);
+
+	PlayerStatsHealthText.addComponent<RectComponent>(Vector3D(-24, screenSize.y * 22.0f / 225.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, 32, 0));
+	PlayerStatsHealthText.addComponent<TextRendererComponent>("300/350", "8Bit36", textColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP);
+	PlayerStatsHealthText.SetParent(&PlayerStatsBackground);
 	#pragma endregion
 
 	#pragma region ENEMY_STATS
@@ -231,7 +251,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	EnemyStatsName.addComponent<TextRendererComponent>("Name", "8Bit36", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
 	EnemyStatsName.SetParent(&EnemyStatsBackground);
 
-	EnemyStatsLevel.addComponent<RectComponent>(Vector3D(-12, screenSize.y * 22.0f / 225.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, screenSize.y * 8.0f / 225.0f, 0));
+	EnemyStatsLevel.addComponent<RectComponent>(Vector3D(-12, screenSize.y * 1.0f / 225.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, screenSize.y * 8.0f / 225.0f, 0));
 	EnemyStatsLevel.addComponent<TextRendererComponent>("Lvl: 01", "8Bit36", textColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP);
 	EnemyStatsLevel.SetParent(&EnemyStatsBackground);
 
@@ -239,6 +259,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	EnemyStatsHealth.addComponent<SpriteComponent>("Health_Bar");
 	EnemyStatsHealth.addComponent<ImageRendererComponent>();
 	EnemyStatsHealth.SetParent(&EnemyStatsBackground);
+
+	EnemyStatsHealthText.addComponent<RectComponent>(Vector3D(-24, screenSize.y * 22.0f / 225.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, screenSize.y * 8.0f / 225.0f, 0));
+	EnemyStatsHealthText.addComponent<TextRendererComponent>("300/350", "8Bit36", textColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP);
+	EnemyStatsHealthText.SetParent(&EnemyStatsBackground);
 	#pragma endregion 
 
 	#pragma region POKEMON_TEAM
@@ -339,11 +363,13 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 		"Move_Normal", "Move_Normal_Highlighted", "Move_Normal_Activated"
 	};
 	Vector3D moveButtonSize = Vector3D(screenSize.x / 3.0f, screenSize.y * 1.0f / 15.0f + 1, 0);
+	ButtonEvent useMove = BattleManager::UseMove;
+
 	MoveButton0.addComponent<RectComponent>(Vector3D(screenSize.x * 2.0f / 3.0f, 500, 0), moveButtonSize);
 	MoveButton0.addComponent<SpriteComponent>(moveButton);
 	MoveButton0.addComponent<ImageRendererComponent>();
 	MoveButton0.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton0.addComponent<ButtonComponent>();
+	MoveButton0.addComponent<ButtonComponent>(useMove);
 
 	MoveButtonText0.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText0.addComponent<TextRendererComponent>("Tackle", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -357,7 +383,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton1.addComponent<SpriteComponent>(moveButton);
 	MoveButton1.addComponent<ImageRendererComponent>();
 	MoveButton1.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton1.addComponent<ButtonComponent>();
+	MoveButton1.addComponent<ButtonComponent>(useMove);
 
 	MoveButtonText1.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText1.addComponent<TextRendererComponent>("Leer", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -371,7 +397,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton2.addComponent<SpriteComponent>(moveButton);
 	MoveButton2.addComponent<ImageRendererComponent>();
 	MoveButton2.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton2.addComponent<ButtonComponent>();
+	MoveButton2.addComponent<ButtonComponent>(useMove);
 
 	MoveButtonText2.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText2.addComponent<TextRendererComponent>("False Swipe", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -385,7 +411,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton3.addComponent<SpriteComponent>(moveButton);
 	MoveButton3.addComponent<ImageRendererComponent>();
 	MoveButton3.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton3.addComponent<ButtonComponent>();
+	MoveButton3.addComponent<ButtonComponent>(useMove);
 	
 	MoveButtonText3.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText3.addComponent<TextRendererComponent>("Protect", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -400,6 +426,25 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	BattleTextBox.addComponent<SpriteComponent>("BattleTextBox");
 	BattleTextBox.addComponent<ImageRendererComponent>(); 
 	BattleTextBox.addComponent<TextRendererComponent>(" SELECT NEXT MOVE...", "8Bit56", textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_MIDDLE);
+
+	//Sends Pokemon To BattleManager
+	BattleManager::SetPlayerTeam({ assets->pokemonManager->playerPokemon });
+	BattleManager::SetEnemyTeam({ assets->pokemonManager->enemyPokemon });
+
+	//Send UI Entites to BattleManager
+	BattleManager::AddUIEntity("PlayerPokemon", &PlayerPokemon);
+	BattleManager::AddUIEntity("EnemyPokemon", &EnemyPokemon);
+
+	BattleManager::AddUIEntity("PlayerStats", &PlayerStatsBackground);
+	BattleManager::AddUIEntity("EnemyStats", &EnemyStatsBackground);
+
+	BattleManager::AddUIEntity("MoveButton0", &MoveButton0);
+	BattleManager::AddUIEntity("MoveButton1", &MoveButton1);
+	BattleManager::AddUIEntity("MoveButton2", &MoveButton2);
+	BattleManager::AddUIEntity("MoveButton3", &MoveButton3);
+
+	//Initializing BattleManager UI
+	assets->pokemonBattleManager->UpdateUI();
 }
 
 void Game::handleEvents()
@@ -490,8 +535,6 @@ void Game::handleEvents()
 	}
 }
 
-auto collision = CollisionDetection();
-
 void Game::update()
 {
 	manager->Refresh();
@@ -501,6 +544,8 @@ void Game::update()
 	//newCamera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
 	//newCamera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
 	camera = Vector2D::Lerp(camera, newCamera, 3.5f * DELTA_TIME);
+
+	assets->pokemonBattleManager->Update();
 
 	UpdateCollisions();
 	UpdateUICollisions();

@@ -1,11 +1,6 @@
-#ifndef JSONNODE_HEADER
-#define JSONNODE_HEADER
+#pragma once
 
-#include <map>
-#include <memory>
-#include <vector>
-#include <string>
-#include <iostream>
+#include "Globals.h"
 
 namespace JSON {
     class JSONNode;
@@ -48,8 +43,6 @@ namespace JSON {
         }
     };
 } // namespace JSON
-
-#endif
 
 //aligned union
 //compare with actual library

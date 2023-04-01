@@ -1,4 +1,5 @@
 #include "SpriteRendererComponent.h"
+#include "Globals.h"
 
 void SpriteRendererComponent::Initialize()
 {

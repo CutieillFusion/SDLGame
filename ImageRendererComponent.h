@@ -1,8 +1,7 @@
 #pragma once
 #include "ECS.h"
-#include "Vector.h"
+#include "Globals.h"
 #include "SpriteComponent.h"
-#include "SDL.h"
 #include "AssetManager.h"
 #include "RectComponent.h"
 class ImageRendererComponent : public Component

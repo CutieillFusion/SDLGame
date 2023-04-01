@@ -1,7 +1,8 @@
 #pragma once
-#include "Vector.h"
+#include "Globals.h"
 #include "ColliderComponent.h"
 #include "UIColliderComponent.h"
+#include "Vector.h"
 
 struct CollisionPoint
 {

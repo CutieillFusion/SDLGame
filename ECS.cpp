@@ -1,4 +1,5 @@
 #include "ECS.h"
+#include "Globals.h"
 
 Entity::Entity(UID uid): uid(uid) 
 { 
@@ -24,6 +25,13 @@ void Entity::Render()
 void Entity::SetActiveStatus(bool activeStatus)
 {
 	active = activeStatus;
+	if (HasChildren())
+	{
+		for (auto child : children)
+		{
+			child->SetActiveStatus(activeStatus);
+		}
+	}
 }
 
 void Entity::ClearTags()
@@ -65,7 +73,8 @@ void Entity::Destroy()
 
 void Entity::SetParent(Entity* parent)
 {
-	Entity::parent = parent;
+	this->parent = parent;
+	parent->SetChild(this);
 }
 
 bool Entity::HasParent()
@@ -76,6 +85,21 @@ bool Entity::HasParent()
 Entity* Entity::GetParent()
 {
 	return parent;
+}
+
+void Entity::SetChild(Entity* child)
+{
+	children.emplace_back(child);
+}
+
+bool Entity::HasChildren()
+{
+	return (children.size() > 0);
+}
+
+std::vector<Entity*> Entity::GetChildren()
+{
+	return children;
 }
 
 void Manager::Update()

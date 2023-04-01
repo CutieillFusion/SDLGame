@@ -1,4 +1,5 @@
 #include "TileComponent.h"
+#include "Globals.h"
 
 void TileComponent::Initialize()
 {

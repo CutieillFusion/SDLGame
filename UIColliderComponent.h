@@ -2,7 +2,7 @@
 #include "ECS.h"
 #include "Game.h"
 #include "RectComponent.h"
-#include "Vector.h"
+#include "Globals.h"
 
 class UIColliderComponent : public Component
 {

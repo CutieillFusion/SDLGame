@@ -1,15 +1,34 @@
 #pragma once
-#include <string>
-#include <vector>
+#include "Globals.h"
 
-struct PokemonMove
+enum PokemonType
 {
+	NORMAL,
+	FIRE,
+	WATER,
+	GRASS
+};
+
+struct PokemonMoveObject
+{
+public:
 	std::string name;
 	PokemonType type;
-	float power;
-	int powerPoint;
+	int power;
 	int maxPowerPoint;
-	float accuracy;
+	int accuracy;
+
+	PokemonMoveObject(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy);
+};
+
+class PokemonMove
+{
+public:
+	PokemonMoveObject* move;
+	int powerPoint;
+
+	PokemonMove(PokemonMoveObject* move);
+	PokemonMove(PokemonMoveObject* move, int powerPoint);
 };
 
 enum PokemonNature
@@ -41,33 +60,50 @@ enum PokemonNature
 	QUIRKY
 };
 
-enum PokemonElement
+struct PokemonStats
 {
-	FIRE,
-	WATER,
-	GRASS
-};
+	int health;
+	int attack;
+	int defense;
+	int specialAttack;
+	int specialDefense;
+	int speed;
 
-struct PokemonType
-{
-	std::string name;
-	PokemonElement type;
-	std::vector<PokemonElement> immuneTo;
-	std::vector<PokemonElement> weakTo;
-	std::vector<PokemonElement> strongTo;
-	std::vector<PokemonElement> immuneFrom;
-	std::vector<PokemonElement> weakFrom;
-	std::vector<PokemonElement> strongFrom;
+	PokemonStats();
+	PokemonStats(int health, int attack, int defense, int specialAttack, int specialDefense, int speed);
+
+	void CalculateStats(PokemonStats baseStats, PokemonStats ivs, int level)
+	{
+		health = CalculateHealth(baseStats.health, ivs.health, level);
+		attack = CalculateStat(baseStats.attack, ivs.attack, level);
+		defense = CalculateStat(baseStats.defense, ivs.defense, level);
+		specialAttack = CalculateStat(baseStats.specialAttack, ivs.specialAttack, level);
+		specialDefense = CalculateStat(baseStats.specialDefense, ivs.specialDefense, level);
+		speed = CalculateStat(baseStats.speed, ivs.speed, level);
+	}
+
+	int CalculateHealth(int baseStat, int iv, int level) 
+	{
+		return ((2 * baseStat + iv) * level / 100) + level + 10;
+	}
+
+	int CalculateStat(int baseStat, int iv, int level) 
+	{
+		return ((2 * baseStat + iv) * level / 100) + 5;
+	}
 };
 
 class PokemonObject
 {
 public:
 	std::string name;
-	std::vector<PokemonObject*> evolutions;
-	PokemonType* types[2];
-	PokemonNature nature;
-	PokemonMove moves[4];
-	int level;
+	std::vector<PokemonType> types;
+	PokemonStats baseStats;
+
+	std::string spriteId;
+
+	PokemonObject();
+	PokemonObject(std::string name, std::vector<PokemonType> types, PokemonStats baseStats, std::string spriteId);
+
 };
 

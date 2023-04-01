@@ -1,0 +1,20 @@
+{
+	"Pokemons": {
+		"Name": [
+			"Crungly",
+			"Watry"
+		],
+		"Types": [
+			[ "Grass" ],
+			[ "Water" ]
+		],
+		"BaseStats": [
+			[ 40, 80, 100, 30, 30, 20 ],
+			[ 20, 10, 55, 15, 20, 80 ]
+		],
+		"SpriteId": [
+			"Crungy",
+			"Watry"
+		]
+	}
+}

@@ -1,4 +1,5 @@
 #include "SpriteComponent.h"
+#include "Globals.h"
 
 SpriteComponent::SpriteComponent(std::string id)
 {
@@ -36,6 +37,18 @@ void SpriteComponent::AddTexture(std::vector<std::string> ids)
 	{
 		textures.emplace_back(Game::assets->GetTexture(id));
 	}
+}
+
+void SpriteComponent::ClearTextures()
+{
+	index = 0;
+	textures.clear();
+}
+
+void SpriteComponent::ClearSetTexture(std::string id)
+{
+	ClearTextures();
+	AddTexture(id);
 }
 
 SDL_Texture* SpriteComponent::GetCurrentTexture()

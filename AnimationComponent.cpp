@@ -1,4 +1,5 @@
 #include "AnimationComponent.h"
+#include "Globals.h"
 
 AnimationComponent::AnimationComponent(std::vector<AnimationState> animation)
 {

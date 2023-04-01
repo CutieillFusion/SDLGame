@@ -1,8 +1,7 @@
 #pragma once
 #include "ECS.h"
 #include "AssetManager.h"
-#include "SDL_ttf.h"
-#include "Vector.h"
+#include "Globals.h"
 #include "RectComponent.h"
 
 enum TEXT_HORIZONTAL_ALIGNMENT
@@ -30,15 +29,15 @@ public:
 	TextRendererComponent(std::string text, std::string id, SDL_Color textColor, TEXT_HORIZONTAL_ALIGNMENT textHorizontalAlignment, TEXT_VERTICAL_ALIGNMENT textVerticalAlignment);
 
 	void SetText();
+	void SetText(std::string text);
 
 	void Initialize() override;
 	void Update() override;
 	void Render() override;
 
-private:
 	TEXT_HORIZONTAL_ALIGNMENT textHorizontalAlignment;
 	TEXT_VERTICAL_ALIGNMENT textVerticalAlignment;
-
+private:
 	SDL_Surface* surf;
 	SDL_Color textColor;
 	SDL_Rect position;

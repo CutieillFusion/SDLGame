@@ -1,4 +1,5 @@
 #include "RectComponent.h"
+#include "Globals.h"
 
 RectComponent::RectComponent(Vector3D position, Vector3D scale) : localPosition(position), scale(scale), rotationAngle(0), flipFlags(SDL_FLIP_NONE)
 {

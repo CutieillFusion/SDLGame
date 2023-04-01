@@ -1,12 +1,6 @@
-#ifndef TOKENIZER_HEADER
-#define TOKENIZER_HEADER
+#pragma once
 
-#include <fstream>
-#include <vector>
-#include <map>
-#include <stdexcept>
-#include <stack>
-#include <iostream>
+#include "Globals.h"
 
 enum class TOKEN
 {
@@ -50,5 +44,3 @@ public:
 
      */
 };
-
-#endif

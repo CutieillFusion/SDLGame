@@ -1,12 +1,6 @@
 #pragma once
 
-#include <map>
-#include <iostream>
-#include <vector>
-#include <memory>
-#include <algorithm>
-#include <bitset>
-#include <array>
+#include "Globals.h"
 
 class Component;
 class Entity;
@@ -54,6 +48,7 @@ private:
 	bool destroy = false;
 	std::vector<std::unique_ptr<Component>> components;
 	Entity* parent = nullptr;
+	std::vector<Entity*> children;
 
 	ComponentArray componentArray{};
 	ComponentBitSet componentBitSet;
@@ -78,6 +73,10 @@ public:
 	void SetParent(Entity* parent);
 	bool HasParent();
 	Entity* GetParent();
+
+	void SetChild(Entity* child);
+	bool HasChildren();
+	std::vector<Entity*> GetChildren();
 
 	template <typename T> bool hasComponent() const
 	{

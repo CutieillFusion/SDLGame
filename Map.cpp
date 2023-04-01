@@ -1,9 +1,9 @@
 #include "Map.h"
-#include <iostream>
 #include "TransformComponent.h"
 #include "TileComponent.h"
 #include "SpriteComponent.h"
 #include "SpriteRendererComponent.h"
+#include "Globals.h"
 
 //Add File Input 
 

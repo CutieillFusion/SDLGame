@@ -36,12 +36,6 @@ int main(int argc, char* argv[])
 
 //TODO:
 //Add BarComponent
-//Make a SIMPLE POKEMON UI THAT WORKS
-//	*Similar to this->https://i.stack.imgur.com/0kZcV.jpg
-//	*FULLY functional (UI ONLY)
-//	*Cant be 50% Static for rn
-//Add Wrapping and Aligning to TextRendererComponent
-//	*https://www.parallelrealities.co.uk/tutorials/ttf/ttf3.php
 //Add Circle Check before running CollisionDetection to save resources?
 //Add Slerp to pivot point
 //	*You hopefully remember the idea 

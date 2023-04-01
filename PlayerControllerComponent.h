@@ -1,7 +1,6 @@
 #pragma once
 #include "ECS.h"
-#include "SDL.h"
-#include "Vector.h"
+#include "Globals.h"
 #include "InputListenerComponent.h"
 #include "TransformComponent.h"
 

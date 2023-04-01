@@ -1,8 +1,8 @@
 #pragma once
-#include "SDL.h"
-#include <iostream>
+
+#include "Globals.h"
+
 
 namespace TestEvents
 {
-
 }
