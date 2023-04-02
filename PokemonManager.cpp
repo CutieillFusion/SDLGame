@@ -5,35 +5,46 @@ PokemonManager::PokemonManager()
 {
 }
 
-void PokemonManager::Initialize() 
+PokemonManager::~PokemonManager()
 {
-	//Make Loading Moves able to happen from JSON File
-	PokemonMove* tackle = new PokemonMove(GetMove("Tackle"), 28);
-	PokemonMove* leer = new PokemonMove(GetMove("Leer"), 16);
-	PokemonMove* falseSwipe = new PokemonMove(GetMove("False Swipe"));
-
-	PokemonMove* _tackle = new PokemonMove(GetMove("Tackle"), 28);
-	PokemonMove* _leer = new PokemonMove(GetMove("Leer"), 16);
-	PokemonMove* _falseSwipe = new PokemonMove(GetMove("False Swipe"));
-
-	//PokemonStats tempBaseStats = { 40, 80, 100, 30, 30, 20 };
-	PokemonStats tempIVs = { 31, 23, 23, 23, 23, 23 };
-
-	//PokemonObject* crungly = new PokemonObject("Crungly", { GRASS }, tempBaseStats, "Crungly");
-	Pokemon* _crungly = new Pokemon(GetPokemonObject("Crungly"), { tackle, falseSwipe, leer, nullptr }, tempIVs, HARDLY, 28);
-	playerPokemon = _crungly;
-
-	//PokemonObject* watry = new PokemonObject("Watry", { WATER }, tempBaseStats, "Watry");
-	Pokemon* _watry = new Pokemon(GetPokemonObject("Watry"), { _tackle, _falseSwipe, _leer, nullptr }, tempIVs, HARDLY, 37);
-	enemyPokemon = _watry;
 }
 
-void PokemonManager::AddMove(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy)
+PokemonMove* PokemonManager::MakeMove(std::string id, int powerPoint) 
+{
+	return new PokemonMove(GetMoveObject(id), powerPoint);
+}
+
+PokemonMove* PokemonManager::MakeMove(std::string id)
+{
+	return new PokemonMove(GetMoveObject(id));
+}
+
+Pokemon* PokemonManager::MakePokemon(std::string id, std::vector<PokemonMove*> moves, PokemonStats ivs, PokemonNature nature, int level)
+{
+	return new Pokemon(GetPokemonObject(id), moves, ivs, nature, level);
+}
+
+Pokemon* PokemonManager::MakePokemon(std::string id, std::vector<PokemonMove*> moves, PokemonStats ivs, int level)
+{
+	return new Pokemon(GetPokemonObject(id), moves, ivs, PokemonObject::GetRandomNature(), level);
+}
+
+Pokemon* PokemonManager::MakePokemon(std::string id, std::vector<PokemonMove*> moves, PokemonNature nature, int level)
+{
+	return new Pokemon(GetPokemonObject(id), moves, PokemonObject::GetRandomIVs(), nature, level);
+}
+
+Pokemon* PokemonManager::MakePokemon(std::string id, std::vector<PokemonMove*> moves, int level)
+{
+	return new Pokemon(GetPokemonObject(id), moves, PokemonObject::GetRandomIVs(), PokemonObject::GetRandomNature(), level);
+}
+
+void PokemonManager::AddMoveObject(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy)
 {
 	moves.emplace(name, new PokemonMoveObject(name, type, power, maxPowerPoint, accuracy));
 }
 
-PokemonMoveObject* PokemonManager::GetMove(std::string id)
+PokemonMoveObject* PokemonManager::GetMoveObject(std::string id)
 {
 	return moves[id];
 }

@@ -33,6 +33,7 @@
     <ClInclude Include="JSONNode.h" />
     <ClInclude Include="JSONParser.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MoveFunctions.h" />
     <ClInclude Include="PlayerControllerComponent.h" />
     <ClInclude Include="Pokemon.h" />
     <ClInclude Include="PokemonBattleManager.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="JSONParser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MoveFunctions.cpp" />
     <ClCompile Include="PlayerControllerComponent.cpp" />
     <ClCompile Include="Pokemon.cpp" />
     <ClCompile Include="PokemonBattleManager.cpp" />

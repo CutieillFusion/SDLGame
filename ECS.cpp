@@ -24,6 +24,11 @@ void Entity::Render()
 
 void Entity::SetActiveStatus(bool activeStatus)
 {
+	if (active == activeStatus) 
+	{
+		return;
+	}
+
 	active = activeStatus;
 	if (HasChildren())
 	{

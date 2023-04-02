@@ -51,6 +51,12 @@ void SpriteComponent::ClearSetTexture(std::string id)
 	AddTexture(id);
 }
 
+void SpriteComponent::ClearSetTexture(std::vector<std::string> ids)
+{
+	ClearTextures();
+	AddTexture(ids);
+}
+
 SDL_Texture* SpriteComponent::GetCurrentTexture()
 {
 	return textures[index];

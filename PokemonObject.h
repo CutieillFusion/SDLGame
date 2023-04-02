@@ -17,8 +17,13 @@ public:
 	int power;
 	int maxPowerPoint;
 	int accuracy;
+	MoveFunction func;
+	std::vector<std::any> data;
 
 	PokemonMoveObject(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy);
+	PokemonMoveObject(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy, MoveFunction func);
+	PokemonMoveObject(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy, MoveFunction func, std::vector<std::any> data);
+	PokemonMoveObject(std::string name, PokemonType type, int power, int maxPowerPoint, int accuracy, std::vector<std::any> data);
 };
 
 class PokemonMove
@@ -105,5 +110,16 @@ public:
 	PokemonObject();
 	PokemonObject(std::string name, std::vector<PokemonType> types, PokemonStats baseStats, std::string spriteId);
 
+	static PokemonNature GetRandomNature() 
+	{
+		srand((unsigned int)time(NULL));
+		return (PokemonNature)(rand() % 25);
+	}
+
+	static PokemonStats GetRandomIVs() 
+	{
+		srand((unsigned int)time(NULL));
+		return PokemonStats(rand() % 32, rand() % 32, rand() % 32, rand() % 32, rand() % 32, rand() % 32);
+	}
 };
 

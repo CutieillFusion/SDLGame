@@ -18,6 +18,7 @@ public:
 	void AddTexture(std::vector<std::string> ids);
 	void ClearTextures();
 	void ClearSetTexture(std::string id);
+	void ClearSetTexture(std::vector<std::string> ids);
 	SDL_Texture* GetCurrentTexture();
 
 	void SetIndex(unsigned int index);

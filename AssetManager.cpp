@@ -8,7 +8,10 @@ AssetManager::AssetManager()
 }
 
 AssetManager::~AssetManager()
-{}
+{
+	pokemonManager->~PokemonManager();
+	pokemonBattleManager->~PokemonBattleManager();
+}
 
 
 void AssetManager::AddTexture(std::string id, const char* path)
@@ -61,13 +64,13 @@ void AssetManager::LoadMovesFromJSONFile(std::string id, std::string jsonId)
 			type = GRASS;
 		}
 
-		pokemonManager->AddMove(names[i]->returnString(), type, (int)powers[i]->returnFloat(), (int)maxPowerPoints[i]->returnFloat(), (int)accuracies[i]->returnFloat());
+		pokemonManager->AddMoveObject(names[i]->returnString(), type, (int)powers[i]->returnFloat(), (int)maxPowerPoints[i]->returnFloat(), (int)accuracies[i]->returnFloat());
 	}
 }
 
-PokemonMoveObject* AssetManager::GetMove(std::string id)
+PokemonMoveObject* AssetManager::GetMoveObject(std::string id)
 {
-	return pokemonManager->GetMove(id);
+	return pokemonManager->GetMoveObject(id);
 }
 
 void AssetManager::LoadPokemonsFromJSONFile(std::string id, std::string jsonId)

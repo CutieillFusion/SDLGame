@@ -1,26 +1,36 @@
 {
 	"Moves": {
 		"Name": [
+			"Swap Pokemon",
 			"Tackle",
 			"Leer",
-			"False Swipe"
+			"False Swipe",
+			"Protect"
 		],
 		"Type": [
+			"Normal",
+			"Normal",
 			"Normal",
 			"Normal",
 			"Normal"
 		],
 		"Power": [
+			0,
 			40,
 			0,
-			40
+			40,
+			0
 		],
 		"MaxPowerPoints": [
+			1000,
 			35,
 			30,
-			40
+			40,
+			10
 		],
 		"Accuracy": [
+			0,
+			100,
 			100,
 			100,
 			100

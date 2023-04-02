@@ -24,7 +24,7 @@ public:
 
 	//Pokemon Management
 	void LoadMovesFromJSONFile(std::string id, std::string jsonId);
-	PokemonMoveObject* GetMove(std::string id);
+	PokemonMoveObject* GetMoveObject(std::string id);
 	void LoadPokemonsFromJSONFile(std::string id, std::string jsonId);
 	PokemonObject* GetPokemon(std::string id);
 
