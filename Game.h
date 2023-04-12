@@ -18,6 +18,7 @@ public:
 	~Game();
 
 	void init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen);
+	void InitializeDaeemon();
 
 	//Deals with Updates that envolve other systems
 	void UpdateCollisions();

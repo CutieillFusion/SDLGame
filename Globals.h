@@ -28,4 +28,3 @@
 
 //Typedefs
 typedef void(*ButtonEvent)(std::vector<std::any>);
-typedef void(*MoveFunction)(std::vector<std::any>);

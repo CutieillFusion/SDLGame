@@ -14,6 +14,11 @@
 #include "ButtonEvents.h"
 #include "AssetManager.h"
 
+#include "Daemon.h"
+#include "Attack.h"
+#include "Attacks.h"
+#include "Battle.h"
+
 //Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -140,8 +145,6 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	assets->LoadSpritesFromJSONFile("Sprites", "PlayerSprites");
 	assets->LoadSpritesFromJSONFile("Sprites", "PokemonSprites");
 	assets->LoadSpritesFromJSONFile("Sprites", "UISprites");
-	assets->LoadMovesFromJSONFile("PokemonMoves", "Moves");
-	assets->LoadPokemonsFromJSONFile("Pokemons", "Pokemons");
 
 	assets->AddFont("8Bit36", "Assets/Fonts/8Bit.ttf", 36);
 	assets->AddFont("8Bit56", "Assets/Fonts/8Bit.ttf", 56);
@@ -206,7 +209,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	PlayerPokemonPlatform.addComponent<ImageRendererComponent>();
 
 	PlayerPokemon.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 50.0f, screenSize.y * 128.0f / 225.0f, 0), pokemonScale);
-	PlayerPokemon.addComponent<SpriteComponent>("Pokemon_0");
+	PlayerPokemon.addComponent<SpriteComponent>("Clawrean");
 	PlayerPokemon.addComponent<ImageRendererComponent>();
 
 	EnemyPokemonPlatform.addComponent<RectComponent>(Vector3D(screenSize.x * 43.0f / 100.0f, screenSize.y / 9.0f, 0), pokemonPlatformScale);
@@ -214,7 +217,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	EnemyPokemonPlatform.addComponent<ImageRendererComponent>();
 
 	EnemyPokemon.addComponent<RectComponent>(Vector3D(screenSize.x * 47.0f / 100.0f, screenSize.y * 8.0f / 225.0f, 0), pokemonScale);
-	EnemyPokemon.addComponent<SpriteComponent>("Pokemon_26");
+	EnemyPokemon.addComponent<SpriteComponent>("Crungly");
 	EnemyPokemon.addComponent<ImageRendererComponent>();
 	#pragma endregion
 
@@ -271,48 +274,47 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	};
 
 	Vector3D pokeballScale = Vector3D(80, 80, 0);
-	ButtonEvent swapPokemon = BattleManager::SwapPokemon;
 
 	PlayerTeam0.addComponent<RectComponent>(Vector3D(0, 144, 0), pokeballScale);
 	PlayerTeam0.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam0.addComponent<ImageRendererComponent>();
 	PlayerTeam0.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam0.addComponent<ButtonComponent>(swapPokemon);
+	PlayerTeam0.addComponent<ButtonComponent>();
 	PlayerTeam0.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam1.addComponent<RectComponent>(Vector3D(92, 144, 0), pokeballScale);
 	PlayerTeam1.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam1.addComponent<ImageRendererComponent>();
 	PlayerTeam1.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam1.addComponent<ButtonComponent>(swapPokemon);
+	PlayerTeam1.addComponent<ButtonComponent>();
 	PlayerTeam1.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam2.addComponent<RectComponent>(Vector3D(184, 144, 0), pokeballScale);
 	PlayerTeam2.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam2.addComponent<ImageRendererComponent>();
 	PlayerTeam2.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam2.addComponent<ButtonComponent>(swapPokemon);
+	PlayerTeam2.addComponent<ButtonComponent>();
 	PlayerTeam2.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam3.addComponent<RectComponent>(Vector3D(276, 144, 0), pokeballScale);
 	PlayerTeam3.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam3.addComponent<ImageRendererComponent>();
 	PlayerTeam3.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam3.addComponent<ButtonComponent>(swapPokemon);
+	PlayerTeam3.addComponent<ButtonComponent>();
 	PlayerTeam3.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam4.addComponent<RectComponent>(Vector3D(368, 144, 0), pokeballScale);
 	PlayerTeam4.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam4.addComponent<ImageRendererComponent>();
 	PlayerTeam4.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam4.addComponent<ButtonComponent>(swapPokemon);
+	PlayerTeam4.addComponent<ButtonComponent>();
 	PlayerTeam4.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam5.addComponent<RectComponent>(Vector3D(460, 144, 0), pokeballScale);
 	PlayerTeam5.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam5.addComponent<ImageRendererComponent>();
 	PlayerTeam5.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam5.addComponent<ButtonComponent>(swapPokemon);
+	PlayerTeam5.addComponent<ButtonComponent>();
 	PlayerTeam5.SetParent(&PlayerStatsBackground);
 
 	EnemyTeam0.addComponent<RectComponent>(Vector3D(0, 144, 0), pokeballScale);
@@ -364,13 +366,12 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 		"Move_Normal", "Move_Normal_Highlighted", "Move_Normal_Activated"
 	};
 	Vector3D moveButtonSize = Vector3D(screenSize.x / 3.0f, screenSize.y * 1.0f / 15.0f + 1, 0);
-	ButtonEvent useMove = BattleManager::UseMove;
 
 	MoveButton0.addComponent<RectComponent>(Vector3D(screenSize.x * 2.0f / 3.0f, 500, 0), moveButtonSize);
 	MoveButton0.addComponent<SpriteComponent>(moveButton);
 	MoveButton0.addComponent<ImageRendererComponent>();
 	MoveButton0.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton0.addComponent<ButtonComponent>(useMove);
+	MoveButton0.addComponent<ButtonComponent>();
 
 	MoveButtonText0.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText0.addComponent<TextRendererComponent>("Tackle", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -384,7 +385,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton1.addComponent<SpriteComponent>(moveButton);
 	MoveButton1.addComponent<ImageRendererComponent>();
 	MoveButton1.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton1.addComponent<ButtonComponent>(useMove);
+	MoveButton1.addComponent<ButtonComponent>();
 
 	MoveButtonText1.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText1.addComponent<TextRendererComponent>("Leer", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -398,7 +399,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton2.addComponent<SpriteComponent>(moveButton);
 	MoveButton2.addComponent<ImageRendererComponent>();
 	MoveButton2.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton2.addComponent<ButtonComponent>(useMove);
+	MoveButton2.addComponent<ButtonComponent>();
 
 	MoveButtonText2.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText2.addComponent<TextRendererComponent>("False Swipe", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -412,7 +413,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton3.addComponent<SpriteComponent>(moveButton);
 	MoveButton3.addComponent<ImageRendererComponent>();
 	MoveButton3.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton3.addComponent<ButtonComponent>(useMove);
+	MoveButton3.addComponent<ButtonComponent>();
 	
 	MoveButtonText3.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText3.addComponent<TextRendererComponent>("Protect", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -428,34 +429,103 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	BattleTextBox.addComponent<ImageRendererComponent>(); 
 	BattleTextBox.addComponent<TextRendererComponent>(" SELECT NEXT MOVE...", "8Bit56", textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_MIDDLE);
 
-	PokemonStats perfectIVs = { 31, 31, 31, 31, 31, 31 };
+	InitializeDaeemon();
 
-	//Creates Pokemon
-	Pokemon* crungly = assets->pokemonManager->MakePokemon("Crungly", { assets->pokemonManager->MakeMove("Tackle"), assets->pokemonManager->MakeMove("Leer"), nullptr, nullptr }, perfectIVs, 30);
-	Pokemon* watry = assets->pokemonManager->MakePokemon("Watry", { assets->pokemonManager->MakeMove("Tackle"), assets->pokemonManager->MakeMove("False Swipe"), nullptr, nullptr }, perfectIVs, 31);
-	Pokemon* clawrean = assets->pokemonManager->MakePokemon("Clawrean", { assets->pokemonManager->MakeMove("False Swipe"), assets->pokemonManager->MakeMove("Protect"), nullptr, nullptr }, perfectIVs, 29);
+}
 
-	//Sends Pokemon To BattleManager
-	BattleManager::SetPlayerTeam({ clawrean, watry });
-	BattleManager::SetEnemyTeam({ crungly });
+void Game::InitializeDaeemon()
+{
+	Daemon::Model::Attack* tackle = new Daemon::Model::Attack("Tackle", 45, Daemon::Model::Type::NEUTRAL, 95, false, false, 25, false, 35, 0, nullptr, nullptr, nullptr);
+	Daemon::Model::Attacks::ChangeStatEffect* lowerDefense = new Daemon::Model::Attacks::ChangeStatEffect(Daemon::Model::Attacks::ChangeStatEffect::Target::DEFENDER, Daemon::Model::Stats::DEF, -1);
+	Daemon::Model::Attack* leer = new Daemon::Model::Attack("Leer", 0, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, false, 35, 0, lowerDefense, nullptr, nullptr);
+	Daemon::Model::Attacks::ProtectEffect* protectEffect = new Daemon::Model::Attacks::ProtectEffect();
+	Daemon::Model::Attack* protect = new Daemon::Model::Attack("Protect", 45, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, true, 35, INT_MAX, protectEffect, nullptr, nullptr);
 
-	//Send UI Entites to BattleManager
-	BattleManager::AddUIEntity("PlayerPokemon", &PlayerPokemon);
-	BattleManager::AddUIEntity("EnemyPokemon", &EnemyPokemon);
+	std::vector<Daemon::Model::Stats> evs = { Daemon::Model::Stats::SPE };
+	Daemon::Model::Species* pidgeySpecies = new Daemon::Model::Species(45, 40, 35, 35, 56, 40, "Crungly", Daemon::Model::Type::DRAGON, Daemon::Model::Type::NEUTRAL, nullptr, evs, 0.3f, 1.8f, "Pidgey", 55, 0, 255, 1);
+	std::vector<Daemon::Model::Attack*> moveSet = {tackle, leer, protect};
+	Daemon::Model::Daemon* pidgey = new Daemon::Model::Daemon("Pickle", pidgeySpecies, 12, moveSet, Daemon::Model::Nature::CAREFUL);
+	pidgey->SetAtkIV(31);
+	pidgey->SetDefIV(31);
+	pidgey->SetAtkSpeIV(31);
+	pidgey->SetDefSpeIV(31);
+	pidgey->SetSpeIV(31);
+	pidgey->SetHPIV(31);
+	pidgey->CalcStats();
+	pidgey->Heal(pidgey->GetStatHP());
 
-	BattleManager::AddUIEntity("PlayerStats", &PlayerStatsBackground);
-	BattleManager::AddUIEntity("EnemyStats", &EnemyStatsBackground);
+	Daemon::Model::Daemon* pidgey2 = new Daemon::Model::Daemon("Rhino", pidgeySpecies, 13, moveSet, Daemon::Model::Nature::CAREFUL);
+	pidgey2->SetAtkIV(31);
+	pidgey2->SetDefIV(31);
+	pidgey2->SetAtkSpeIV(31);
+	pidgey2->SetDefSpeIV(31);
+	pidgey2->SetSpeIV(31);
+	pidgey2->SetHPIV(31);
+	pidgey2->CalcStats();
+	pidgey2->Heal(pidgey2->GetStatHP());
 
-	BattleManager::AddUIEntity("MoveButton0", &MoveButton0);
-	BattleManager::AddUIEntity("MoveButton1", &MoveButton1);
-	BattleManager::AddUIEntity("MoveButton2", &MoveButton2);
-	BattleManager::AddUIEntity("MoveButton3", &MoveButton3);
+	std::cout << pidgey->GetNickname() << " Before - " << pidgey->GetHP() << std::endl;
+	std::cout << pidgey2->GetNickname() << " Before - " << pidgey2->GetHP() << std::endl;
+	
+	Daemon::Model::Battle battle = Daemon::Model::Battle(pidgey, pidgey2);
 
-	//Sends Swap Move
-	BattleManager::SetSwapMove(assets->pokemonManager->MakeMove("Swap Pokemon"));
+	battle.atkTurn.attackUsed = tackle;
+	battle.atkTurn.daemon = pidgey;
+	battle.Turn();
 
-	//Initializing BattleManager UI
-	assets->pokemonBattleManager->UpdateUI();
+	std::cout << pidgey->GetNickname() << " After Turn 1 - " << pidgey->GetHP() << std::endl;
+	std::cout << pidgey2->GetNickname() << " After Turn 1 - " << pidgey2->GetHP() << std::endl;
+
+	battle.atkTurn.attackUsed = protect;
+	battle.atkTurn.daemon = pidgey;
+	battle.Turn();
+	
+	std::cout << pidgey->GetNickname() << " After Turn 2 - " << pidgey->GetHP() << std::endl;
+	std::cout << pidgey2->GetNickname() << " After Turn 2 - " << pidgey2->GetHP() << std::endl;
+
+	std::vector<std::any> ui =
+	{
+		&PlayerPokemonPlatform,
+		&PlayerPokemon,
+		&EnemyPokemonPlatform,
+		&EnemyPokemon,
+		&PlayerStatsName,
+		&PlayerStatsLevel,
+		&PlayerStatsHealth,
+		&PlayerStatsHealthText,
+		&EnemyStatsName,
+		&EnemyStatsLevel,
+		&EnemyStatsHealth,
+		&EnemyStatsHealthText,
+		&PlayerTeam0,
+		&PlayerTeam1,
+		&PlayerTeam2,
+		&PlayerTeam3,
+		&PlayerTeam4,
+		&PlayerTeam5,
+		&EnemyTeam0,
+		&EnemyTeam1,
+		&EnemyTeam2,
+		&EnemyTeam3,
+		&EnemyTeam4,
+		&EnemyTeam5,
+		&MoveButton0,
+		&MoveButtonText0,
+		&MoveButtonTextPP0,
+		&MoveButton1,
+		&MoveButtonText1,
+		&MoveButtonTextPP1,
+		&MoveButton2,
+		&MoveButtonText2,
+		&MoveButtonTextPP2,
+		&MoveButton3,
+		&MoveButtonText3,
+		&MoveButtonTextPP3,
+		&BattleTextBox
+	};
+
+	battle.InitalizeUI(ui);
+	battle.UpdateBattleUI();
 }
 
 void Game::handleEvents()
@@ -555,8 +625,6 @@ void Game::update()
 	//newCamera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
 	//newCamera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
 	camera = Vector2D::Lerp(camera, newCamera, 3.5f * DELTA_TIME);
-
-	assets->pokemonBattleManager->Update();
 
 	UpdateCollisions();
 	UpdateUICollisions();
