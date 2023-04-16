@@ -4,10 +4,6 @@
 #include "ECS.h"
 #include "Vector.h"
 
-#define WORLD_SCALE 32
-#define MAX_KEYBOARD_KEYS 350
-#define DELTA_TIME 1.0f / 144.0f
-
 class AssetManager;
 
 class Game

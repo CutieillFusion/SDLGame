@@ -140,6 +140,11 @@ namespace Daemon
                 return (held == nullptr);
             }
 
+            bool IsDead() const 
+            {
+                return (HP <= 0);
+            }
+
             /**Method called when the Daemon wins*/
             int Win(Daemon const& defeated);
 

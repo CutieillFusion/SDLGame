@@ -22,7 +22,7 @@
 #include <math.h>
 
 //Macros
-#define WORLD_SCALE 32
+#define WORLD_SCALE 64
 #define MAX_KEYBOARD_KEYS 350
 #define DELTA_TIME 1.0f / 144.0f
 

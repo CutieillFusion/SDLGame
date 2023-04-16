@@ -124,7 +124,7 @@ void Manager::Render()
 	{
 		for (auto& uid : renderLayers[(RenderLayer)i])
 		{
-			if(entities[uid]->isActive()) 
+			if(entities[uid]->isActive())
 			{
 				entities[uid]->Render();
 			}

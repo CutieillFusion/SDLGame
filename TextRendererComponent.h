@@ -22,7 +22,7 @@ class TextRendererComponent : public Component
 {
 public:
 	RectComponent* rect;
-	std::string text;
+	std::string* text;
 	TTF_Font* font;
 
 	TextRendererComponent() = default;
@@ -30,6 +30,8 @@ public:
 
 	void SetText();
 	void SetText(std::string text);
+	void SetText(std::string* text);
+
 
 	void Initialize() override;
 	void Update() override;

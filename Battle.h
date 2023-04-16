@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Globals.h"
 #include "ECS.h"
 #include "Daemon.h"
+#include "DaemonTeam.h"
 #include "Turn.h"
 #include "Attack.h"
 #include "Attacks.h"
@@ -13,22 +15,29 @@ namespace Daemon
 		class Battle
 		{
 		public:
-			Battle(Daemon* atk, Daemon* def);
+			Battle(DaeTeam* playerTeam, DaeTeam* trainerTeam, int atkIndex, int defIndex);
 			void InitalizeUI(std::vector<std::any> ui);
 
-			void Turn();
 			bool CanAttack(Daemon* daemon, TurnData* daemonTurn);
-			TurnData* AITurn();
+			bool CheckTurnEnded();
 			bool CheckBattleEnded();
+			void EndBattle();
 			void UpdateBattleUI();
-			~Battle() { };
+			~Battle();
+
+			void Turn();
+			TurnData* AITurn();
+			bool PlayerTurn(int moveIndex);
+			bool SwapTurn(int daemonIndex);
+			bool ItemTurn(Item* item);
+			bool RunTurn();
 
 			TurnData atkTurn;
 			TurnData defTurn;
 
 		private:
-			//DaemonTeam* playerTeam;
-			//DaemonTeam* trainerTeam;
+			DaeTeam* playerTeam;
+			DaeTeam* trainerTeam;
 	
 			std::queue<Model::TurnAction> actionsQueue;
 
@@ -50,6 +59,13 @@ namespace Daemon
 
 			std::map<std::string, Entity*> ui;
 		};
+
+		namespace BattleWrapper
+		{
+			void UseMove(std::vector<std::any> data);
+			void SwapDaemon(std::vector<std::any> data);
+
+		}
 	}
 }
 

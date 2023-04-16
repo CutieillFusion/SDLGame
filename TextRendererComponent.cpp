@@ -3,7 +3,7 @@
 
 TextRendererComponent::TextRendererComponent(std::string text, std::string id, SDL_Color textColor, TEXT_HORIZONTAL_ALIGNMENT textHorizontalAlignment, TEXT_VERTICAL_ALIGNMENT textVerticalAlignment)
 {
-	TextRendererComponent::text = text;
+	TextRendererComponent::text = &text;
 	TextRendererComponent::textHorizontalAlignment = textHorizontalAlignment;
 	TextRendererComponent::textVerticalAlignment = textVerticalAlignment;
 
@@ -22,12 +22,24 @@ TextRendererComponent::TextRendererComponent(std::string text, std::string id, S
 
 void TextRendererComponent::SetText()
 {
-	surf = TTF_RenderText_Blended(font, text.c_str(), textColor);
+	if (labelTexture != nullptr) 
+	{
+		SDL_DestroyTexture(labelTexture);
+	}
+
+	surf = TTF_RenderText_Blended(font, text->c_str(), textColor);
 	labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
 	SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
+	SDL_FreeSurface(surf);
 }
 
 void TextRendererComponent::SetText(std::string text)
+{
+	this->text = &text;
+	SetText();
+}
+
+void TextRendererComponent::SetText(std::string* text)
 {
 	this->text = text;
 	SetText();

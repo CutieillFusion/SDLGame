@@ -6,10 +6,18 @@ namespace Daemon
 {
 	namespace Model
 	{
-        Battle::Battle(Daemon* atk, Daemon* def)
+        static Battle* instance;
+
+        Battle::Battle(DaeTeam* playerTeam, DaeTeam* trainerTeam, int atkIndex, int defIndex)
         {
-            this->atk = atk;
-            this->def = def;
+            instance = this;
+
+            this->playerTeam = playerTeam;
+            this->trainerTeam = trainerTeam;
+
+            this->atk = playerTeam->operator[](atkIndex);
+            this->def = trainerTeam->operator[](defIndex);
+
             oldStats[0][0] = atk->GetStatATK();
             oldStats[0][1] = atk->GetStatDEF();
             oldStats[0][2] = atk->GetStatATKSPE();
@@ -96,9 +104,21 @@ namespace Daemon
             this->ui["MoveButtonText3"] = std::any_cast<Entity*>(ui[34]);
             this->ui["MoveButtonTextPP3"] = std::any_cast<Entity*>(ui[35]);
 
-            this->ui["BattleTextBox"] = std::any_cast<Entity*>(ui[36]);             
+            this->ui["BattleTextBox"] = std::any_cast<Entity*>(ui[36]);    
+            this->ui["BattleUIParent"] = std::any_cast<Entity*>(ui[37]);
+
+
+            this->ui["WorldParent"] = std::any_cast<Entity*>(ui[38]);
+
+            this->ui["WorldParent"]->SetActiveStatus(false);
+            this->ui["BattleUIParent"]->SetActiveStatus(true);
         }
 
+        //Move Order
+        //  Player Run
+        //  Priority Item or Enemy Run(Wild Daemon)
+        //  Item or Change
+        //  Attacks
         void Battle::Turn()
         {           
             //These variables are used to check if the turn of one of the OpMons' is over.
@@ -112,18 +132,29 @@ namespace Daemon
             }*/
 
             //Item use or switching always comes before the attack. It is calculated before everything else.
-            if (atkTurn.type != TurnType::ATTACK) {
+            if (atkTurn.type != TurnType::ATTACK) 
+            {
                 //Actions
+                if (atkTurn.type == TurnType::CHANGE) 
+                {
+                    atk = atkTurn.daemon;
+                }
                 atkDone = true;
             }
-            if (defTurn.type != TurnType::ATTACK) {
+            if (defTurn.type != TurnType::ATTACK) 
+            {
                 //Actions
+                if (defTurn.type == TurnType::CHANGE)
+                {
+                    def = defTurn.daemon;
+                }
+
                 defDone = true;
             }
-            //If the two of them attack, then the priority must be calculated. Else, the only attacking OpMon will attack, obviously.
+
+            //If the two of them attack, then the priority must be calculated. Else, the only attacking Daemon will attack, obviously.
             if (defTurn.type == TurnType::ATTACK && atkTurn.type == TurnType::ATTACK) 
             {
-                
                 atkFirst = (atkTurn.attackUsed->GetPriority() == defTurn.attackUsed->GetPriority()) ? (atk->GetStatSPE() * atk->GetOtherSpe() > def->GetStatSPE() * def->GetOtherSpe()) : (atkTurn.attackUsed->GetPriority() > defTurn.attackUsed->GetPriority());
             }
             else 
@@ -138,15 +169,12 @@ namespace Daemon
                     if (!atkDone && CanAttack(atk, &atkTurn)) 
                     {
                         atkTurn.attackUsed->attack(*atk, *def, actionsQueue, true);
-                    }
+                    }                    
                     //actionsQueue.push(next);
-                    if (!defDone && CanAttack(def, &defTurn) && !CheckBattleEnded()) 
+                    if (!defDone && CanAttack(def, &defTurn) && !CheckTurnEnded()) 
                     {
                         defTurn.attackUsed->attack(*def, *atk, actionsQueue, false);
                     }
-
-                    CheckBattleEnded();
-
                 }
                 else
                 {
@@ -155,15 +183,23 @@ namespace Daemon
                         defTurn.attackUsed->attack(*def, *atk, actionsQueue, false);
                     }
                     //actionsQueue.push(next);
-                    if (!atkDone && CanAttack(atk, &atkTurn) && !CheckBattleEnded())
+                    if (!atkDone && CanAttack(atk, &atkTurn) && !CheckTurnEnded())
                     {
                         atkTurn.attackUsed->attack(*atk, *def, actionsQueue, true);
                     }
-                    CheckBattleEnded();
+                }
+
+                if (CheckBattleEnded())
+                {
+                    EndBattle();
                 }
             }
+            UpdateBattleUI();
 
             //Resets all Other Stats that are just for the turn;
+            NewTurnData(&atkTurn);
+            NewTurnData(&defTurn);
+
             atk->ResetAllOtherStats();
             def->ResetAllOtherStats();
         }
@@ -257,13 +293,68 @@ namespace Daemon
         TurnData* Battle::AITurn()
         {
             defTurn.attackUsed = def->GetAttacks()[0];
+            defTurn.daemon = def;
             defTurn.type = TurnType::ATTACK;
             return &defTurn;
         }
 
-        bool Battle::CheckBattleEnded()
+        bool Battle::PlayerTurn(int moveIndex)
         {
-            if (def->GetHP() <= 0) 
+            if (moveIndex < atk->GetAttacks().size() && !atk->IsDead()) 
+            {
+                if (atk->GetAttacks()[moveIndex]->GetPP() > 0) 
+                {
+                    atkTurn.daemon = atk;
+                    atkTurn.attackUsed = atk->GetAttacks()[moveIndex];
+                    atkTurn.type = TurnType::ATTACK;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool Battle::SwapTurn(int daemonIndex)
+        {
+            if (daemonIndex >= playerTeam->GetSize())
+            {
+                return false;
+            }
+
+            auto newDaemon = playerTeam->operator[](daemonIndex);
+            if (newDaemon != atk && !newDaemon->IsDead()) 
+            {
+                if (!atk->IsDead()) 
+                {
+                    atkTurn.daemon = newDaemon;
+                    atkTurn.type = TurnType::CHANGE;
+                    return true;
+                }
+                else 
+                {
+                    atk = newDaemon;
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        bool Battle::ItemTurn(Item* item)
+        {
+            atkTurn.itemUsed = item;
+            atkTurn.type = TurnType::ITEM;
+            return true;
+        }
+
+        bool Battle::RunTurn()
+        {
+            atkTurn.type = TurnType::RUN;
+            return true;
+        }
+
+        bool Battle::CheckTurnEnded()
+        {
+            if (def->IsDead()) 
             {
                 //if (trainer != nullptr) 
                 //{
@@ -274,10 +365,9 @@ namespace Daemon
                 //victory.type = TurnActionType::VICTORY;
                 //actionsQueue.push(victory);
 
-                std::cout << "Battle Ended" << std::endl;
                 return true;
             }
-            else if (atk->GetHP() <= 0) 
+            else if (atk->IsDead())
             {
                 //if (trainer != nullptr) { //TODO : Only for the test battle, should be removed at some point.
                 //    trainer->defeat();
@@ -287,10 +377,43 @@ namespace Daemon
                 //defeat.type = TurnActionType::DEFEAT;
                 //actionsQueue.push(defeat);
 
-                std::cout << "Battle Ended" << std::endl;
                 return true;
             }
             return false;
+        }
+
+        bool Battle::CheckBattleEnded()
+        {
+            if (playerTeam->IsKo()) 
+            {
+                std::cout << "Player Lost Battle" << std::endl;
+                EndBattle();
+                return true;
+            }
+            if (trainerTeam->IsKo()) 
+            {
+                std::cout << "Player Won Battle" << std::endl;
+                EndBattle();
+                return true;
+            }
+
+            return false;
+        }
+
+        void Battle::EndBattle()
+        {
+            this->ui["WorldParent"]->SetActiveStatus(true);
+            this->ui["BattleUIParent"]->SetActiveStatus(false);
+        }
+
+        std::vector<std::string> pokeballIds =
+        {
+            "Pokeball_Team", "Pokeball_Team_Highlighted", "Pokeball_Team_Activated"
+        };
+
+        Battle::~Battle()
+        {
+            instance = nullptr;
         }
 
         void Battle::UpdateBattleUI()
@@ -298,34 +421,46 @@ namespace Daemon
             ui["PlayerPokemon"]->getComponent<SpriteComponent>().ClearSetTexture(atk->GetSpecies().getName());
             ui["EnemyPokemon"]->getComponent<SpriteComponent>().ClearSetTexture(def->GetSpecies().getName());
 
-            ui["PlayerStatsName"]->getComponent<TextRendererComponent>().SetText(atk->GetNickname());
-            ui["PlayerStatsLevel"]->getComponent<TextRendererComponent>().SetText("lvl: " + std::to_string(atk->GetLevel()));
+            ui["PlayerStatsName"]->getComponent<TextRendererComponent>().SetText(atk->GetNicknamePtr());//*
+            ui["PlayerStatsLevel"]->getComponent<TextRendererComponent>().SetText("lvl: " + std::to_string(atk->GetLevel()));//*
             ui["PlayerStatsHealth"]->getComponent<RectComponent>().scale.x = 504.0f * atk->GetHP() / atk->GetStatHP();
-            ui["PlayerStatsHealthText"]->getComponent<TextRendererComponent>().SetText(std::to_string(atk->GetHP()) + "/" + std::to_string(atk->GetStatHP()));
+            ui["PlayerStatsHealthText"]->getComponent<TextRendererComponent>().SetText(std::to_string(atk->GetHP()) + "/" + std::to_string(atk->GetStatHP()));//*
+            
+            ui["EnemyStatsName"]->getComponent<TextRendererComponent>().SetText(def->GetNicknamePtr());//*
+            ui["EnemyStatsLevel"]->getComponent<TextRendererComponent>().SetText("lvl: " + std::to_string(def->GetLevel()));//*
+            ui["EnemyStatsHealth"]->getComponent<RectComponent>().scale.x = 504.0f * def->GetHP() / def->GetStatHP();
+            ui["EnemyStatsHealthText"]->getComponent<TextRendererComponent>().SetText(std::to_string(def->GetHP()) + "/" + std::to_string(def->GetStatHP()));//*
 
-            ui["EnemyStatsName"]->getComponent<TextRendererComponent>().SetText(atk->GetNickname());
-            ui["EnemyStatsLevel"]->getComponent<TextRendererComponent>().SetText("lvl: " + std::to_string(atk->GetLevel()));
-            ui["EnemyStatsHealth"]->getComponent<RectComponent>().scale.x = 504.0f * atk->GetHP() / atk->GetStatHP();
-            ui["EnemyStatsHealthText"]->getComponent<TextRendererComponent>().SetText(std::to_string(atk->GetHP()) + "/" + std::to_string(atk->GetStatHP()));
-            /*
-            this->ui["PlayerTeam0"] = std::any_cast<Entity*>(ui[12]);
-            this->ui["PlayerTeam1"] = std::any_cast<Entity*>(ui[13]);
-            this->ui["PlayerTeam2"] = std::any_cast<Entity*>(ui[14]);
-            this->ui["PlayerTeam3"] = std::any_cast<Entity*>(ui[15]);
-            this->ui["PlayerTeam4"] = std::any_cast<Entity*>(ui[16]);
-            this->ui["PlayerTeam5"] = std::any_cast<Entity*>(ui[17]);
+            for (int i = 0; i < 6; i++)
+            {
+                if (playerTeam->GetSize() > i) 
+                {
+                    std::string name = playerTeam->GetDae(i)->GetSpecies().getName();
+                    ui["PlayerTeam" + std::to_string(i)]->getComponent<SpriteComponent>().ClearSetTexture({ name, name, name });
+                }
+                else 
+                {
+                    ui["PlayerTeam" + std::to_string(i)]->getComponent<SpriteComponent>().ClearSetTexture({ "Pokeball_Team", "Pokeball_Team_Highlighted", "Pokeball_Team_Activated" });
+                }
+            }
 
-            this->ui["EnemyTeam0"] = std::any_cast<Entity*>(ui[18]);
-            this->ui["EnemyTeam1"] = std::any_cast<Entity*>(ui[19]);
-            this->ui["EnemyTeam2"] = std::any_cast<Entity*>(ui[20]);
-            this->ui["EnemyTeam3"] = std::any_cast<Entity*>(ui[21]);
-            this->ui["EnemyTeam4"] = std::any_cast<Entity*>(ui[22]);
-            this->ui["EnemyTeam5"] = std::any_cast<Entity*>(ui[23]);
-            */
+            for (int i = 0; i < 6; i++)
+            {
+                if (trainerTeam->GetSize() > i)
+                {
+                    std::string name = trainerTeam->GetDae(i)->GetSpecies().getName();
+                    ui["EnemyTeam" + std::to_string(i)]->getComponent<SpriteComponent>().ClearSetTexture({ name, name, name });
+                }
+                else
+                {
+                    ui["EnemyTeam" + std::to_string(i)]->getComponent<SpriteComponent>().ClearSetTexture(pokeballIds);
+
+                }
+            }
 
             for (int i = 0; i < 4; i++) 
             {
-                bool active = atk->GetAttacks().size() > i;
+                bool active = atk->GetAttacks().size() > i && ui["BattleUIParent"]->isActive();
                 ui["MoveButton" + std::to_string(i)]->SetActiveStatus(active);
                 if (active)
                 {
@@ -336,6 +471,29 @@ namespace Daemon
 
             /*
             this->ui["BattleTextBox"] = std::any_cast<Entity*>(ui[36]);*/
+        }
+
+        namespace BattleWrapper 
+        {
+            void UseMove(std::vector<std::any> data)
+            {
+                auto index = std::any_cast<int>(data[0]);
+
+                if (instance->PlayerTurn(index)) 
+                {
+                    instance->Turn();
+                }
+            }
+
+            void SwapDaemon(std::vector<std::any> data)
+            {
+                auto index = std::any_cast<int>(data[0]);
+
+                if (instance->SwapTurn(index))
+                {
+                    instance->Turn();
+                }
+            }
         }
 	}
 }

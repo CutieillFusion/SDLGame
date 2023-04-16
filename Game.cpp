@@ -24,7 +24,7 @@
 SDL_Renderer* Game::renderer = nullptr;
 
 Vector2D Game::camera = Vector2D(0, 0);
-Vector2D cameraOffset = Vector2D(800.0f/(WORLD_SCALE * 2), 640.0f/(WORLD_SCALE * 2));//Center Screen
+Vector2D cameraOffset = Vector2D(1920.0f / (WORLD_SCALE * 2), 1080.0f / (WORLD_SCALE * 2));//Center Screen
 
 AssetManager* Game::assets = new AssetManager();
 Manager* Game::manager = new Manager();
@@ -33,6 +33,8 @@ CollisionDetection collision = CollisionDetection();
 
 //Entities
 #pragma region ENTITIES
+
+#pragma region BattleUI
 auto& Background(Game::manager->AddEntity(LAYER_UI));
 
 auto& MoveButton0(Game::manager->AddEntity(LAYER_UI));
@@ -86,6 +88,21 @@ auto& EnemyStatsHealth(Game::manager->AddEntity(LAYER_UI));
 auto& EnemyStatsHealthText(Game::manager->AddEntity(LAYER_UI));
 
 auto& BattleTextBox(Game::manager->AddEntity(LAYER_UI));
+auto& BattleUIParent(Game::manager->AddEntity(LAYER_UI));
+#pragma endregion
+
+#pragma region World
+auto& WorldParent(Game::manager->AddEntity(LAYER_BACKGROUND));
+auto& WorldBackground(Game::manager->AddEntity(LAYER_BACKGROUND));
+
+auto& Player(Game::manager->AddEntity(LAYER_CHARACTER));
+auto& Trainer(Game::manager->AddEntity(LAYER_CHARACTER));
+
+auto& Box1(Game::manager->AddEntity(LAYER_FOREGROUND));
+auto& Box2(Game::manager->AddEntity(LAYER_FOREGROUND));
+auto& Box3(Game::manager->AddEntity(LAYER_FOREGROUND));
+#pragma endregion
+
 #pragma endregion
 
 Game::Game()
@@ -99,7 +116,9 @@ Game::~Game()
 void Game::init(const char* title, int xPos, int yPos, int width, int height, bool fullscreen)
 {
 	#pragma region Initialization
+
 	screenSize = Vector2D((float)width, (float)height);
+	cameraOffset = Vector2D(screenSize.x / (WORLD_SCALE * 2), screenSize.y / (WORLD_SCALE * 2));
 
 	int flags = 0;
 	if (fullscreen) 
@@ -161,9 +180,13 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 
 	SDL_Color textColor = { 0, 0, 0, 255 };
 
+	#pragma region BattleUI
+	BattleUIParent.addComponent<RectComponent>(Vector3D(0, 0, 0), Vector3D(0, 0, 0));
+
 	Background.addComponent<RectComponent>(Vector3D(0, 0, 0), Vector3D(screenSize.x, screenSize.y, 0));
 	Background.addComponent<SpriteComponent>("Grass");
 	Background.addComponent<ImageRendererComponent>();
+	Background.SetParent(&BattleUIParent);
 
 	#pragma region ITEM_SLOTS
 	std::vector<std::string> itemSlotIds =
@@ -177,6 +200,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	ItemSlot0.addComponent<ImageRendererComponent>();
 	ItemSlot0.addComponent<UIColliderComponent>(boxCollider);
 	ItemSlot0.addComponent<ButtonComponent>();
+	ItemSlot0.SetParent(&BattleUIParent);
 
 	ItemSlot1.addComponent<RectComponent>(Vector3D(screenSize.x * 1.0f / 12.0f, 0, 0), itemSlotScale);
 	ItemSlot1.addComponent<SpriteComponent>(itemSlotIds);
@@ -207,24 +231,29 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	PlayerPokemonPlatform.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 80.0f, screenSize.y * 2.0f / 3.0f, 0), pokemonPlatformScale);
 	PlayerPokemonPlatform.addComponent<SpriteComponent>("Pokemon_Platform");
 	PlayerPokemonPlatform.addComponent<ImageRendererComponent>();
+	PlayerPokemonPlatform.SetParent(&BattleUIParent);
 
 	PlayerPokemon.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 50.0f, screenSize.y * 128.0f / 225.0f, 0), pokemonScale);
 	PlayerPokemon.addComponent<SpriteComponent>("Clawrean");
 	PlayerPokemon.addComponent<ImageRendererComponent>();
+	PlayerPokemon.SetParent(&BattleUIParent);
 
 	EnemyPokemonPlatform.addComponent<RectComponent>(Vector3D(screenSize.x * 43.0f / 100.0f, screenSize.y / 9.0f, 0), pokemonPlatformScale);
 	EnemyPokemonPlatform.addComponent<SpriteComponent>("Pokemon_Platform");
 	EnemyPokemonPlatform.addComponent<ImageRendererComponent>();
+	EnemyPokemonPlatform.SetParent(&BattleUIParent);
 
 	EnemyPokemon.addComponent<RectComponent>(Vector3D(screenSize.x * 47.0f / 100.0f, screenSize.y * 8.0f / 225.0f, 0), pokemonScale);
 	EnemyPokemon.addComponent<SpriteComponent>("Crungly");
 	EnemyPokemon.addComponent<ImageRendererComponent>();
+	EnemyPokemon.SetParent(&BattleUIParent);
 	#pragma endregion
 
 	#pragma region PLAYER_STATS
 	PlayerStatsBackground.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 10.0f, screenSize.y * 32.0f / 45.0f, 0), Vector3D(screenSize.x * 17.0f / 50.0f, screenSize.y * 32.0f / 225.0f, 0));
 	PlayerStatsBackground.addComponent<SpriteComponent>("Stats_Border");
 	PlayerStatsBackground.addComponent<ImageRendererComponent>();
+	PlayerStatsBackground.SetParent(&BattleUIParent);
 
 	PlayerStatsName.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 400.0f, screenSize.y * 1.0f / 225.0f, 0), Vector3D(screenSize.x * 2.0f / 25.0f, screenSize.y * 8.0f / 225.0f, 0));
 	PlayerStatsName.addComponent<TextRendererComponent>("Name", "8Bit36", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -248,6 +277,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	EnemyStatsBackground.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 200.0f, screenSize.y * 2.0f / 75.0f, 0), Vector3D(screenSize.x * 17.0f / 50.f, screenSize.y * 32.0f / 225.0f, 0));
 	EnemyStatsBackground.addComponent<SpriteComponent>("Stats_Border");
 	EnemyStatsBackground.addComponent<ImageRendererComponent>();
+	EnemyStatsBackground.SetParent(&BattleUIParent);
 
 	EnemyStatsName.addComponent<RectComponent>(Vector3D(screenSize.x * 3.0f / 400.0f, screenSize.y * 1.0f / 225.0f, 0), Vector3D(screenSize.x * 2.0f / 25.0f, screenSize.y * 8.0f / 225.0f, 0));
 	EnemyStatsName.addComponent<TextRendererComponent>("Name", "8Bit36", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -274,47 +304,54 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	};
 
 	Vector3D pokeballScale = Vector3D(80, 80, 0);
+	auto swapFunc = Daemon::Model::BattleWrapper::SwapDaemon;
 
 	PlayerTeam0.addComponent<RectComponent>(Vector3D(0, 144, 0), pokeballScale);
 	PlayerTeam0.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam0.addComponent<ImageRendererComponent>();
 	PlayerTeam0.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam0.addComponent<ButtonComponent>();
+	PlayerTeam0.addComponent<ButtonComponent>(swapFunc);
+	PlayerTeam0.getComponent<ButtonComponent>().data = { 0 };
 	PlayerTeam0.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam1.addComponent<RectComponent>(Vector3D(92, 144, 0), pokeballScale);
 	PlayerTeam1.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam1.addComponent<ImageRendererComponent>();
 	PlayerTeam1.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam1.addComponent<ButtonComponent>();
+	PlayerTeam1.addComponent<ButtonComponent>(swapFunc);
+	PlayerTeam1.getComponent<ButtonComponent>().data = { 1 };
 	PlayerTeam1.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam2.addComponent<RectComponent>(Vector3D(184, 144, 0), pokeballScale);
 	PlayerTeam2.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam2.addComponent<ImageRendererComponent>();
 	PlayerTeam2.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam2.addComponent<ButtonComponent>();
+	PlayerTeam2.addComponent<ButtonComponent>(swapFunc);
+	PlayerTeam2.getComponent<ButtonComponent>().data = { 2 };
 	PlayerTeam2.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam3.addComponent<RectComponent>(Vector3D(276, 144, 0), pokeballScale);
 	PlayerTeam3.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam3.addComponent<ImageRendererComponent>();
 	PlayerTeam3.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam3.addComponent<ButtonComponent>();
+	PlayerTeam3.addComponent<ButtonComponent>(swapFunc);
+	PlayerTeam3.getComponent<ButtonComponent>().data = { 3 };
 	PlayerTeam3.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam4.addComponent<RectComponent>(Vector3D(368, 144, 0), pokeballScale);
 	PlayerTeam4.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam4.addComponent<ImageRendererComponent>();
 	PlayerTeam4.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam4.addComponent<ButtonComponent>();
+	PlayerTeam4.addComponent<ButtonComponent>(swapFunc);
+	PlayerTeam4.getComponent<ButtonComponent>().data = { 4 };
 	PlayerTeam4.SetParent(&PlayerStatsBackground);
 
 	PlayerTeam5.addComponent<RectComponent>(Vector3D(460, 144, 0), pokeballScale);
 	PlayerTeam5.addComponent<SpriteComponent>(pokeballIds);
 	PlayerTeam5.addComponent<ImageRendererComponent>();
 	PlayerTeam5.addComponent<UIColliderComponent>(boxCollider);
-	PlayerTeam5.addComponent<ButtonComponent>();
+	PlayerTeam5.addComponent<ButtonComponent>(swapFunc);
+	PlayerTeam5.getComponent<ButtonComponent>().data = { 5 };
 	PlayerTeam5.SetParent(&PlayerStatsBackground);
 
 	EnemyTeam0.addComponent<RectComponent>(Vector3D(0, 144, 0), pokeballScale);
@@ -366,12 +403,15 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 		"Move_Normal", "Move_Normal_Highlighted", "Move_Normal_Activated"
 	};
 	Vector3D moveButtonSize = Vector3D(screenSize.x / 3.0f, screenSize.y * 1.0f / 15.0f + 1, 0);
+	auto moveFunc = Daemon::Model::BattleWrapper::UseMove;
 
 	MoveButton0.addComponent<RectComponent>(Vector3D(screenSize.x * 2.0f / 3.0f, 500, 0), moveButtonSize);
 	MoveButton0.addComponent<SpriteComponent>(moveButton);
 	MoveButton0.addComponent<ImageRendererComponent>();
 	MoveButton0.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton0.addComponent<ButtonComponent>();
+	MoveButton0.addComponent<ButtonComponent>(moveFunc);
+	MoveButton0.getComponent<ButtonComponent>().data = { 0 };
+	MoveButton0.SetParent(&BattleUIParent);
 
 	MoveButtonText0.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText0.addComponent<TextRendererComponent>("Tackle", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -385,7 +425,9 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton1.addComponent<SpriteComponent>(moveButton);
 	MoveButton1.addComponent<ImageRendererComponent>();
 	MoveButton1.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton1.addComponent<ButtonComponent>();
+	MoveButton1.addComponent<ButtonComponent>(moveFunc);
+	MoveButton1.getComponent<ButtonComponent>().data = { 1 };
+	MoveButton1.SetParent(&BattleUIParent);
 
 	MoveButtonText1.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText1.addComponent<TextRendererComponent>("Leer", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -399,7 +441,9 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton2.addComponent<SpriteComponent>(moveButton);
 	MoveButton2.addComponent<ImageRendererComponent>();
 	MoveButton2.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton2.addComponent<ButtonComponent>();
+	MoveButton2.addComponent<ButtonComponent>(moveFunc);
+	MoveButton2.getComponent<ButtonComponent>().data = { 2 };
+	MoveButton2.SetParent(&BattleUIParent);
 
 	MoveButtonText2.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText2.addComponent<TextRendererComponent>("False Swipe", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
@@ -413,8 +457,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	MoveButton3.addComponent<SpriteComponent>(moveButton);
 	MoveButton3.addComponent<ImageRendererComponent>();
 	MoveButton3.addComponent<UIColliderComponent>(boxCollider);
-	MoveButton3.addComponent<ButtonComponent>();
-	
+	MoveButton3.addComponent<ButtonComponent>(moveFunc);
+	MoveButton3.getComponent<ButtonComponent>().data = { 3 };
+	MoveButton3.SetParent(&BattleUIParent);
+
 	MoveButtonText3.addComponent<RectComponent>(Vector3D(12, 4, 0), moveButtonSize);
 	MoveButtonText3.addComponent<TextRendererComponent>("Protect", "8Bit56", textColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP);
 	MoveButtonText3.SetParent(&MoveButton3);
@@ -428,23 +474,51 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	BattleTextBox.addComponent<SpriteComponent>("BattleTextBox");
 	BattleTextBox.addComponent<ImageRendererComponent>(); 
 	BattleTextBox.addComponent<TextRendererComponent>(" SELECT NEXT MOVE...", "8Bit56", textColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_MIDDLE);
+	BattleTextBox.SetParent(&BattleUIParent);
+	#pragma endregion
+
+	#pragma region World
+
+	WorldParent.addComponent<TransformComponent>(Vector3D(0, 0, 0), Vector3D(0, 0, 0));
+
+	Player.addComponent<TransformComponent>(Vector3D(0, 0, 0), Vector3D(1, 1, 0));
+	Player.addComponent<SpriteComponent>("Player");
+	Player.addComponent<SpriteRendererComponent>();
+	Player.addComponent<PlayerControllerComponent>();
+	Player.addComponent<ColliderComponent>(boxCollider, false, false);
+	Player.SetParent(&WorldParent);
+
+	#pragma endregion 
 
 	InitializeDaeemon();
-
 }
-
+Daemon::Model::Battle* battle = nullptr;
 void Game::InitializeDaeemon()
 {
-	Daemon::Model::Attack* tackle = new Daemon::Model::Attack("Tackle", 45, Daemon::Model::Type::NEUTRAL, 95, false, false, 25, false, 35, 0, nullptr, nullptr, nullptr);
-	Daemon::Model::Attacks::ChangeStatEffect* lowerDefense = new Daemon::Model::Attacks::ChangeStatEffect(Daemon::Model::Attacks::ChangeStatEffect::Target::DEFENDER, Daemon::Model::Stats::DEF, -1);
-	Daemon::Model::Attack* leer = new Daemon::Model::Attack("Leer", 0, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, false, 35, 0, lowerDefense, nullptr, nullptr);
+	Daemon::Model::DaeTeam* playerTeam = new Daemon::Model::DaeTeam("Player");
+	Daemon::Model::DaeTeam* trainerTeam = new Daemon::Model::DaeTeam("Trainer");
+
 	Daemon::Model::Attacks::ProtectEffect* protectEffect = new Daemon::Model::Attacks::ProtectEffect();
+	Daemon::Model::Attacks::ChangeStatEffect* lowerDefense = new Daemon::Model::Attacks::ChangeStatEffect(Daemon::Model::Attacks::ChangeStatEffect::Target::DEFENDER, Daemon::Model::Stats::DEF, -1);
+	Daemon::Model::Attacks::ChangeStatEffect* lowerAttack = new Daemon::Model::Attacks::ChangeStatEffect(Daemon::Model::Attacks::ChangeStatEffect::Target::DEFENDER, Daemon::Model::Stats::ATK, -1);
+	
+	Daemon::Model::Attack* tackle = new Daemon::Model::Attack("Tackle", 45, Daemon::Model::Type::NEUTRAL, 95, false, false, 25, false, 35, 0, nullptr, nullptr, nullptr);
+	Daemon::Model::Attack* leer = new Daemon::Model::Attack("Leer", 0, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, false, 35, 0, lowerDefense, nullptr, nullptr);
 	Daemon::Model::Attack* protect = new Daemon::Model::Attack("Protect", 45, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, true, 35, INT_MAX, protectEffect, nullptr, nullptr);
+
+	Daemon::Model::Attack* tackle2 = new Daemon::Model::Attack("Tackle", 45, Daemon::Model::Type::NEUTRAL, 95, false, false, 25, false, 35, 0, nullptr, nullptr, nullptr);
+	Daemon::Model::Attack* leer2 = new Daemon::Model::Attack("Leer", 0, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, false, 35, 0, lowerDefense, nullptr, nullptr);
+
+	Daemon::Model::Attack* icebeam = new Daemon::Model::Attack("Icebeam", 75, Daemon::Model::Type::COLD, 50, true, false, 25, false, 10, 0, nullptr, nullptr, nullptr);
+	Daemon::Model::Attack* splash = new Daemon::Model::Attack("Splash", 0, Daemon::Model::Type::LIQUID, 100, false, true, 0, false, 20, 0, lowerAttack, nullptr, nullptr);
+	Daemon::Model::Attack* protect2 = new Daemon::Model::Attack("Protect", 45, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, true, 35, INT_MAX, protectEffect, nullptr, nullptr);
 
 	std::vector<Daemon::Model::Stats> evs = { Daemon::Model::Stats::SPE };
 	Daemon::Model::Species* pidgeySpecies = new Daemon::Model::Species(45, 40, 35, 35, 56, 40, "Crungly", Daemon::Model::Type::DRAGON, Daemon::Model::Type::NEUTRAL, nullptr, evs, 0.3f, 1.8f, "Pidgey", 55, 0, 255, 1);
+	Daemon::Model::Species* watrySpecies = new Daemon::Model::Species(10, 40, 60, 20, 50, 40, "Watry", Daemon::Model::Type::LIQUID, Daemon::Model::Type::NOTHING, nullptr, evs, 0.6f, 0.5f, "Watry", 40, 0, 255, 2);
+
 	std::vector<Daemon::Model::Attack*> moveSet = {tackle, leer, protect};
-	Daemon::Model::Daemon* pidgey = new Daemon::Model::Daemon("Pickle", pidgeySpecies, 12, moveSet, Daemon::Model::Nature::CAREFUL);
+	Daemon::Model::Daemon* pidgey = new Daemon::Model::Daemon("Pickle", pidgeySpecies, 15, moveSet, Daemon::Model::Nature::CAREFUL);
 	pidgey->SetAtkIV(31);
 	pidgey->SetDefIV(31);
 	pidgey->SetAtkSpeIV(31);
@@ -453,8 +527,22 @@ void Game::InitializeDaeemon()
 	pidgey->SetHPIV(31);
 	pidgey->CalcStats();
 	pidgey->Heal(pidgey->GetStatHP());
+	playerTeam->AddDaeMon(pidgey);
 
-	Daemon::Model::Daemon* pidgey2 = new Daemon::Model::Daemon("Rhino", pidgeySpecies, 13, moveSet, Daemon::Model::Nature::CAREFUL);
+	std::vector<Daemon::Model::Attack*> moveSet3 = { icebeam, splash, protect2 };
+	Daemon::Model::Daemon* watry= new Daemon::Model::Daemon("Puddle", watrySpecies, 12, moveSet3, Daemon::Model::Nature::IMPISH);
+	watry->SetAtkIV(31);
+	watry->SetDefIV(31);
+	watry->SetAtkSpeIV(31);
+	watry->SetDefSpeIV(31);
+	watry->SetSpeIV(31);
+	watry->SetHPIV(31);
+	watry->CalcStats();
+	watry->Heal(watry->GetStatHP());
+	playerTeam->AddDaeMon(watry);
+
+	std::vector<Daemon::Model::Attack*> moveSet2 = { tackle2, leer2 };
+	Daemon::Model::Daemon* pidgey2 = new Daemon::Model::Daemon("Rhino", pidgeySpecies, 13, moveSet2, Daemon::Model::Nature::BASHFUL);
 	pidgey2->SetAtkIV(31);
 	pidgey2->SetDefIV(31);
 	pidgey2->SetAtkSpeIV(31);
@@ -463,25 +551,9 @@ void Game::InitializeDaeemon()
 	pidgey2->SetHPIV(31);
 	pidgey2->CalcStats();
 	pidgey2->Heal(pidgey2->GetStatHP());
-
-	std::cout << pidgey->GetNickname() << " Before - " << pidgey->GetHP() << std::endl;
-	std::cout << pidgey2->GetNickname() << " Before - " << pidgey2->GetHP() << std::endl;
+	trainerTeam->AddDaeMon(pidgey2);
 	
-	Daemon::Model::Battle battle = Daemon::Model::Battle(pidgey, pidgey2);
-
-	battle.atkTurn.attackUsed = tackle;
-	battle.atkTurn.daemon = pidgey;
-	battle.Turn();
-
-	std::cout << pidgey->GetNickname() << " After Turn 1 - " << pidgey->GetHP() << std::endl;
-	std::cout << pidgey2->GetNickname() << " After Turn 1 - " << pidgey2->GetHP() << std::endl;
-
-	battle.atkTurn.attackUsed = protect;
-	battle.atkTurn.daemon = pidgey;
-	battle.Turn();
-	
-	std::cout << pidgey->GetNickname() << " After Turn 2 - " << pidgey->GetHP() << std::endl;
-	std::cout << pidgey2->GetNickname() << " After Turn 2 - " << pidgey2->GetHP() << std::endl;
+	battle = new Daemon::Model::Battle(playerTeam, trainerTeam, 0, 0);
 
 	std::vector<std::any> ui =
 	{
@@ -521,11 +593,13 @@ void Game::InitializeDaeemon()
 		&MoveButton3,
 		&MoveButtonText3,
 		&MoveButtonTextPP3,
-		&BattleTextBox
+		&BattleTextBox,
+		&BattleUIParent,
+		&WorldParent
 	};
 
-	battle.InitalizeUI(ui);
-	battle.UpdateBattleUI();
+	battle->InitalizeUI(ui);
+	battle->UpdateBattleUI();
 }
 
 void Game::handleEvents()
@@ -622,8 +696,8 @@ void Game::update()
 
 	manager->Update();
 
-	//newCamera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
-	//newCamera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
+	newCamera.x = Player.getComponent<TransformComponent>().position.x - cameraOffset.x;
+	newCamera.y = Player.getComponent<TransformComponent>().position.y - cameraOffset.y;
 	camera = Vector2D::Lerp(camera, newCamera, 3.5f * DELTA_TIME);
 
 	UpdateCollisions();
@@ -632,7 +706,7 @@ void Game::update()
 
 void Game::UpdateCollisions() 
 {
-	for (auto &[key, entity] : manager->entities)
+	for (auto& [key, entity] : manager->entities)
 	{
 		Entity* entityA = entity.get();
 

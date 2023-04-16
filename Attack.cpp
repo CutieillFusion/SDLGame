@@ -51,7 +51,10 @@ namespace Daemon
             if ((Utils::randU(100)) > (accuracy * (atk.GetStatACC() / def.GetStatEVA())) && neverFails == false) {
                 //TurnAction failAction;
                 //turnQueue.push(createTurnDialogAction({ Utils::OpString("battle.dialog.fail", {atk.getNicknamePtr()}) }));
-                failEffect->Apply(*this, atk, def, turnQueue);
+                if (failEffect != nullptr) 
+                {
+                    failEffect->Apply(*this, atk, def, turnQueue);
+                }
                 return -2;
             }
 
@@ -62,8 +65,10 @@ namespace Daemon
             //If type unefficiency
             if (ArrayTypes::CalcEffectiveness(type, def.GetType1(), def.GetType2()) == 0 && (neverFails == false || status == false)) {
                 //turnQueue.push(createTurnDialogAction({ Utils::OpString("battle.effectiveness.none", {atk.getNicknamePtr()}) }));
-                if (failEffect != nullptr)
+                if (failEffect != nullptr) 
+                {
                     failEffect->Apply(*this, atk, def, turnQueue);
+                }
                 return -1;
             }
 

@@ -30,6 +30,7 @@
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="CurveExp.h" />
     <ClInclude Include="Daemon.h" />
+    <ClInclude Include="DaemonTeam.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="Evolution.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="CurveExp.cpp" />
     <ClCompile Include="Daemon.cpp" />
+    <ClCompile Include="DaemonTeam.cpp" />
     <ClCompile Include="ECS.cpp" />
     <ClCompile Include="EItem.cpp" />
     <ClCompile Include="ELevel.cpp" />
