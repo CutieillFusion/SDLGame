@@ -1,39 +1,72 @@
 {
-	"Moves": {
-		"Name": [
-			"Swap Pokemon",
-			"Tackle",
-			"Leer",
-			"False Swipe",
-			"Protect"
-		],
-		"Type": [
-			"Normal",
-			"Normal",
-			"Normal",
-			"Normal",
-			"Normal"
-		],
-		"Power": [
-			0,
-			40,
-			0,
-			40,
-			0
-		],
-		"MaxPowerPoints": [
-			1000,
-			35,
-			30,
-			40,
-			10
-		],
-		"Accuracy": [
-			0,
-			100,
-			100,
-			100,
-			100
-		]
+	"Tackle": {
+			"Power": 45,
+			"Type": "Neutral",
+			"Accuracy": 95,
+			"Special": false,
+			"Status": false,
+			"CriticalRate": 25,
+			"NeverFails": false,
+			"PPMax": 35,
+			"Priority": 0,
+			"PreEffect": "nullptr",
+			"PostEffect": "nullptr",
+			"FailEffect": "nullptr"
+	},
+	"Leer": {
+		"Power": 0,
+		"Type": "Neutral",
+		"Accuracy": 100,
+		"Special": false,
+		"Status": true,
+		"CriticalRate": 0,
+		"NeverFails": false,
+		"PPMax": 35,
+		"Priority": 0,
+		"PreEffect": "LowerDefense -1",
+		"PostEffect": "nullptr",
+		"FailEffect": "nullptr"
+	},
+	"Protect": {
+		"Power": 0,
+		"Type": "Neutral",
+		"Accuracy": 100,
+		"Special": false,
+		"Status": true,
+		"CriticalRate": 0,
+		"NeverFails": true,
+		"PPMax": 10,
+		"Priority": 0,
+		"PreEffect": "Protect",
+		"PostEffect": "nullptr",
+		"FailEffect": "nullptr"
+	},
+	"Icebeam": {
+		"Power": 75,
+		"Type": "Cold",
+		"Accuracy": 75,
+		"Special": true,
+		"Status": false,
+		"CriticalRate": 25,
+		"NeverFails": false,
+		"PPMax": 10,
+		"Priority": 0,
+		"PreEffect": "nullptr",
+		"PostEffect": "nullptr",
+		"FailEffect": "nullptr"
+	},
+	"Splash": {
+		"Power": 0,
+		"Type": "Liquid",
+		"Accuracy": 100,
+		"Special": false,
+		"Status": true,
+		"CriticalRate": 0,
+		"NeverFails": false,
+		"PPMax": 25,
+		"Priority": 0,
+		"PreEffect": "LowerAttack -1",
+		"PostEffect": "nullptr",
+		"FailEffect": "nullptr"
 	}
 }

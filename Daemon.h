@@ -145,6 +145,18 @@ namespace Daemon
                 return (HP <= 0);
             }
 
+            void SetAllIVs(int iv) 
+            {
+                SetAtkIV(iv);
+                SetDefIV(iv);
+                SetAtkSpeIV(iv);
+                SetDefSpeIV(iv);
+                SetSpeIV(iv);
+                SetHPIV(iv);
+                CalcStats();
+                Heal(GetStatHP());
+            }
+
             /**Method called when the Daemon wins*/
             int Win(Daemon const& defeated);
 
@@ -251,7 +263,7 @@ namespace Daemon
             }
 
             int GetStatACC() const {
-                return statACC;
+                return (int)statACC;
             }
 
             void GetEvs(Daemon const& defeated);

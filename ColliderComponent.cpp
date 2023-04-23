@@ -1,5 +1,7 @@
 #include "ColliderComponent.h"
+#include "TrainerComponent.h"
 #include "Globals.h"
+#include "Battle.h"
 
 ColliderComponent::ColliderComponent(std::vector<Vector3D> vertexs, bool isStatic, bool isTrigger)
 {
@@ -38,12 +40,21 @@ void ColliderComponent::Render()
 {
 }
 
-void ColliderComponent::OnCollision()
+void ColliderComponent::OnCollision(Entity* entity)
 {
 }
 
-void ColliderComponent::OnTrigger()
+void ColliderComponent::OnTrigger(Entity* entity)
 {
+	if (entity->HasTag("Player")) 
+	{
+		if (entity->getComponent<TrainerComponent>().CanBattle() && this->entity->GetParent()->getComponent<TrainerComponent>().CanBattle()) 
+		{
+			auto trainerTeam = this->entity->GetParent()->getComponent<TrainerComponent>().team;
+			auto playerTeam = entity->getComponent<TrainerComponent>().team;
+			auto battle = new Daemon::Model::Battle(playerTeam, trainerTeam, 0, 0);
+		}
+	}
 }
 
 bool ColliderComponent::IsStatic()

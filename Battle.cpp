@@ -7,6 +7,7 @@ namespace Daemon
 	namespace Model
 	{
         static Battle* instance;
+        static std::map<std::string, Entity*> ui;
 
         Battle::Battle(DaeTeam* playerTeam, DaeTeam* trainerTeam, int atkIndex, int defIndex)
         {
@@ -55,63 +56,16 @@ namespace Daemon
             //Register the opmons' addresses in the Turns
             atkTurn.daemon = atk;
             defTurn.daemon = def;
+
+            ui["WorldParent"]->SetActiveStatus(false);
+            ui["BattleUIParent"]->SetActiveStatus(true);
+
+            UpdateBattleUI();
         }
 
-        void Battle::InitalizeUI(std::vector<std::any> ui)
+        void Battle::InitalizeUI(std::map<std::string, Entity*> _ui)
         {
-            this->ui["PlayerPokemonPlatform"] = std::any_cast<Entity*>(ui[0]);
-            this->ui["PlayerPokemon"] = std::any_cast<Entity*>(ui[1]);
-            this->ui["EnemyPokemonPlatform"] = std::any_cast<Entity*>(ui[2]);
-            this->ui["EnemyPokemon"] = std::any_cast<Entity*>(ui[3]);
-
-            this->ui["PlayerStatsName"] = std::any_cast<Entity*>(ui[4]);
-            this->ui["PlayerStatsLevel"] = std::any_cast<Entity*>(ui[5]);
-            this->ui["PlayerStatsHealth"] = std::any_cast<Entity*>(ui[6]);
-            this->ui["PlayerStatsHealthText"] = std::any_cast<Entity*>(ui[7]);
-
-            this->ui["EnemyStatsName"] = std::any_cast<Entity*>(ui[8]);
-            this->ui["EnemyStatsLevel"] = std::any_cast<Entity*>(ui[9]);
-            this->ui["EnemyStatsHealth"] = std::any_cast<Entity*>(ui[10]);
-            this->ui["EnemyStatsHealthText"] = std::any_cast<Entity*>(ui[11]);
-
-            this->ui["PlayerTeam0"] = std::any_cast<Entity*>(ui[12]);
-            this->ui["PlayerTeam1"] = std::any_cast<Entity*>(ui[13]);
-            this->ui["PlayerTeam2"] = std::any_cast<Entity*>(ui[14]);
-            this->ui["PlayerTeam3"] = std::any_cast<Entity*>(ui[15]);
-            this->ui["PlayerTeam4"] = std::any_cast<Entity*>(ui[16]);
-            this->ui["PlayerTeam5"] = std::any_cast<Entity*>(ui[17]);
-
-            this->ui["EnemyTeam0"] = std::any_cast<Entity*>(ui[18]);
-            this->ui["EnemyTeam1"] = std::any_cast<Entity*>(ui[19]);
-            this->ui["EnemyTeam2"] = std::any_cast<Entity*>(ui[20]);
-            this->ui["EnemyTeam3"] = std::any_cast<Entity*>(ui[21]);
-            this->ui["EnemyTeam4"] = std::any_cast<Entity*>(ui[22]);
-            this->ui["EnemyTeam5"] = std::any_cast<Entity*>(ui[23]);
-
-            this->ui["MoveButton0"] = std::any_cast<Entity*>(ui[24]);
-            this->ui["MoveButtonText0"] = std::any_cast<Entity*>(ui[25]);
-            this->ui["MoveButtonTextPP0"] = std::any_cast<Entity*>(ui[26]);
-
-            this->ui["MoveButton1"] = std::any_cast<Entity*>(ui[27]);
-            this->ui["MoveButtonText1"] = std::any_cast<Entity*>(ui[28]);
-            this->ui["MoveButtonTextPP1"] = std::any_cast<Entity*>(ui[29]);
-
-            this->ui["MoveButton2"] = std::any_cast<Entity*>(ui[30]);
-            this->ui["MoveButtonText2"] = std::any_cast<Entity*>(ui[31]);
-            this->ui["MoveButtonTextPP2"] = std::any_cast<Entity*>(ui[32]);
-
-            this->ui["MoveButton3"] = std::any_cast<Entity*>(ui[33]);
-            this->ui["MoveButtonText3"] = std::any_cast<Entity*>(ui[34]);
-            this->ui["MoveButtonTextPP3"] = std::any_cast<Entity*>(ui[35]);
-
-            this->ui["BattleTextBox"] = std::any_cast<Entity*>(ui[36]);    
-            this->ui["BattleUIParent"] = std::any_cast<Entity*>(ui[37]);
-
-
-            this->ui["WorldParent"] = std::any_cast<Entity*>(ui[38]);
-
-            this->ui["WorldParent"]->SetActiveStatus(false);
-            this->ui["BattleUIParent"]->SetActiveStatus(true);
+            ui = _ui;                
         }
 
         //Move Order
@@ -128,7 +82,7 @@ namespace Daemon
             AITurn();
 
             /*if (!actionsQueue.empty()) {
-                handleError("Error : Actions Queue not empty but beginning a new turn anyway. Undefined behavior my result, because I won't fix that for you. And it could be funny to see.");
+                handleError("Error : Actions Queue not empty but beginning a new turn anyway. Undefined behavior my result, because I won't fix that for you. And it could be funny to see."];
             }*/
 
             //Item use or switching always comes before the attack. It is calculated before everything else.
@@ -189,10 +143,6 @@ namespace Daemon
                     }
                 }
 
-                if (CheckBattleEnded())
-                {
-                    EndBattle();
-                }
             }
             UpdateBattleUI();
 
@@ -202,6 +152,11 @@ namespace Daemon
 
             atk->ResetAllOtherStats();
             def->ResetAllOtherStats();
+
+            if (CheckBattleEnded())
+            {
+                EndBattle();
+            }
         }
 
         bool Battle::CanAttack(Daemon* daemon, TurnData* daemonTurn)
@@ -302,7 +257,7 @@ namespace Daemon
         {
             if (moveIndex < atk->GetAttacks().size() && !atk->IsDead()) 
             {
-                if (atk->GetAttacks()[moveIndex]->GetPP() > 0) 
+                if (atk->GetAttacks()[moveIndex]->GetPP() > 0)
                 {
                     atkTurn.daemon = atk;
                     atkTurn.attackUsed = atk->GetAttacks()[moveIndex];
@@ -402,8 +357,9 @@ namespace Daemon
 
         void Battle::EndBattle()
         {
-            this->ui["WorldParent"]->SetActiveStatus(true);
-            this->ui["BattleUIParent"]->SetActiveStatus(false);
+            ui["BattleUIParent"]->SetActiveStatus(false);
+            ui["WorldParent"]->SetActiveStatus(true);
+            //delete this;
         }
 
         std::vector<std::string> pokeballIds =
@@ -468,9 +424,6 @@ namespace Daemon
                     ui["MoveButtonTextPP" + std::to_string(i)]->getComponent<TextRendererComponent>().SetText(std::to_string(atk->GetAttacks()[i]->GetPP()) + "/" + std::to_string(atk->GetAttacks()[i]->GetPPMax()));
                 }
             }
-
-            /*
-            this->ui["BattleTextBox"] = std::any_cast<Entity*>(ui[36]);*/
         }
 
         namespace BattleWrapper 
@@ -479,9 +432,12 @@ namespace Daemon
             {
                 auto index = std::any_cast<int>(data[0]);
 
-                if (instance->PlayerTurn(index)) 
+                if (instance != nullptr) 
                 {
-                    instance->Turn();
+                    if (instance->PlayerTurn(index)) 
+                    {
+                        instance->Turn();
+                    }
                 }
             }
 
@@ -489,9 +445,12 @@ namespace Daemon
             {
                 auto index = std::any_cast<int>(data[0]);
 
-                if (instance->SwapTurn(index))
+                if (instance != nullptr)
                 {
-                    instance->Turn();
+                    if (instance->SwapTurn(index))
+                    {
+                        instance->Turn();
+                    }
                 }
             }
         }

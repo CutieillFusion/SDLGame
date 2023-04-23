@@ -1,4 +1,67 @@
 {
+	"Crungly": {
+		"BaseAttack": 45,
+		"BaseDefense": 40,
+		"BaseSpecialAttack": 35,
+		"BaseSpecialDefense": 35,
+		"BaseSpeed": 55,
+		"BaseHealth": 40,
+		"Type1": "Dragon",
+		"Type2": "Neutral",
+		"EvolutionType": "nullptr",
+		"EVsGiven": [
+			"Speed"
+		],
+		"Height": 0.3,
+		"Weight": 1.8,
+		"DaedexEntry": "NOTHING",
+		"ExpGiven": 55,
+		"ExpMax": 800000,
+		"CaptureRate": 255,
+		"DaedexNumber": 1
+	},
+	"Watry": {
+		"BaseAttack": 10,
+		"BaseDefense": 40,
+		"BaseSpecialAttack": 60,
+		"BaseSpecialDefense": 20,
+		"BaseSpeed": 50,
+		"BaseHealth": 40,
+		"Type1": "Liquid",
+		"Type2": "Nothing",
+		"EvolutionType": "nullptr",
+		"EVsGiven": [
+			"Speed"
+		],
+		"Height": 0.6,
+		"Weight": 0.5,
+		"DaedexEntry": "NOTHING",
+		"ExpGiven": 40,
+		"ExpMax": 800000,
+		"CaptureRate": 255,
+		"DaedexNumber": 2
+	},
+	"Clawrean": {
+		"BaseAttack": 60,
+		"BaseDefense": 40,
+		"BaseSpecialAttack": 60,
+		"BaseSpecialDefense": 40,
+		"BaseSpeed": 60,
+		"BaseHealth": 30,
+		"Type1": "Burning",
+		"Type2": "Nothing",
+		"EvolutionType": "nullptr",
+		"EVsGiven": [
+			"Health"
+		],
+		"Height": 1.7,
+		"Weight": 2.0,
+		"DaedexEntry": "NOTHING",
+		"ExpGiven": 75,
+		"ExpMax": 800000,
+		"CaptureRate": 255,
+		"DaedexNumber": 3
+	},
 	"Pokemons": {
 		"Name": [
 			"Crungly",
@@ -13,7 +76,7 @@
 		"BaseStats": [
 			[ 40, 80, 100, 30, 30, 20 ],
 			[ 20, 10, 55, 15, 20, 80 ],
-			[ 25, 90, 80, 15, 20, 80]
+			[ 25, 90, 80, 15, 20, 80 ]
 		],
 		"SpriteId": [
 			"Crungy",

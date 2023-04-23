@@ -53,6 +53,7 @@
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TileComponent.h" />
     <ClInclude Include="Tokenizer.h" />
+    <ClInclude Include="TrainerComponent.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Turn.h" />
     <ClInclude Include="UIColliderComponent.h" />
@@ -100,6 +101,7 @@
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TileComponent.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="TrainerComponent.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="Turn.cpp" />
     <ClCompile Include="UIColliderComponent.cpp" />

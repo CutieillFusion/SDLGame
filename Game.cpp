@@ -13,6 +13,7 @@
 #include "ButtonComponent.h"
 #include "ButtonEvents.h"
 #include "AssetManager.h"
+#include "TrainerComponent.h"
 
 #include "Daemon.h"
 #include "Attack.h"
@@ -97,6 +98,9 @@ auto& WorldBackground(Game::manager->AddEntity(LAYER_BACKGROUND));
 
 auto& Player(Game::manager->AddEntity(LAYER_CHARACTER));
 auto& Trainer(Game::manager->AddEntity(LAYER_CHARACTER));
+auto& TrainerVision(Game::manager->AddEntity(LAYER_CHARACTER));
+auto& Trainer2(Game::manager->AddEntity(LAYER_CHARACTER));
+auto& Trainer2Vision(Game::manager->AddEntity(LAYER_CHARACTER));
 
 auto& Box1(Game::manager->AddEntity(LAYER_FOREGROUND));
 auto& Box2(Game::manager->AddEntity(LAYER_FOREGROUND));
@@ -477,129 +481,171 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
 	BattleTextBox.SetParent(&BattleUIParent);
 	#pragma endregion
 
+	Daemon::Model::DaeTeam* playerTeam = new Daemon::Model::DaeTeam("Player");
+	Daemon::Model::DaeTeam* trainerTeam = new Daemon::Model::DaeTeam("Trainer");
+	Daemon::Model::DaeTeam* trainer2Team = new Daemon::Model::DaeTeam("Trainer2");
+
+	Daemon::Model::Species* crunglySpecies = assets->CreateSpecies("Crungly", "Pokemons");
+	Daemon::Model::Species* watrySpecies = assets->CreateSpecies("Watry", "Pokemons");
+	Daemon::Model::Species* clawreanSpecies = assets->CreateSpecies("Clawrean", "Pokemons");
+
+	Daemon::Model::Daemon* crungly = new Daemon::Model::Daemon("Pickle", crunglySpecies, 15, { assets->CreateMove("Tackle", "PokemonMoves"), assets->CreateMove("Leer", "PokemonMoves"), assets->CreateMove("Protect", "PokemonMoves") }, Daemon::Model::Nature::CAREFUL);
+	crungly->SetAllIVs(31);
+	playerTeam->AddDaeMon(crungly);
+
+	Daemon::Model::Daemon* watry = new Daemon::Model::Daemon("Puddle", watrySpecies, 12, { assets->CreateMove("Icebeam", "PokemonMoves"), assets->CreateMove("Splash", "PokemonMoves"), assets->CreateMove("Protect", "PokemonMoves") }, Daemon::Model::Nature::IMPISH);
+	watry->SetAllIVs(31);
+	playerTeam->AddDaeMon(watry);
+
+	Daemon::Model::Daemon* crungly2 = new Daemon::Model::Daemon("Rhino", crunglySpecies, 13, { assets->CreateMove("Tackle", "PokemonMoves"), assets->CreateMove("Leer", "PokemonMoves") }, Daemon::Model::Nature::BASHFUL);
+	crungly2->SetAllIVs(31);
+	trainerTeam->AddDaeMon(crungly2);
+
+	Daemon::Model::Daemon* clawrean = new Daemon::Model::Daemon("Rhino", clawreanSpecies, 13, { assets->CreateMove("Icebeam", "PokemonMoves"), assets->CreateMove("Leer", "PokemonMoves"), assets->CreateMove("Protect", "PokemonMoves") }, Daemon::Model::Nature::BASHFUL);
+	clawrean->SetAllIVs(31);
+	trainer2Team->AddDaeMon(clawrean);
+
 	#pragma region World
 
 	WorldParent.addComponent<TransformComponent>(Vector3D(0, 0, 0), Vector3D(0, 0, 0));
-
-	Player.addComponent<TransformComponent>(Vector3D(0, 0, 0), Vector3D(1, 1, 0));
-	Player.addComponent<SpriteComponent>("Player");
-	Player.addComponent<SpriteRendererComponent>();
-	Player.addComponent<PlayerControllerComponent>();
-	Player.addComponent<ColliderComponent>(boxCollider, false, false);
-	Player.SetParent(&WorldParent);
-
-	#pragma endregion 
-
-	InitializeDaeemon();
-}
-Daemon::Model::Battle* battle = nullptr;
-void Game::InitializeDaeemon()
-{
-	Daemon::Model::DaeTeam* playerTeam = new Daemon::Model::DaeTeam("Player");
-	Daemon::Model::DaeTeam* trainerTeam = new Daemon::Model::DaeTeam("Trainer");
-
-	Daemon::Model::Attacks::ProtectEffect* protectEffect = new Daemon::Model::Attacks::ProtectEffect();
-	Daemon::Model::Attacks::ChangeStatEffect* lowerDefense = new Daemon::Model::Attacks::ChangeStatEffect(Daemon::Model::Attacks::ChangeStatEffect::Target::DEFENDER, Daemon::Model::Stats::DEF, -1);
-	Daemon::Model::Attacks::ChangeStatEffect* lowerAttack = new Daemon::Model::Attacks::ChangeStatEffect(Daemon::Model::Attacks::ChangeStatEffect::Target::DEFENDER, Daemon::Model::Stats::ATK, -1);
-	
-	Daemon::Model::Attack* tackle = new Daemon::Model::Attack("Tackle", 45, Daemon::Model::Type::NEUTRAL, 95, false, false, 25, false, 35, 0, nullptr, nullptr, nullptr);
-	Daemon::Model::Attack* leer = new Daemon::Model::Attack("Leer", 0, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, false, 35, 0, lowerDefense, nullptr, nullptr);
-	Daemon::Model::Attack* protect = new Daemon::Model::Attack("Protect", 45, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, true, 35, INT_MAX, protectEffect, nullptr, nullptr);
-
-	Daemon::Model::Attack* tackle2 = new Daemon::Model::Attack("Tackle", 45, Daemon::Model::Type::NEUTRAL, 95, false, false, 25, false, 35, 0, nullptr, nullptr, nullptr);
-	Daemon::Model::Attack* leer2 = new Daemon::Model::Attack("Leer", 0, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, false, 35, 0, lowerDefense, nullptr, nullptr);
-
-	Daemon::Model::Attack* icebeam = new Daemon::Model::Attack("Icebeam", 75, Daemon::Model::Type::COLD, 50, true, false, 25, false, 10, 0, nullptr, nullptr, nullptr);
-	Daemon::Model::Attack* splash = new Daemon::Model::Attack("Splash", 0, Daemon::Model::Type::LIQUID, 100, false, true, 0, false, 20, 0, lowerAttack, nullptr, nullptr);
-	Daemon::Model::Attack* protect2 = new Daemon::Model::Attack("Protect", 45, Daemon::Model::Type::NEUTRAL, 95, false, true, 0, true, 35, INT_MAX, protectEffect, nullptr, nullptr);
-
-	std::vector<Daemon::Model::Stats> evs = { Daemon::Model::Stats::SPE };
-	Daemon::Model::Species* pidgeySpecies = new Daemon::Model::Species(45, 40, 35, 35, 56, 40, "Crungly", Daemon::Model::Type::DRAGON, Daemon::Model::Type::NEUTRAL, nullptr, evs, 0.3f, 1.8f, "Pidgey", 55, 0, 255, 1);
-	Daemon::Model::Species* watrySpecies = new Daemon::Model::Species(10, 40, 60, 20, 50, 40, "Watry", Daemon::Model::Type::LIQUID, Daemon::Model::Type::NOTHING, nullptr, evs, 0.6f, 0.5f, "Watry", 40, 0, 255, 2);
-
-	std::vector<Daemon::Model::Attack*> moveSet = {tackle, leer, protect};
-	Daemon::Model::Daemon* pidgey = new Daemon::Model::Daemon("Pickle", pidgeySpecies, 15, moveSet, Daemon::Model::Nature::CAREFUL);
-	pidgey->SetAtkIV(31);
-	pidgey->SetDefIV(31);
-	pidgey->SetAtkSpeIV(31);
-	pidgey->SetDefSpeIV(31);
-	pidgey->SetSpeIV(31);
-	pidgey->SetHPIV(31);
-	pidgey->CalcStats();
-	pidgey->Heal(pidgey->GetStatHP());
-	playerTeam->AddDaeMon(pidgey);
-
-	std::vector<Daemon::Model::Attack*> moveSet3 = { icebeam, splash, protect2 };
-	Daemon::Model::Daemon* watry= new Daemon::Model::Daemon("Puddle", watrySpecies, 12, moveSet3, Daemon::Model::Nature::IMPISH);
-	watry->SetAtkIV(31);
-	watry->SetDefIV(31);
-	watry->SetAtkSpeIV(31);
-	watry->SetDefSpeIV(31);
-	watry->SetSpeIV(31);
-	watry->SetHPIV(31);
-	watry->CalcStats();
-	watry->Heal(watry->GetStatHP());
-	playerTeam->AddDaeMon(watry);
-
-	std::vector<Daemon::Model::Attack*> moveSet2 = { tackle2, leer2 };
-	Daemon::Model::Daemon* pidgey2 = new Daemon::Model::Daemon("Rhino", pidgeySpecies, 13, moveSet2, Daemon::Model::Nature::BASHFUL);
-	pidgey2->SetAtkIV(31);
-	pidgey2->SetDefIV(31);
-	pidgey2->SetAtkSpeIV(31);
-	pidgey2->SetDefSpeIV(31);
-	pidgey2->SetSpeIV(31);
-	pidgey2->SetHPIV(31);
-	pidgey2->CalcStats();
-	pidgey2->Heal(pidgey2->GetStatHP());
-	trainerTeam->AddDaeMon(pidgey2);
-	
-	battle = new Daemon::Model::Battle(playerTeam, trainerTeam, 0, 0);
-
-	std::vector<std::any> ui =
+	 
+	std::vector<std::string> playerSpriteIds =
 	{
-		&PlayerPokemonPlatform,
-		&PlayerPokemon,
-		&EnemyPokemonPlatform,
-		&EnemyPokemon,
-		&PlayerStatsName,
-		&PlayerStatsLevel,
-		&PlayerStatsHealth,
-		&PlayerStatsHealthText,
-		&EnemyStatsName,
-		&EnemyStatsLevel,
-		&EnemyStatsHealth,
-		&EnemyStatsHealthText,
-		&PlayerTeam0,
-		&PlayerTeam1,
-		&PlayerTeam2,
-		&PlayerTeam3,
-		&PlayerTeam4,
-		&PlayerTeam5,
-		&EnemyTeam0,
-		&EnemyTeam1,
-		&EnemyTeam2,
-		&EnemyTeam3,
-		&EnemyTeam4,
-		&EnemyTeam5,
-		&MoveButton0,
-		&MoveButtonText0,
-		&MoveButtonTextPP0,
-		&MoveButton1,
-		&MoveButtonText1,
-		&MoveButtonTextPP1,
-		&MoveButton2,
-		&MoveButtonText2,
-		&MoveButtonTextPP2,
-		&MoveButton3,
-		&MoveButtonText3,
-		&MoveButtonTextPP3,
-		&BattleTextBox,
-		&BattleUIParent,
-		&WorldParent
+		"Player_0",
+		"Player_1",
+		"Player_2",
+		"Player_3",
+		"Player_4",
+		"Player_5", 
+		"Player_6",
+		"Player_7",
+		"Player_8",
+		"Player_9",
+		"Player_10",
+		"Player_11",
+		"Player_12"
 	};
 
-	battle->InitalizeUI(ui);
-	battle->UpdateBattleUI();
+	std::vector<AnimationState> playerAnimation =
+	{
+		{ 0, 15 },
+		{ 1, 15 },
+		{ 2, 15 },
+		{ 3, 15 },
+		{ 4, 15 },
+		{ 5, 15 },
+		{ 6, 15 },
+		{ 7, 15 },
+		{ 8, 15 },
+		{ 9, 15 },
+		{ 10, 15 },
+		{ 11, 15 },
+		{ 12, 15 }
+	};
+
+	Player.addComponent<TransformComponent>(Vector3D(0, 0, 0), Vector3D(1, 1, 0));
+	Player.addComponent<SpriteComponent>(playerSpriteIds);
+	Player.addComponent<SpriteRendererComponent>();
+	Player.addComponent<AnimationComponent>(playerAnimation);
+	Player.addComponent<PlayerControllerComponent>();
+	Player.addComponent<ColliderComponent>(boxCollider, false, false);
+	Player.addComponent<TrainerComponent>(playerTeam);
+	Player.AddTag("Player");
+	Player.SetParent(&WorldParent);
+
+	Trainer.addComponent<TransformComponent>(Vector3D(3, -2, 0), Vector3D(1, 1, 0));
+	Trainer.addComponent<SpriteComponent>("Dirt");
+	Trainer.addComponent<SpriteRendererComponent>();
+	Trainer.addComponent<ColliderComponent>(boxCollider, true, false);
+	Trainer.addComponent<TrainerComponent>(trainerTeam);
+	Trainer.SetParent(&WorldParent);
+
+	TrainerVision.addComponent<TransformComponent>(Vector3D(-3, 0, 0), Vector3D(3, 1, 0));
+	TrainerVision.addComponent<SpriteComponent>("Debug");//TEMP
+	TrainerVision.addComponent<SpriteRendererComponent>();//TEMP
+	TrainerVision.addComponent<ColliderComponent>(boxCollider, false, true);
+	TrainerVision.SetParent(&Trainer);
+
+	Trainer2.addComponent<TransformComponent>(Vector3D(-3, -3, 0), Vector3D(1, 1, 0));
+	Trainer2.addComponent<SpriteComponent>("Dirt");
+	Trainer2.addComponent<SpriteRendererComponent>();
+	Trainer2.addComponent<ColliderComponent>(boxCollider, true, false);
+	Trainer2.addComponent<TrainerComponent>(trainer2Team);
+	Trainer2.SetParent(&WorldParent);
+
+	Trainer2Vision.addComponent<TransformComponent>(Vector3D(0, -3, 0), Vector3D(1, 3, 0));
+	Trainer2Vision.addComponent<SpriteComponent>("Debug");//TEMP
+	Trainer2Vision.addComponent<SpriteRendererComponent>();//TEMP
+	Trainer2Vision.addComponent<ColliderComponent>(boxCollider, false, true);
+	Trainer2Vision.SetParent(&Trainer2);
+
+	Box1.addComponent<TransformComponent>(Vector3D(1, 1, 0), Vector3D(1, 1, 0));
+	Box1.addComponent<SpriteComponent>("Grass");
+	Box1.addComponent<SpriteRendererComponent>();
+	Box1.addComponent<ColliderComponent>(boxCollider, true, false);
+	Box1.SetParent(&WorldParent);
+
+	Box2.addComponent<TransformComponent>(Vector3D(3, 7, 0), Vector3D(1, 1, 0));
+	Box2.addComponent<SpriteComponent>("Grass");
+	Box2.addComponent<SpriteRendererComponent>();
+	Box2.addComponent<ColliderComponent>(boxCollider, true, false);
+	Box2.SetParent(&WorldParent);
+
+	Box3.addComponent<TransformComponent>(Vector3D(2, 5, 0), Vector3D(1, 1, 0));
+	Box3.addComponent<SpriteComponent>("Grass");
+	Box3.addComponent<SpriteRendererComponent>();
+	Box3.addComponent<ColliderComponent>(boxCollider, false, false);
+	Box3.SetParent(&WorldParent);
+
+	
+	#pragma endregion 
+
+	BattleUIParent.SetActiveStatus(false);
+
+	std::map<std::string, Entity*> ui =
+	{
+		{"PlayerPokemonPlatform", &PlayerPokemonPlatform},
+		{"PlayerPokemon", &PlayerPokemon},
+		{"EnemyPokemonPlatform", &EnemyPokemonPlatform},
+		{"EnemyPokemon", &EnemyPokemon},
+		{"PlayerStatsName", &PlayerStatsName},
+		{"PlayerStatsLevel", &PlayerStatsLevel},
+		{"PlayerStatsHealth", &PlayerStatsHealth},
+		{"PlayerStatsHealthText", &PlayerStatsHealthText},
+		{"EnemyStatsName", &EnemyStatsName},
+		{"EnemyStatsLevel", &EnemyStatsLevel},
+		{"EnemyStatsHealth", &EnemyStatsHealth},
+		{"EnemyStatsHealthText", &EnemyStatsHealthText},
+		{"PlayerTeam0", &PlayerTeam0},
+		{"PlayerTeam1", &PlayerTeam1},
+		{"PlayerTeam2", &PlayerTeam2},
+		{"PlayerTeam3", &PlayerTeam3},
+		{"PlayerTeam4", &PlayerTeam4},
+		{"PlayerTeam5", &PlayerTeam5},
+		{"EnemyTeam0", &EnemyTeam0},
+		{"EnemyTeam1", &EnemyTeam1},
+		{"EnemyTeam2", &EnemyTeam2},
+		{"EnemyTeam3", &EnemyTeam3},
+		{"EnemyTeam4", &EnemyTeam4},
+		{"EnemyTeam5", &EnemyTeam5},
+		{"MoveButton0", &MoveButton0},
+		{"MoveButtonText0", &MoveButtonText0},
+		{"MoveButtonTextPP0", &MoveButtonTextPP0},
+		{"MoveButton1", &MoveButton1},
+		{"MoveButtonText1" ,&MoveButtonText1},
+		{"MoveButtonTextPP1", &MoveButtonTextPP1},
+		{"MoveButton2", &MoveButton2},
+		{"MoveButtonText2", &MoveButtonText2},
+		{"MoveButtonTextPP2", &MoveButtonTextPP2},
+		{"MoveButton3", &MoveButton3},
+		{"MoveButtonText3", &MoveButtonText3},
+		{"MoveButtonTextPP3", &MoveButtonTextPP3},
+		{"BattleTextBox", &BattleTextBox},
+		{"BattleUIParent", &BattleUIParent},
+		{"WorldParent", &WorldParent}
+	};
+
+	Daemon::Model::Battle::InitalizeUI(ui);
 }
 
 void Game::handleEvents()
@@ -757,7 +803,7 @@ void Game::UpdateCollisions()
 						}
 						else 
 						{
-							entityB->getComponent<ColliderComponent>().OnTrigger();
+							entityB->getComponent<ColliderComponent>().OnTrigger(entityA);
 						}
 					}
 				}

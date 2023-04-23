@@ -25,6 +25,8 @@
 #define WORLD_SCALE 64
 #define MAX_KEYBOARD_KEYS 350
 #define DELTA_TIME 1.0f / 144.0f
+#define MinMov 0.01f
+#define DEBUG(x) std::cout << x << std::endl
 
 //Typedefs
 typedef void(*ButtonEvent)(std::vector<std::any>);

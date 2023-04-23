@@ -14,8 +14,8 @@ public:
 	void Update() override;
 	void Render() override;
 
-	void OnCollision();
-	void OnTrigger();
+	void OnCollision(Entity* entity);
+	void OnTrigger(Entity* entity);
 
 	bool IsStatic();
 	bool IsTrigger();

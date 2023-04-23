@@ -16,7 +16,7 @@ namespace Daemon
 		{
 		public:
 			Battle(DaeTeam* playerTeam, DaeTeam* trainerTeam, int atkIndex, int defIndex);
-			void InitalizeUI(std::vector<std::any> ui);
+			static void InitalizeUI(std::map<std::string, Entity*> _ui);
 
 			bool CanAttack(Daemon* daemon, TurnData* daemonTurn);
 			bool CheckTurnEnded();
@@ -41,9 +41,9 @@ namespace Daemon
 	
 			std::queue<Model::TurnAction> actionsQueue;
 
-			/*The player's current OpMon*/
+			/*The player's current Daemon*/
 			Daemon* atk;
-			/*The opposite trainer's current OpMon*/
+			/*The opposite trainer's current Daemon*/
 			Daemon* def;
 
 			bool atkFirst;
@@ -56,8 +56,6 @@ namespace Daemon
 			Model::Type oldTypes[2][2];
 			const Model::Species* oldSpecies[2];
 			std::vector<Model::Attack*> oldAttacks[2];
-
-			std::map<std::string, Entity*> ui;
 		};
 
 		namespace BattleWrapper

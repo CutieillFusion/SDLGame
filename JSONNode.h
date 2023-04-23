@@ -26,6 +26,7 @@ namespace JSON {
         JSONList returnList();
         std::string returnString();
         float returnFloat();
+        bool returnBool();
 
         void setObject(JSONObject* object);
 

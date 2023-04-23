@@ -58,7 +58,7 @@ namespace Daemon
             this->EVgiven = EVGiven;
             this->expMax = expMax;
 
-            //The curve is found according to the max OpMon's exp.
+            //The curve is found according to the max Daemon's exp.
             switch (this->expMax) {
             case 800000:
                 curve = new CurveExpQuick();

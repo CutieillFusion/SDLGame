@@ -19,7 +19,34 @@ void TransformComponent::Initialize()
 
 void TransformComponent::Update()
 {
-	localPosition += dPosition;
+	while (std::fabs(dPosition.x) > MinMov) 
+	{ 
+		if (dPosition.x > 0) 
+		{
+			localPosition.x += MinMov;
+			dPosition.x -= MinMov;
+		}
+		else if(dPosition.x < 0)
+		{
+			localPosition.x -= MinMov;
+			dPosition.x += MinMov;
+		}
+	}
+	while (std::fabs(dPosition.y) > MinMov)
+	{
+		if (dPosition.y > 0)
+		{
+			localPosition.y += MinMov;
+			dPosition.y -= MinMov;
+		}
+		else if (dPosition.y < 0)
+		{
+			localPosition.y -= MinMov;
+			dPosition.y += MinMov;
+		}
+	}
+
+	//localPosition += dPosition;
 	dPosition = Vector3D();
 
 	if (entity->HasParent())

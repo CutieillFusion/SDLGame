@@ -36,12 +36,13 @@ int main(int argc, char* argv[])
 
 //TODO:
 //Add BarComponent
-//Pokemon Battles
-//	*Add Move Speed Check
-//	*Add Death Check
 //Add Circle Check before running CollisionDetection to save resources?
-//Add Slerp to pivot point
-//	*You hopefully remember the idea 
-//	*while (dPosition > minMov) { position += minMov }
+//Add Local and Global Active for Game Object
+//	*Pointer to Parent's Active Status?
+//Swap All Raw Pointers to Smart Pointers
+//	*std::unique_pointer or std::shared_pointer
 //https://www.youtube.com/watch?v=1eaxE_waDNc&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&index=8
 //https://www.parallelrealities.co.uk/tutorials/
+
+//Good C++ Memory Ideas to follow
+//https://www.reddit.com/r/cpp_questions/comments/ul1996/getting_error_exception_thrown_read_access/

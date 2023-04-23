@@ -41,6 +41,14 @@ float JSON::JSONNode::returnFloat()
     throw std::logic_error("Improper return");
 }
 
+bool JSON::JSONNode::returnBool()
+{
+    if (type == Type::BOOLEAN) {
+        return values.bValue;
+    }
+    throw std::logic_error("Improper return");
+}
+
 void JSON::JSONNode::setObject(JSONObject* object)
 {
     this->values.object = object;
