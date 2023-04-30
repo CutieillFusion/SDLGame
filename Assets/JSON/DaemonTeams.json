@@ -1,0 +1,86 @@
+{
+	"Player": {
+		"TeamSize": 2,
+		"Daemon1": {
+			"Nickname": "Pickle",
+			"Species": "Crungly",
+			"Level": 15,
+			"Moves": [
+				"Tackle",
+				"Leer",
+				"Protect"
+			],
+			"Nature": "Careful",
+			"IVs": [
+				31,
+				31,
+				31,
+				31,
+				31,
+				31
+			]
+		},
+		"Daemon2": {
+			"Nickname": "Puddle",
+			"Species": "Watry",
+			"Level": 12,
+			"Moves": [
+				"Icebeam",
+				"Splash",
+				"Protect"
+			],
+			"Nature": "Impish",
+			"IVs": [
+				31,
+				31,
+				31,
+				31,
+				31,
+				31
+			]
+		}
+	},
+	"Trainer": {
+		"TeamSize": 1,
+		"Daemon1": {
+			"Nickname": "Rhino",
+			"Species": "Crungly",
+			"Level": 13,
+			"Moves": [
+				"Tackle",
+				"Leer"
+			],
+			"Nature": "Bashful",
+			"IVs": [
+				31,
+				31,
+				31,
+				31,
+				31,
+				31
+			]
+		}
+	},
+	"Trainer2": {
+		"TeamSize": 1,
+		"Daemon1": {
+			"Nickname": "Crably",
+			"Species": "Clawrean",
+			"Level": 14,
+			"Moves": [
+				"Icebeam",
+				"Leer",
+				"Protect"
+			],
+			"Nature": "Docile",
+			"IVs": [
+				31,
+				31,
+				31,
+				31,
+				31,
+				31
+			]
+		}
+	}
+}

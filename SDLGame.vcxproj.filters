@@ -15,249 +15,249 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Scripts\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="Scripts\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
+    <ClInclude Include="Scripts\Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
+    <ClInclude Include="Scripts\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ECS.h">
+    <ClInclude Include="Scripts\Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ColliderComponent.h">
+    <ClInclude Include="Scripts\JSON Loader\JSONNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionDetection.h">
+    <ClInclude Include="Scripts\JSON Loader\JSONParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TransformComponent.h">
+    <ClInclude Include="Scripts\JSON Loader\Tokenizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRendererComponent.h">
+    <ClInclude Include="Scripts\Daemon\Attack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerControllerComponent.h">
+    <ClInclude Include="Scripts\Daemon\Attacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextRendererComponent.h">
+    <ClInclude Include="Scripts\Daemon\Battle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileComponent.h">
+    <ClInclude Include="Scripts\Daemon\CurveExp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputListenerComponent.h">
+    <ClInclude Include="Scripts\Daemon\Daemon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImageRendererComponent.h">
+    <ClInclude Include="Scripts\Daemon\DaemonTeam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetManager.h">
+    <ClInclude Include="Scripts\Daemon\Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteComponent.h">
+    <ClInclude Include="Scripts\Daemon\Evolution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationComponent.h">
+    <ClInclude Include="Scripts\Daemon\evolutions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JSONNode.h">
+    <ClInclude Include="Scripts\Daemon\Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JSONParser.h">
+    <ClInclude Include="Scripts\Daemon\Nature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tokenizer.h">
+    <ClInclude Include="Scripts\Daemon\Species.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RectComponent.h">
+    <ClInclude Include="Scripts\Daemon\Turn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UIColliderComponent.h">
+    <ClInclude Include="Scripts\ECS\Components\AnimationComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonComponent.h">
+    <ClInclude Include="Scripts\ECS\Components\ButtonComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonEvents.h">
+    <ClInclude Include="Scripts\ECS\Components\ButtonEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
+    <ClInclude Include="Scripts\ECS\Components\ColliderComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enums.h">
+    <ClInclude Include="Scripts\ECS\Components\ImageRendererComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Nature.h">
+    <ClInclude Include="Scripts\ECS\Components\InputListenerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CurveExp.h">
+    <ClInclude Include="Scripts\ECS\Components\PlayerControllerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Species.h">
+    <ClInclude Include="Scripts\ECS\Components\RectComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Daemon.h">
+    <ClInclude Include="Scripts\ECS\Components\SpriteComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
+    <ClInclude Include="Scripts\ECS\Components\SpriteRendererComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="Scripts\ECS\Components\TextRendererComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Evolution.h">
+    <ClInclude Include="Scripts\ECS\Components\TileComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="evolutions.h">
+    <ClInclude Include="Scripts\ECS\Components\TrainerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Turn.h">
+    <ClInclude Include="Scripts\ECS\Components\TransformComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Attack.h">
+    <ClInclude Include="Scripts\ECS\Components\UIColliderComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Attacks.h">
+    <ClInclude Include="Scripts\ECS\ECS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Battle.h">
+    <ClInclude Include="Scripts\CollisionDetection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DaemonTeam.h">
+    <ClInclude Include="Scripts\AssetManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TrainerComponent.h">
+    <ClInclude Include="Scripts\TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Scripts\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Scripts\Globals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="Scripts\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
+    <ClCompile Include="Scripts\Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionDetection.cpp">
+    <ClCompile Include="Scripts\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ECS.cpp">
+    <ClCompile Include="Scripts\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImageRendererComponent.cpp">
+    <ClCompile Include="Scripts\JSON Loader\JSONNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
+    <ClCompile Include="Scripts\JSON Loader\JSONParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteComponent.cpp">
+    <ClCompile Include="Scripts\JSON Loader\Tokenizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRendererComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Attack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TileComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Attacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerControllerComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Battle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextRendererComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\CurveExp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Daemon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\DaemonTeam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JSONNode.cpp">
+    <ClCompile Include="Scripts\Daemon\EItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JSONParser.cpp">
+    <ClCompile Include="Scripts\Daemon\ELevel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
+    <ClCompile Include="Scripts\Daemon\Enums.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColliderComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Evolution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RectComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UIColliderComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Nature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonComponent.cpp">
+    <ClCompile Include="Scripts\Daemon\Species.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonEvents.cpp">
+    <ClCompile Include="Scripts\Daemon\Turn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
+    <ClCompile Include="Scripts\ECS\Components\AnimationComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Globals.cpp">
+    <ClCompile Include="Scripts\ECS\Components\ButtonComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enums.cpp">
+    <ClCompile Include="Scripts\ECS\Components\ButtonEvents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Nature.cpp">
+    <ClCompile Include="Scripts\ECS\Components\ColliderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CurveExp.cpp">
+    <ClCompile Include="Scripts\ECS\Components\ImageRendererComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Species.cpp">
+    <ClCompile Include="Scripts\ECS\Components\PlayerControllerComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Daemon.cpp">
+    <ClCompile Include="Scripts\ECS\Components\RectComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
+    <ClCompile Include="Scripts\ECS\Components\SpriteComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="Scripts\ECS\Components\SpriteRendererComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Evolution.cpp">
+    <ClCompile Include="Scripts\ECS\Components\TextRendererComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ELevel.cpp">
+    <ClCompile Include="Scripts\ECS\Components\TileComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EItem.cpp">
+    <ClCompile Include="Scripts\ECS\Components\TrainerComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Turn.cpp">
+    <ClCompile Include="Scripts\ECS\Components\TransformComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Attack.cpp">
+    <ClCompile Include="Scripts\ECS\Components\UIColliderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Attacks.cpp">
+    <ClCompile Include="Scripts\ECS\ECS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Battle.cpp">
+    <ClCompile Include="Scripts\CollisionDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DaemonTeam.cpp">
+    <ClCompile Include="Scripts\AssetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TrainerComponent.cpp">
+    <ClCompile Include="Scripts\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -271,8 +271,9 @@
     <None Include=".gitignore" />
     <None Include="README.md" />
     <None Include="Assets\JSON\Sprites.json" />
-    <None Include="Assets\JSON\PokemonMoves.json" />
-    <None Include="Assets\JSON\Pokemons.json" />
+    <None Include="Assets\JSON\DaemonMoves.json" />
+    <None Include="Assets\JSON\DaemonSpecies.json" />
+    <None Include="Assets\JSON\DaemonTeams.json" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\8Bit.ttf" />
